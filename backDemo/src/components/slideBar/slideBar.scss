@@ -1,0 +1,75 @@
+.slideBar{
+  width:260px;
+  position: fixed;
+  left:0;
+  top:60px;
+  height:100%;
+  background:#fff;
+  border:1px solid #eee;
+  z-index:1000;
+}
+.slideBox{
+  width:100px;
+  background:#fff;
+  overflow: auto;
+  float: left;
+  font-size:16px;
+  height:100%;
+  .menuItem{
+    margin:20px 0;
+    cursor: pointer;
+    .svgBox{
+      border:2px solid #eee;
+      border-radius: 50%;
+      // box-shadow: 1px 1px 1px #888888;
+      width:60px;
+      height:60px;
+      margin:0 auto;
+    }
+    .icon{
+      width:40px;
+      height:40px;
+      display: inline-block;
+      margin:0 auto;
+      vertical-align: middle;
+      margin-top:10px;
+    }
+    span{
+      color:#333;
+      line-height: 30px;
+    }
+
+  }
+  .menuItem:hover{
+    .svgBox{
+      background: #409EFF;
+      color:#fff;
+    }
+  }
+  .menuItem.active{
+    .svgBox{
+      background:#409EFF;
+      color:#fff;
+    }
+  }
+}
+.menu-s-box{
+  float:left;
+  width:160px;
+  background:#eee;
+  height:100%;
+}
+
+.el-submenu .el-menu-item{
+  min-width:auto;
+}
+
+.router-link-active{
+  .svgBox{
+    background:#409EFF;
+    color:#fff;
+    .icon{
+      color:#fff;
+    }
+  }
+}

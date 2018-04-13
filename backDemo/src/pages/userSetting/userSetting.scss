@@ -1,0 +1,88 @@
+.setting{
+  li{
+    list-style: none;
+  }
+  .topBar{
+    ul {
+      width:100%;
+      border-bottom:2px solid #00abec;
+      li{
+        width:150px;
+        height:30px;
+        line-height:30px;
+        color:#00abec;
+        font-size:14px;
+        float:left;
+        cursor: pointer;
+        border-radius: 3px;
+      }
+      li.active{
+        background:#00abec;
+        color:#fff;
+      }
+    }
+  }
+
+
+  .contentBox{
+    padding:20px 40px;
+    .userInfoBox{
+      .el-input{
+        width:auto;
+        text-align: left;
+      }
+      input{
+        width:150px;
+        display: inline-block;
+      }
+      p{
+        line-height:50px;
+        font-size:14px;
+        .span-left-c{
+          width:80px;
+          display: inline-block;
+        }
+      }
+    }
+
+    .passwordBox{
+      width:300px;
+    }
+    .userphoto{
+      text-align: left;
+      img{
+        width:100px;
+        height:100px;
+        border-radius: 50%;
+        border:1px solid #eee;
+      }
+      .avatar-uploader .el-upload {
+        border: 1px dashed #d9d9d9;
+        border-radius: 6px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+      }
+      .avatar-uploader .el-upload:hover {
+        border-color: #409EFF;
+      }
+      .avatar-uploader-icon {
+        font-size: 28px;
+        color: #8c939d;
+        width: 100px;
+        height: 100px;
+        line-height: 100px;
+        text-align: center;
+      }
+      .avatar {
+        width: 100px;
+        height: 100px;
+        display: block;
+      }
+      p{
+        font-size:14px;
+        color:#ccc;
+      }
+    }
+  }
+}
