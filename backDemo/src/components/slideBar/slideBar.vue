@@ -45,7 +45,7 @@
         </el-menu-item>
       </router-link>
     </el-menu> -->
-    <div class="slideBox">
+    <!-- <div class="slideBox">
       <router-link :to="{ name: 'index'}">
         <div class="menuItem">
           <div class="svgBox">
@@ -54,7 +54,7 @@
           <span>首页</span>
         </div>
       </router-link>
-      <router-link :to="{ name: 'order'}">
+      <router-link :to="{ name: 'table'}">
         <div class="menuItem">
           <div class="svgBox">
             <svg-icon name="order"></svg-icon>
@@ -62,7 +62,7 @@
           <span>订单管理</span>
         </div>
       </router-link>
-      <router-link :to="{ name: 'user'}">
+      <router-link :to="{ name: 'userManage'}">
         <div class="menuItem">
           <div class="svgBox">
             <svg-icon name="userFrom"></svg-icon>
@@ -70,7 +70,7 @@
           <span>用户管理</span>
         </div>
       </router-link>
-      <router-link :to="{ name: 'user'}">
+      <router-link :to="{ name: 'departmentManage'}">
         <div class="menuItem">
           <div class="svgBox">
             <svg-icon name="content"></svg-icon>
@@ -78,7 +78,7 @@
           <span>内容管理</span>
         </div>
       </router-link>
-      <router-link :to="{ name: 'user'}">
+      <router-link :to="{ name: 'accoutsSettle'}">
         <div class="menuItem">
           <div class="svgBox">
             <svg-icon name="count"></svg-icon>
@@ -86,7 +86,7 @@
           <span>统计结算</span>
         </div>
       </router-link>
-      <router-link :to="{ name: 'user'}">
+      <router-link :to="{ name: 'operationalData'}">
         <div class="menuItem">
           <div class="svgBox">
             <svg-icon name="setting"></svg-icon>
@@ -94,18 +94,57 @@
           <span>综合设置</span>
         </div>
       </router-link>
+      <second-bar></second-bar>
+    </div> -->
+    <div class="slideBox">
+      <div class="menuItem" v-for="item in sidebarRoute" :key="item.title" @click="jump(item)" :class="{'active':currentName === item.name}">
+        <div class="svgBox">
+          <svg-icon :name="item.icon"></svg-icon>
+        </div>
+        <span>{{item.title}}</span>
+      </div>
     </div>
-
+    <second-bar :menulist="routesFilter"></second-bar>
   </div>
 </template>
-
 <script>
+import SecondBar from '../secondBar/secondBar'
+import filterRoute from '@/router/middle'
+import { sidebar } from './sidebarConfig'
 export default {
   data () {
-    return {}
+    return {
+      sidebarRoute: sidebar,
+      routesFilter: [],
+      currentName:'index'
+    }
   },
-  computed:{
-
+  mounted () {
+    // 默认是首页
+    this.routesFilter = filterRoute[1].children.filter((route) => {
+      return route.node === 'index'
+    })
+    this.$router.push({
+      name:this.routesFilter[0].name
+    })
+  },
+  methods:{
+    jump (item) {
+      this.$message.success('即将去'+ item.name + item.title + '路由模块')
+      this.routesFilter = filterRoute[1].children.filter((route) => {
+        if(route.meta.role){
+          return route.node === item.name
+        }
+      })
+      // console.log(this.routesFilter);
+      this.currentName = item.name
+      this.$router.push({
+        name:this.routesFilter[0].name
+      })
+    }
+  },
+  components:{
+    SecondBar
   }
 }
 </script>

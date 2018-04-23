@@ -189,7 +189,7 @@ export default {
   },
   methods:{
     goDetial(){
-      this.$router.push({name:'orderExmin',query:{id:'1'}})
+      this.$router.push({name:'orderExmin'})
     },
     handleSizeChange(val) {
         console.log(`每页 ${val} 条`);

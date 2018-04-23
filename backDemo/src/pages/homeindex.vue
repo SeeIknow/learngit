@@ -8,10 +8,10 @@
 </template>
 
 <script>
-import AppMain from '../../components/appMain/appMain'
-import SideBar from '../../components/slideBar/slideBar'
-import HeaderTop from '../../components/header/header'
-import FooterBottom from '../../components/footer/footer'
+import AppMain from '@/components/appMain/appMain'
+import SideBar from '@/components/slideBar/slideBar'
+import HeaderTop from '@/components/header/header'
+import FooterBottom from '@/components/footer/footer'
 export default {
   data () {
     return {

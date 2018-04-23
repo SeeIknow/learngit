@@ -15,7 +15,7 @@
             <span>首页</span>
           </div>
         </router-link>
-        <router-link :to="{ name: 'setting'}">
+        <router-link :to="{ name: 'userSetting'}">
           <div class="item" title="设置">
             <svg-icon name="setting"></svg-icon>
             <span>设置</span>

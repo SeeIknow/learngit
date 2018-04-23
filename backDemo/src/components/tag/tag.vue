@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="tag">
-    tagq
+    tag
   </div>
 </template>
 

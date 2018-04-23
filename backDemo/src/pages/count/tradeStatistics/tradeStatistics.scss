@@ -1,0 +1,70 @@
+$bg-c:#eee;
+$border-color:#eee;
+.detail-c-box{
+  border:1px solid $border-color;
+}
+.trade-header-top{
+  background:$bg-c;
+  line-height:70px;
+  padding-left:20px;
+  color:#333;
+}
+.trade-inner-box{
+  padding:20px;
+  .charts-b{
+    padding:0 20px;
+    .table-trade{
+      font-size:14px;
+      color:#333;
+      border:1px solid $border-color;
+      display: inline-block;
+      .tabel-title-tr{
+        span{
+          background:$bg-c;
+        }
+      }
+      span{
+        width:93px;
+        height:30px;
+        line-height:30px;
+        text-align: center;
+        display: inline-block;
+        margin:0 1px;
+      }
+    }
+  }
+
+  .account-b{
+    .doc-account{
+      width:400px;
+      border:1px solid $border-color;
+      margin-right:40px;
+      float:left;
+      .account-t{
+        height:30px;
+        line-height:30px;
+        padding-left:20px;
+        color:#333;
+        border-bottom: 1px solid $border-color;
+      }
+      .account-p-b{
+        .item{
+          float:left;
+          width:33%;
+          padding:15px 0;
+          p{
+            text-align: center;
+          }
+          .num{
+            font-size:42px;
+            color:red;
+          }
+          .num-words{
+            font-size:14px;
+            color:#666;
+          }
+        }
+      }
+    }
+  }
+}

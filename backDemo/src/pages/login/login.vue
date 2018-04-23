@@ -14,8 +14,8 @@
     </el-form>
   </div>
 </template>
-
 <script>
+import qs from 'qs'
 export default {
   data () {
     var checkName = (rule, value, callback) => {
@@ -54,12 +54,20 @@ export default {
         console.log(valid);
         // 验证成功
           if (valid) {
+            // 按钮加载中
             this.loadingStatus = true;
             setTimeout(() =>{
               this.loadingStatus = false;
-              localStorage.setItem('userInfo',JSON.stringify(this.ruleForm2))
-              this.$router.push({
-                name: 'index'
+              this.$http.post('http://192.168.2.200:8080/ccyl/login',null,{headers:{'loginname':this.ruleForm2.username,'password':this.ruleForm2.pass}}).then(response => {
+                  // success callback
+                  console.log(response);
+                  localStorage.setItem('userInfo',JSON.stringify(response.data))
+                  this.$router.push({
+                    name: 'index'
+                  })
+              }, response => {
+                  // error callback
+                  console.log(response);
               })
             },1000)
           } else {

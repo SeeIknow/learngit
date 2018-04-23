@@ -35,7 +35,7 @@
     <div class="pending-order common_p">
       <p class="menu-title">待处理订单</p>
       <div class="order-menu clearfix">
-        <el-menu
+        <!-- <el-menu
           class="el-menu-demo"
           mode="horizontal"
           background-color="#f5f5f5"
@@ -105,7 +105,14 @@
             <el-menu-item index="5-2">选项2</el-menu-item>
             <el-menu-item index="5-3">选项3</el-menu-item>
           </el-submenu>
-        </el-menu>
+        </el-menu> -->
+        <select-component></select-component>
+      </div>
+    </div>
+    <div class="common_p">
+      <p class="menu-title">快捷添加</p>
+      <div class="order-menu clearfix">
+        <add-menu></add-menu>
       </div>
     </div>
     <div class="common_p">
@@ -126,7 +133,9 @@
 </template>
 
 <script>
-import SecondBar from '../../components/secondBar/secondBar'
+import SecondBar from '@/components/secondBar/secondBar'
+import SelectComponent from '@/components/selectComponent/selectComponent'
+import addMenu from '@/components/addMenu/addMenu'
 export default {
   data() {
     return{}
@@ -135,7 +144,9 @@ export default {
     this.drawLine();
   },
   components:{
-    SecondBar
+    SecondBar,
+    SelectComponent,
+    addMenu
   },
   methods:{
     drawLine(){

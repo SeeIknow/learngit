@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import store from './store'
 
 import SvgIcon from '@/components/SvgIcon/index'
 
@@ -10,8 +11,15 @@ import echarts from 'echarts'
 Vue.prototype.$echarts = echarts
 
 
+import axios from 'axios'
+if(process.env.NODE_ENV == 'development'){
+  axios.defaults.baseURL = 'http://192.168.2.200:8080/ccyl'
+}else{
+  axios.defaults.baseURL = 'http://192.168.2.200:8080/ccyl'
+}
+Vue.prototype.$http = axios
 
-console.log(process.env);
+
 /*
 * 全局注册svg-icon
 */
@@ -50,6 +58,7 @@ router.beforeEach((to, from, next) => {
 new Vue({
   el: '#app',
   router,
+  store,//使用store
   components: { App },
   template: '<App/>'
 })

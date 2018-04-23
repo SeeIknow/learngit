@@ -1,0 +1,24 @@
+$border-color:#00abec;
+.detail-c-box{
+  text-align: left;
+  padding:0 20px;
+  .form-box{
+    padding:30px 100px;
+    width:400px;
+  }
+  .form-title{
+    height:40px;
+    line-height:40px;
+    font-size:16px;
+    border-bottom:1px solid $border-color;
+    margin-top:20px;
+  }
+  .module-i-title{
+    padding-left:10px;
+    border-left:3px solid $border-color;
+    margin:10px;
+  }
+  .module-i{
+    border-bottom:1px solid #eee;
+  }
+}

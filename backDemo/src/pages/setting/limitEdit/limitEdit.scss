@@ -1,0 +1,30 @@
+$bg-c:#eee;
+$border-color:#eee;
+.role-b-top{
+  height:60px;
+  line-height:60px;
+  padding-left:20px;
+  font-size:16px;
+  color:#333;
+  background:$bg-c;
+}
+.module-i{
+  padding:20px 0;
+}
+.limit-outer-box{
+  border:1px solid $border-color;
+  padding:20px;
+  .limit-item{
+    margin:10px 0;
+    .limit-title{
+      background:$bg-c;
+      height:40px;
+      line-height:40px;
+      padding-left:20px;
+    }
+    .limit-inner-box{
+      padding:10px;
+      border:1px solid $border-color;
+    }
+  }
+}
