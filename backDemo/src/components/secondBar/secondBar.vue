@@ -2,13 +2,13 @@
   <div class="secondBar">
     <div class="menu-s-box">
       <el-menu
-       default-active="2"
+       default-active="0"
        class="el-menu-vertical-demo"
        background-color="#ccc"
-       text-color="#fff"
+       text-color="#333"
        active-text-color="#00abec">
-       <template v-for="item in menulist">
-        <template v-if="item.children && item.children.length >= 1">
+       <template v-for="(item,$index) in menulist">
+        <!-- <template v-if="item.children && item.children.length >= 1">
            <el-submenu :index="item.name" :key="item.name">
              <template slot="title">
                <span>{{ item.meta.title }}</span>
@@ -19,14 +19,14 @@
                </el-menu-item>
              </router-link>
            </el-submenu>
-         </template>
-         <template v-else>
-           <router-link :to="item.name" :key="item.name" class="route-link">
-             <el-menu-item :index="item.meta.title||item.path">
+         </template> -->
+         <!-- <template v-else> -->
+           <router-link :to="item.name" :key="item.name" class="route-link" >
+             <el-menu-item :index="String($index)">
                  <span slot="title">{{ item.meta.title }}</span>
              </el-menu-item>
            </router-link>
-         </template>
+         <!-- </template> -->
 
        </template>
      </el-menu>
@@ -51,5 +51,9 @@ export default {
 </script>
 
 <style lang="scss">
-@import './secondBar.scss'
+@import './secondBar.scss';
+.secondBar .el-menu-item.is-active{
+  background-color:rgb(103,103,103)!important;
+  color:#00abec!important;
+}
 </style>

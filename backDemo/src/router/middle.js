@@ -15,7 +15,8 @@ export default
         path: 'index',
         name: 'index',
         meta: {
-          title: '首页'
+          title: '首页',
+          role:true
         },
         node: 'index',
         component: () => import('@/pages/home/index/index.vue')
@@ -30,35 +31,35 @@ export default
         node: 'index',
         component: () => import('@/pages/home/userSetting/userSetting.vue')
       },
-      {
-        path:'wolet',
-        meta: {
-          title: '我的钱包',
-          role:true
-        },
-        name:'wolet',
-        component: () => import('@/pages/home/index/index.vue')
-      },
-      {
-        path:'changPass',
-        node: 'index',
-        meta: {
-          title: '修改密码',
-          role:true
-        },
-        name:'changPass',
-        component: () => import('@/pages/home/userSetting/userSetting.vue')
-      },
-      {
-        path:'changePic',
-        node: 'index',
-        meta: {
-          title: '修改头像',
-          role:true
-        },
-        name:'changePic',
-        component: () => import('@/pages/home/userSetting/userSetting.vue')
-      },
+      // {
+      //   path:'wolet',
+      //   meta: {
+      //     title: '我的钱包',
+      //     role:true
+      //   },
+      //   name:'wolet',
+      //   component: () => import('@/pages/home/index/index.vue')
+      // },
+      // {
+      //   path:'changPass',
+      //   node: 'index',
+      //   meta: {
+      //     title: '修改密码',
+      //     role:true
+      //   },
+      //   name:'changPass',
+      //   component: () => import('@/pages/home/userSetting/userSetting.vue')
+      // },
+      // {
+      //   path:'changePic',
+      //   node: 'index',
+      //   meta: {
+      //     title: '修改头像',
+      //     role:true
+      //   },
+      //   name:'changePic',
+      //   component: () => import('@/pages/home/userSetting/userSetting.vue')
+      // },
       // 订单
       {
         path: 'table',
@@ -69,15 +70,6 @@ export default
           role:false
         },
         component: () => import('@/pages/order/orderManage/orderManage.vue')
-      },
-      {
-        path: 'orderExmin',
-        name: 'orderExmin',
-        node: 'order',
-        meta: {
-          title: '待初审订单'
-        },
-        component: () => import('@/pages/order/orderExmin/orderExmin.vue')
       },
       {
         path: 'healthService',
@@ -100,6 +92,46 @@ export default
         component: () => import('@/pages/order/consultingService/consultingService.vue')
       },
       {
+        path: 'orderExmin',
+        name: 'orderExmin',
+        meta: {
+          title: '图文咨询待分诊详情'
+        },
+        component: () => import('@/pages/order/orderExmin/orderExmin.vue')
+      },
+      {
+        path: 'orderExmin1',
+        name: 'orderExmin1',
+        meta: {
+          title: '图文咨询待回复详情'
+        },
+        component: () => import('@/pages/order/orderExmin1/orderExmin1.vue')
+      },
+      {
+        path: 'orderExmin2',
+        name: 'orderExmin2',
+        meta: {
+          title: '图文咨询未通过详情'
+        },
+        component: () => import('@/pages/order/orderExmin2/orderExmin2.vue')
+      },
+      {
+        path: 'orderExmin3',
+        name: 'orderExmin3',
+        meta: {
+          title: '图文咨询已关闭详情'
+        },
+        component: () => import('@/pages/order/orderExmin3/orderExmin3.vue')
+      },
+      {
+        path: 'orderExmin4',
+        name: 'orderExmin4',
+        meta: {
+          title: '图文咨询已采纳详情'
+        },
+        component: () => import('@/pages/order/orderExmin4/orderExmin4.vue')
+      },
+      {
         path: 'appointmentService',
         name: 'appointmentService',
         node: 'order',
@@ -110,6 +142,31 @@ export default
         component: () => import('@/pages/order/appointmentService/appointmentService.vue')
       },
       {
+        path: 'orderOutpatientAppointment',
+        name: 'orderOutpatientAppointment',
+        meta: {
+          title: '门诊预约待预约详情'
+        },
+        component: () => import('@/pages/order/orderOutpatientAppointment/orderOutpatientAppointment.vue')
+      },
+      {
+        path: 'orderOutpatientAppointment1',
+        name: 'orderOutpatientAppointment1',
+        meta: {
+          title: '门诊预约待就诊详情'
+        },
+        component: () => import('@/pages/order/orderOutpatientAppointment1/orderOutpatientAppointment1.vue')
+      },
+      {
+        path: 'orderOutpatientAppointment2',
+        name: 'orderOutpatientAppointment2',
+        meta: {
+          title: '门诊预约已结束详情',
+          role:true
+        },
+        component: () => import('@/pages/order/orderOutpatientAppointment2/orderOutpatientAppointment2.vue')
+      },
+      {
         path: 'doctorOfficeSerivce',
         name: 'doctorOfficeSerivce',
         node: 'order',
@@ -118,6 +175,22 @@ export default
           role:true
         },
         component: () => import('@/pages/order/doctorOfficeSerivce/doctorOfficeSerivce.vue')
+      },
+      {
+        path: 'orderOutpatientAppointment3',
+        name: 'orderOutpatientAppointment3',
+        meta: {
+          title: '就诊待就诊详情'
+        },
+        component: () => import('@/pages/order/orderOutpatientAppointment3/orderOutpatientAppointment3.vue')
+      },
+      {
+        path: 'orderOutpatientAppointment4',
+        name: 'orderOutpatientAppointment4',
+        meta: {
+          title: '就诊已完成详情'
+        },
+        component: () => import('@/pages/order/orderOutpatientAppointment4/orderOutpatientAppointment4.vue')
       },
       {
         path: 'longRangeService',
@@ -171,14 +244,68 @@ export default
         component: () => import('@/pages/user/userManage/userManage.vue')
       },
       {
-        path: 'orderExmin1',
-        name: 'orderExmin1',
+        path: 'doctorManager',
+        name: 'doctorManager',
         node: 'user',
         meta: {
           title: '医生管理',
           role:true
         },
-        component: () => import('@/pages/user/userManage/userManage.vue')
+        component: () => import('@/pages/user/doctorManager/doctorManager.vue')
+      },
+      {
+        path: 'doctorEdit',
+        name: 'doctorEdit',
+        meta: {
+          title: '医生编辑',
+          role:true
+        },
+        component: () => import('@/pages/user/doctorEdit1/doctorEdit.vue')
+      },
+      {
+        path: 'doctorAdd',
+        name: 'doctorAdd',
+        meta: {
+          title: '医生添加',
+          role:true
+        },
+        component: () => import('@/pages/user/doctorAdd/doctorAdd.vue')
+      },
+      {
+        path: 'doctorIntroEdit',
+        name: 'doctorIntroEdit',
+        meta: {
+          title: '医生简介编辑',
+          role:true
+        },
+        component: () => import('@/pages/user/doctorEdit/doctorIntroEdit.vue')
+      },
+      {
+        path: 'addHospital',
+        name: 'addHospital',
+        meta: {
+          title: '医生添加',
+          role:true
+        },
+        component: () => import('@/pages/user/addHospital/addHospital.vue')
+      },
+      {
+        path: 'addHospitalList',
+        name: 'addHospitalList',
+        meta: {
+          title: '医生添加列表',
+          role:true
+        },
+        component: () => import('@/pages/user/addHospitalList/addHospitalList.vue')
+      },
+      {
+        path: 'serviceMange',
+        name: 'serviceMange',
+        meta: {
+          title: '服务管理',
+          role:true
+        },
+        component: () => import('@/pages/user/serviceMange/serviceMange.vue')
       },
       {
         path: 'orderExmin2',

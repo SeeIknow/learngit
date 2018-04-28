@@ -62,7 +62,7 @@ export default {
                   // success callback
                   console.log(response);
                   localStorage.setItem('userInfo',JSON.stringify(response.data))
-                  this.$router.push({
+                  this.$router.replace({
                     name: 'index'
                   })
               }, response => {

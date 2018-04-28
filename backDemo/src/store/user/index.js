@@ -1,10 +1,10 @@
 import * as getters from './getters'
 import mutations from './mutations'
-import { actions }from './action'
+import * as actions from './action'
 
 const state = {
-  role: [],
-  members:''
+  userList:'',
+  doctorDetail:''
 }
 
 export default {

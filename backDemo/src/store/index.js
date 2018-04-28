@@ -9,12 +9,14 @@ import mutations from './mutations'
 
 import user from './user'
 import order from './order'
+import api from './api'
 
 export default new vuex.Store({
   state,
   getters,
   mutations,
   modules:{
+    api,
     user,
     order
   }

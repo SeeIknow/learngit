@@ -130,7 +130,7 @@ export default {
   },
   methods:{
     jump (item) {
-      this.$message.success('即将去'+ item.name + item.title + '路由模块')
+      // this.$message.success('即将去'+ item.name + item.title + '路由模块')
       this.routesFilter = filterRoute[1].children.filter((route) => {
         if(route.meta.role){
           return route.node === item.name
@@ -139,7 +139,10 @@ export default {
       // console.log(this.routesFilter);
       this.currentName = item.name
       this.$router.push({
-        name:this.routesFilter[0].name
+        name:this.routesFilter[0].name,
+        params:{
+          name:item.title
+        }
       })
     }
   },

@@ -202,5 +202,5 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../table.scss'
+@import '../../../styles/table.scss'
 </style>

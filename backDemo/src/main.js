@@ -9,14 +9,16 @@ import SvgIcon from '@/components/SvgIcon/index'
 
 import echarts from 'echarts'
 Vue.prototype.$echarts = echarts
-
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
+NProgress.configure({ easing: 'ease', speed: 500 });
 
 import axios from 'axios'
-if(process.env.NODE_ENV == 'development'){
-  axios.defaults.baseURL = 'http://192.168.2.200:8080/ccyl'
-}else{
-  axios.defaults.baseURL = 'http://192.168.2.200:8080/ccyl'
-}
+// if(process.env.NODE_ENV == 'development'){
+//   axios.defaults.baseURL = 'http://192.168.2.200:8080/ccyl'
+// }else{
+//   axios.defaults.baseURL = 'http://192.168.2.200:8080/ccyl'
+// }
 Vue.prototype.$http = axios
 
 
@@ -37,7 +39,7 @@ Vue.config.productionTip = false
 // 登陆拦截
 router.beforeEach((to, from, next) => {
   // Util.opendPage(router.app, to.name, to.params, to.query, to.meta, to.path)
-  // NProgress.start()
+  NProgress.start();
   const title = to.meta.title
   // Util.title(title)
   if (!localStorage.getItem('userInfo') && to.name !== 'login') {
@@ -54,6 +56,11 @@ router.beforeEach((to, from, next) => {
       // NProgress.done()
     }
   })
+
+router.afterEach(transition => {
+  NProgress.done()
+  NProgress.remove();
+});
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

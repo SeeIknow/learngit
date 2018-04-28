@@ -1,13 +1,12 @@
 import {LIST} from './mutation-type.js'
 
 export default {
-  [LIST.GET_MEMEBER] (state, res) {
+  [LIST.GET_DOCTOR] (state, res) {
     console.log(state);
-    state.members = res;
+    state.userList = res;
   },
-  [LIST.GET_DOCTOR] (state) {
-  },
-  [LIST.GET_CENTER] (state) {
+  [LIST.DOCTORDETAIL] (state,res) {
+    state.doctorDetail = res
   },
   [LIST.GET_CHANNEL] (state) {
   },

@@ -1,124 +1,105 @@
-import axios from 'axios';
-import { Message } from 'element-ui';
-
-axios.defaults.timeout = 5000;
-axios.defaults.baseURL ='';
-
-
-//http request 拦截器
-axios.interceptors.request.use(
-  config => {
-    // const token = getCookie('名称');注意使用的时候需要引入cookie方法，推荐js-cookie
-    config.data = JSON.stringify(config.data);
-    config.headers = {
-      'Content-Type':'application/x-www-form-urlencoded'
-    }
-    // if(token){
-    //   config.params = {'token':token}
-    // }
-    return config;
-  },
-  error => {
-    return Promise.reject(err);
-  }
-);
-
-
-//http response 拦截器
+import axios from 'axios'
+import router from '../router'
+import { Message } from 'element-ui'
+// import Cookie from 'js-cookie'
+/**
+* 封装基于axios的ajax请求
+*
+*
+*/
+// http response 拦截器
+// 401 返回登录页
 axios.interceptors.response.use(
-  response => {
-    if(response.data.errCode ==2){
-      router.push({
-        name:"login"})
-    }
-    return response;
-  },
-  error => {
-    return Promise.reject(error)
+    response => {
+        return response;
+    },
+    error => {
+        if (error.response) {
+            switch (error.response.status) {
+                case 401:
+                    // 返回 401 清除token信息并跳转到登录页面
+                    localStorage.removeItem('userInfo')
+                    Message.error('登录已失效，请重新登录！')
+                    setTimeout(function(){
+                      router.replace({
+                          path: 'login'
+                      })
+                    },1500)
+                    break;
+                default:
+                console.log(error.response);
+                Message.error(error.response.data)
+            }
+        }
+        return Promise.reject(error.response.data)   // 返回接口返回的错误信息
+});
+
+
+export const AjaxRequest = function (url, param, payload) {
+  this.url = url
+  this.param = param
+  this.callback = payload.callback
+  this.error = payload.error
+  this.status = 200
+  this.response = {}
+  this.getAjaxMethod = () => {
+    axios({
+      method: 'GET',
+      url: this.url,
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': JSON.parse(localStorage.getItem('userInfo')).token
+      },
+      param: this.param
+    }).then(res => {
+      this.callback(res)
+    }).catch(res => {
+      this.error(res)
+    })
   }
-)
-
-
-/**
- * 封装get方法
- * @param url
- * @param data
- * @returns {Promise}
- */
-
-export function fetch(url,params={},token){
-  return new Promise((resolve,reject) => {
-    axios.get(url,{
-      params:params,
-      headers:{
-        'Authorization':token
-      }
+  this.postAjaxMethod = () => {
+    axios({
+      method: 'POST',
+      url: this.url,
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': JSON.parse(localStorage.getItem('userInfo')).token
+      },
+      data: this.param
+    }).then(res => {
+      this.callback(res)
+    }).catch(res => {
+      this.error(res)
     })
-    .then(response => {
-      resolve(response.data);
+  }
+  this.putAjaxMethod = async () => {
+    await axios({
+      method: 'PUT',
+      url: this.url,
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': JSON.parse(localStorage.getItem('userInfo')).token
+      },
+      data: this.param
+    }).then(res => {
+      this.callback(res)
+    }).catch(res => {
+      this.error(res)
     })
-    .catch(err => {
-      reject(err)
+  }
+  this.deleteAjaxMethod = async () => {
+    await axios({
+      method: 'DELETE',
+      url: url,
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': JSON.parse(localStorage.getItem('userInfo')).token
+      },
+      params: this.param
+    }).then(res => {
+      this.callback(res)
+    }).catch(res => {
+      this.error(res)
     })
-  })
-}
-
-
-/**
- * 封装post请求
- * @param url
- * @param data
- * @returns {Promise}
- */
-
- export function post(url,data = {},token){
-   return new Promise((resolve,reject) => {
-     axios.post(url,data,
-       {
-         headers:{
-           'Authorization':token
-         }
-       })
-          .then(response => {
-            resolve(response.data);
-          },err => {
-            reject(err)
-          })
-   })
- }
-
- /**
- * 封装patch请求
- * @param url
- * @param data
- * @returns {Promise}
- */
-
-export function patch(url,data = {}){
-  return new Promise((resolve,reject) => {
-    axios.patch(url,data)
-         .then(response => {
-           resolve(response.data);
-         },err => {
-           reject(err)
-         })
-  })
-}
-
- /**
- * 封装put请求
- * @param url
- * @param data
- * @returns {Promise}
- */
-
-export function put(url,data = {}){
-  return new Promise((resolve,reject) => {
-    axios.put(url,data)
-         .then(response => {
-           resolve(response.data);
-         },err => {
-           reject(err)
-         })
-  })
+  }
 }
