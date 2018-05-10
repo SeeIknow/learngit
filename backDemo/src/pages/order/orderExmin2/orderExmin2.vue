@@ -38,7 +38,7 @@
           <el-col :span="12">
             <div class="grid-content">
             <span class="spa-left-span">证件类型:</span>
-            <span class="spa-right-span">{{listItem.inquiryOrderResponse.patientCertificateType }}</span>
+            <span class="spa-right-span">{{listItem.inquiryOrderResponse.patientCertificateTypeName }}</span>
             </div>
           </el-col>
           <el-col :span="12">
@@ -64,7 +64,7 @@
             </div>
           </el-col>
         </el-row>
-        <el-row>
+        <el-row v-if="depStatus">
           <el-col :span="12">
             <div class="grid-content">
             <span class="spa-left-span">一级科室:</span>
@@ -171,10 +171,12 @@ export default {
     return {
       value:'',
       photoMod:false,
+      depStatus:false,
     }
   },
   mounted(){
     this.getParams()
+    this.depStatus = this.listItem.inquiryOrderResponse.type == 0? false:true;//0专家问诊 1免费咨询
   },
   computed:{
     ...mapGetters('order',[

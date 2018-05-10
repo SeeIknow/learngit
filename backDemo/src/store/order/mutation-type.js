@@ -7,4 +7,5 @@ export const LIST={
   GET_ORDER_DOCTOR:'getOrderDoctor',//分配医生
   GET_LIST_YY_DETAIL:'getListYyDetail',//预约详情
   GET_LIST_YY_ADRESS:'getListYyAdress',//出诊地点
+  GET_LIST_DEP_THREE:'getListDepThree',//疾病分型（三级科室）
 }

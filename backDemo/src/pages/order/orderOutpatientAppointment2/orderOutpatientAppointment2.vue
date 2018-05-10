@@ -104,7 +104,7 @@
           <el-col :span="24">
             <div class="grid-content">
             <span class="spa-left-span">申请时间:</span>
-            <span class="spa-right-span">{{yyDetail.expectDateEnd}}</span>
+            <span class="spa-right-span">{{yyDetail.appointmentApplyDate}}</span>
             </div>
           </el-col>
         </el-row>
@@ -120,7 +120,7 @@
           <el-col :span="12">
             <div class="grid-content">
             <span class="spa-left-span">申请时间:</span>
-            <span class="spa-right-span">{{yyDetail.patientName}}</span>
+            <span class="spa-right-span">{{yyDetail.appointmentApplyDate}}</span>
           </div>
           </el-col>
         </el-row>
@@ -143,14 +143,14 @@
         <el-row v-show="b">
           <el-col :span="12">
             <div class="grid-content">
-            <span class="spa-left-span">取消时间:</span>
+            <span class="spa-left-span">订单状态:</span>
             <span class="spa-right-span">待预约</span>
             </div>
           </el-col>
           <el-col :span="12">
             <div class="grid-content">
             <span class="spa-left-span">取消失败:</span>
-            <span class="spa-right-span">{{yyDetail.patientName}}</span>
+            <span class="spa-right-span">{{yyDetail.refuseReason}}</span>
           </div>
           </el-col>
         </el-row>

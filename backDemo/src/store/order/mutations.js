@@ -21,6 +21,11 @@ export default {
     console.log(state);
     state.departmentTList = res;
   },
+  // 疾病分型（三级科室）
+  [LIST.GET_LIST_DEP_THREE] (state, res) {
+    console.log(state);
+    state.depList_three = res;
+  },
   // 分配医生
   [LIST.GET_ORDER_DOCTOR] (state, res) {
     console.log(state);

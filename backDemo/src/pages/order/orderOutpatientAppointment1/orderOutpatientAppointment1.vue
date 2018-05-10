@@ -104,7 +104,7 @@
           <el-col :span="12">
             <div class="grid-content">
             <span class="spa-left-span">申请时间:</span>
-            <span class="spa-right-span">{{yyDetail.expectDateEnd}}</span>
+            <span class="spa-right-span">{{yyDetail.appointmentApplyDate }}</span>
             </div>
           </el-col>
           <el-col :span="12">
@@ -125,7 +125,7 @@
           <el-col :span="12">
             <div class="grid-content">
             <span class="spa-left-span">申请时间:</span>
-            <span class="spa-right-span">{{yyDetail.appointmentApplyDate}}</span>
+            <span class="spa-right-span">{{parseTime1(yyDetail.appointmentApplyDate)}}</span>
           </div>
           </el-col>
         </el-row>
@@ -133,13 +133,13 @@
           <el-col :span="12">
             <div class="grid-content">
             <span class="spa-left-span">预约时间:</span>
-            <span class="spa-right-span">{{yyDetail.appointmentApplyDate}}</span>
+            <span class="spa-right-span">{{parseTime1(yyDetail.appointmentDate)}}</span>
             </div>
           </el-col>
         </el-row>
       </div>
       <!-- 沟通记录 -->
-      <div class="infoItem" >
+      <div class="infoItem communicationRecord" >
         <p>沟通记录</p>
         <el-row>
           <el-col :span="24">
@@ -150,8 +150,8 @@
         </el-row>
         <template v-for="(item,$index) in outpatientOrderComms">
           <div class="contentBox">
-            <p class="time_c">{{item.inDate}}</p>
-            <p>{{item.communicationRecord}}</p>
+            <p class="time_c">{{$index+1}}.{{parseTime1(item.inDate)}}</p>
+            <p>内容记录：{{item.communicationRecord}}</p>
           </div>
         </template>
 
@@ -203,7 +203,7 @@
 
 <script>
 import { mapGetters, mapActions,mapMutations  } from 'vuex'
-import {getNowFormatDate} from '@/utils'
+import {getNowFormatDate,parseTime} from '@/utils'
 export default {
   data(){
     return {
@@ -234,6 +234,9 @@ export default {
       'getOrderYy_address',
       'getOrderYy_check_j',
     ]),
+    parseTime1(val){
+      return parseTime(val)
+    },
     getParams () {
         // 取到路由带过来的参数
         let routerParams = this.$route.params.id
@@ -276,8 +279,7 @@ export default {
         case 'successMod':
               const obj1 = {
                 "id": this.$route.params.id,
-                "nonMedicalReasons": '',
-                "status":1
+                "status":2
               }
               this.getOrderYy_check_j(obj1).then(()=>{
                 this.successMod = false;
@@ -308,7 +310,7 @@ export default {
                 "communicationRecord": this.valueTextArea1,
                 "id": this.$route.params.id,
                 "inDate": getNowFormatDate(),
-                "outpatientOrderId": 0
+                "outpatientOrderId": this.yyDetail.id
               }
               // 添加沟通记录
               this.getOrderYy_detailRecord(obj).then( ()=>{

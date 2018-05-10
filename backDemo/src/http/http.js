@@ -28,7 +28,7 @@ axios.interceptors.response.use(
                     break;
                 default:
                 console.log(error.response);
-                Message.error(error.response.data)
+                Message.error(error.response.data.errorMessage)
             }
         }
         return Promise.reject(error.response.data)   // 返回接口返回的错误信息

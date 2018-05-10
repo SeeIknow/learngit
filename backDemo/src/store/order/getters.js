@@ -16,6 +16,10 @@ export const departmentTList = state => {
 export const doctorList_fp = state => {
   return state.doctorList_fp
 }
+export const depList_three = state => {
+  return state.depList_three
+}
+
 // 预约
 export const listYY = state => {
   return state.listYY

@@ -5,4 +5,7 @@ export const LIST={
   GET_CHANNEL:'getChannel',//渠道管理
   GET_FOUNT:'getFount',//基金会
   DOCTORDETAIL:'doctorDetail',
+  DOCTOROFFICE:'doctorOffice',//医生级别
+  DOCTORLEVEL:'doctorLevel',
+  MEDICALASSITANT:'medicalAssitant',//医学助理
 }

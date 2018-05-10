@@ -139,7 +139,7 @@
         </el-row>
       </div>
       <!-- 沟通记录 -->
-      <div class="infoItem" >
+      <div class="infoItem communicationRecord" >
         <p>沟通记录</p>
         <el-row>
           <el-col :span="24">
@@ -150,7 +150,8 @@
         </el-row>
         <template v-for="(item,$index) in outpatientOrderComms">
           <div class="contentBox">
-            <p class="time_c">{{item.inDate}}</p>
+
+            <p class="time_c">{{$index+1}}.{{parseTime1(item.inDate)}}</p>
             <p>{{item.communicationRecord}}</p>
           </div>
         </template>
@@ -172,7 +173,7 @@
         <template v-for="(item,$index) in outpatientOrderComms">
           <div class="contentBox">
             <p class="time_c">{{item.inDate}}</p>
-            <p>{{item.communicationRecord}}</p>
+            <p>内容记录：{{item.communicationRecord}}</p>
           </div>
         </template>
       </div>
@@ -228,7 +229,7 @@
 
 <script>
 import { mapGetters, mapActions,mapMutations  } from 'vuex'
-import {getNowFormatDate} from '@/utils'
+import {getNowFormatDate,parseTime} from '@/utils'
 export default {
   data(){
     return {
@@ -260,6 +261,9 @@ export default {
       'getOrderYy_address',
       'getOrderYy_check_j',
     ]),
+    parseTime1(val){
+      return parseTime(val)
+    },
     getParams () {
         // 取到路由带过来的参数
         let routerParams = this.$route.params.id
@@ -303,7 +307,7 @@ export default {
               const obj1 = {
                 "id": this.$route.params.id,
                 "nonMedicalReasons": '',
-                "status":1
+                "status":2
               }
               this.getOrderYy_check_j(obj1).then(()=>{
                 this.successMod = false;

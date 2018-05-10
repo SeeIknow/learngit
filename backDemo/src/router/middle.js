@@ -421,44 +421,104 @@ export default
       },
       // 综合
       {
+        path: 'administerList',
+        name: 'administerList',
+        node: 'setting',
+        meta: {
+          title: '成员设置',
+          role:true
+        },
+        component: () => import('@/pages/setting/administerList/administerList.vue')
+      },
+      {
         path: 'managerSetting',
         name: 'managerSetting',
         node: 'setting',
         meta: {
-          title: '成员设置',
+          title: '成员信息修改',
           role:false
         },
         component: () => import('@/pages/setting/managerSetting/managerSetting.vue')
       },
       {
-        path: 'aa',
-        name: 'aa1',
+        path: 'managerSettingAdd',
+        name: 'managerSettingAdd',
+        node: 'setting',
+        meta: {
+          title: '成员信息添加',
+          role:false
+        },
+        component: () => import('@/pages/setting/managerSetting/managerSettingAdd.vue')
+      },
+      {
+        path: 'roleList',
+        name: 'roleList',
         node: 'setting',
         meta: {
           title: '角色设置',
-          role:false
+          role:true
         },
-        component: () => import('@/pages/setting/aa/aa.vue')
+        component: () => import('@/pages/setting/roleList/roleList.vue')
       },
       {
-        path: 'aa',
-        name: 'aa2',
+        path: 'roleManageSetting',
+        name: 'roleManageSetting',
+        node: 'setting',
+        meta: {
+          title: '角色设置修改',
+          role:false
+        },
+        component: () => import('@/pages/setting/roleList/roleManageSetting.vue')
+      },
+      {
+        path: 'roleManagerSettingAdd',
+        name: 'roleManagerSettingAdd',
+        node: 'setting',
+        meta: {
+          title: '角色设置添加',
+          role:false
+        },
+        component: () => import('@/pages/setting/roleList/roleManagerSettingAdd.vue')
+      },
+      {
+        path: 'depList',
+        name: 'depList',
         node: 'setting',
         meta: {
           title: '部门设置',
-          role:false
+          role:true
         },
-        component: () => import('@/pages/setting/aa/aa.vue')
+        component: () => import('@/pages/setting/depList/depList.vue')
       },
       {
-        path: '1',
-        name: 'aa3',
+        path: 'depManageSetting',
+        name: 'depManageSetting',
+        node: 'setting',
+        meta: {
+          title: '部门设置修改',
+          role:false
+        },
+        component: () => import('@/pages/setting/depList/depManageSetting.vue')
+      },
+      {
+        path: 'depManagerSettingAdd',
+        name: 'depManagerSettingAdd',
+        node: 'setting',
+        meta: {
+          title: '部门设置添加',
+          role:false
+        },
+        component: () => import('@/pages/setting/depList/depManagerSettingAdd.vue')
+      },
+      {
+        path: 'limitEdit',
+        name: 'limitEdit',
         node: 'setting',
         meta: {
           title: '权限设置',
-          role:true
+          role:false
         },
-        component: () => import('@/pages/setting/aa/aa.vue')
+        component: () => import('@/pages/setting/limitEdit/limitEdit.vue')
       },
       {
         path: 'aa',

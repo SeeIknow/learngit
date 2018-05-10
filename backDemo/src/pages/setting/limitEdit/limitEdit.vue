@@ -3,7 +3,7 @@
     <p class="form-title">管理员设置</p>
     <div class="module-i">
       <p class="role-b-top">
-        <span>角色名称：管理员</span>
+        <span>角色名称：{{JSON.parse($route.params.form1).roleName }}</span>
         <span>所属部门：产品部</span>
       </p>
       <div class="limit-outer-box">
@@ -82,6 +82,7 @@
 </template>
 
 <script>
+import {mapGetters,mapMutations,mapActions} from 'vuex'
 export default {
   data(){
     return{
@@ -90,6 +91,28 @@ export default {
       checkboxGroup3:[],
       checkboxGroup4:[],
       checkboxGroup5:[]
+    }
+  },
+  computed:{
+    ...mapGetters('setting',[
+      'limitsListBySeletc'
+    ])
+  },
+  mounted(){
+    this.getData();
+    console.log(this.$route.params.form1+'111');
+  },
+  methods:{
+    ...mapActions('setting',[
+      'setLimitsBySelectUser',
+      'getLimitsBySelectUser'
+    ]),
+    getData(){
+      const data = {
+        roleId:JSON.parse(this.$route.params.form1).refId,
+        deptId:JSON.parse(this.$route.params.form1).deptId
+      }
+      this.getLimitsBySelectUser(data)
     }
   }
 }

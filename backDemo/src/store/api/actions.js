@@ -1,4 +1,5 @@
 import {AjaxRequest} from '@/http/http'
+import axios from 'axios'
 /*
 *https://www.mmxiaowu.com/article/591a74f60ef91a5c93a340c4
 */
@@ -55,12 +56,25 @@ export const getOrderList = ({state, dispatch}, payload) => {
    export const getOrderDepartment = ({state, dispatch}, payload) => {
      dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/inquiryOrder/departments?hospitalId=${payload.param.id}`, payload.param,payload]}, {root: true})
    }
- /**
-  * 订单管理》》图文咨询>>详情>>分配医生
-  */
-  export const getOrderDoctor = ({state, dispatch}, payload) => {
-    dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/inquiryOrder/${payload.param.departmentid}/doctors?type=${payload.param.type}`, payload.param,payload]}, {root: true})
-  }
+   /**
+    * 订单管理》》图文咨询>>详情>>疾病分型（三级科室）
+    */
+    export const getOrderDepartmentThree = ({state, dispatch}, payload) => {
+      dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/inquiryOrder/${payload.param.id}/diseaseTypes`, payload.param,payload]}, {root: true})
+    }
+ // /**
+ //  * 订单管理》》图文咨询>>详情>>分配医生
+ //  */
+ //  export const getOrderDoctor = ({state, dispatch}, payload) => {
+ //    dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/inquiryOrder/${payload.param.departmentid}/doctors?type=${payload.param.type}`, payload.param,payload]}, {root: true})
+ //  }
+
+  /**
+   * 订单管理》》图文咨询>>详情>>分配医生
+   */
+   export const getOrderDoctor = ({state, dispatch}, payload) => {
+     dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/inquiryOrder/${payload.param.id}/allocation/doctors`, payload.param,payload]}, {root: true})
+   }
   /**
    * 订单管理》》图文咨询>>详情>>订单审核通过
    */
@@ -77,7 +91,7 @@ export const getOrderList = ({state, dispatch}, payload) => {
  * 订单管理》》门诊预约
  */
  export const getOrderList_yy = ({state, dispatch}, payload) => {
-   dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/outpatientOrder/orders?status=${payload.param.status}`, payload.param, payload]}, {root: true})
+   dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/outpatientOrder/orders?status=${payload.param.status}&pageNum=${payload.param.pageNum}`, payload.param, payload]}, {root: true})
  }
  /**
   * 订单管理》》门诊预约》详情
@@ -113,7 +127,7 @@ export const getOrderList = ({state, dispatch}, payload) => {
   * 用户管理》》医生管理
   */
   export const getUserList = ({state, dispatch}, payload) => {
-    dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/doctor/doctors`, payload.param, payload]}, {root: true})
+    dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/doctor/doctors?pageNum=${payload.param.pageNum}`, payload.param, payload]}, {root: true})
   }
   /**
    * 用户管理》》医生管理>>添加 编辑医生
@@ -121,9 +135,181 @@ export const getOrderList = ({state, dispatch}, payload) => {
    export const doctorEdit = ({state, dispatch}, payload) => {
      dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/doctor/doctor`, payload.param, payload]}, {root: true})
    }
+/**
+* 用户管理》》医生管理>>医生详情
+*/
+export const doctorDetail = ({state, dispatch}, payload) => {
+dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/doctor/${payload.param.id}/doctor`, payload.param, payload]}, {root: true})
+}
+/**
+* 用户管理》》医生管理>>医生详情>医生级别
+*/
+export const doctorLevel = ({state, dispatch}, payload) => {
+ dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/doctor/doctorLevels`, payload.param, payload]}, {root: true})
+}
+/**
+* 用户管理》》医生管理>>医生详情>医生职称
+*/
+export const doctorOffice = ({state, dispatch}, payload) => {
+  dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/doctor/doctorPositions`, payload.param, payload]}, {root: true})
+}
+/**
+* 用户管理》》医生管理>>医生详情> 提交
+*/
+export const doctorSave = ({state, dispatch}, payload) => {
+ dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/doctor/doctor`, payload.param, payload]}, {root: true})
+}
+/**
+* 用户管理》》医生管理>>医生详情> 医生下拉菜单
+*/
+export const hospitalList = ({state, dispatch}, payload) => {
+ dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/doctor/hospitals`, payload.param, payload]}, {root: true})
+}
+export const hospitalManage = ({state, dispatch}, payload) => {
+ dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/doctor/update/hospital`, payload.param, payload]}, {root: true})
+}
+/**
+* 用户管理》》医生管理>>医生详情> 医学助理
+*/
+export const medicalAssitant = ({state, dispatch}, payload) => {
+ dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/doctor/assistants`, payload.param, payload]}, {root: true})
+}
+/**
+* 用户管理》》医生管理>>医生详情>医院添加
+*/
+export const addHospital = ({state, dispatch}, payload) => {
+ dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/doctor/add/hospital`, payload.param, payload]}, {root: true})
+}
+/**
+* 用户管理》》医生管理>>医生详情>查看医生详情
+*/
+export const hospitalDetails = ({state, dispatch}, payload) => {
+ dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/doctor/${payload.param.id}/hospital`, payload.param, payload]}, {root: true})
+}
+/**
+* 用户管理》》医生管理>>医生详情>服务管理
+*/
+export const serviceMange = ({state, dispatch}, payload) => {
+ dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/doctor/${payload.params.id}/services`, payload.param, payload]}, {root: true})
+}
+
+/**
+* 用户管理》》医生管理>>医生详情>删除医院
+*/
+export const deleteHospital = ({state, dispatch}, payload) => {
+ dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/doctor/${payload.params.id}/delhospital`, payload.param, payload]}, {root: true})
+}
+
+
+
+
+/**
+ * 设置---------------------------
+ */
+/**
+ * 用户设置》》成员列表
+ */
+ export const userSettingUserList = ({state, dispatch}, payload) => {
+  dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/userinfo/getUserInfoList?pageNum=${payload.param.pageNum}`, payload.param, payload]}, {root: true})
+ }
+ /**
+  * 用户设置》》成员信息修改
+  */
+  export const userSettingUserEdit = ({state, dispatch}, payload) => {
+   dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/userinfo/editUserInfo`, payload.param, payload]}, {root: true})
+  }
+  /**
+   * 用户设置》》成员信息删除
+   */
+   export const userSettingUserDelete = ({state, dispatch}, payload) => {
+    dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/userinfo/deleteUserInfo?id=${payload.params.id}`, payload.param, payload]}, {root: true})
+   }
+
    /**
-    * 用户管理》》医生管理>>医生详情
+    * 用户设置》》部门下拉列表
     */
-    export const doctorDetail = ({state, dispatch}, payload) => {
-      dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/doctor/${payload.param.id}/doctor`, payload.param, payload]}, {root: true})
+    export const userSettingBMlist = ({state, dispatch}, payload) => {
+     dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/deptInfo/getDeptInfoListForUser`, payload.param, payload]}, {root: true})
     }
+/**
+* 用户设置》》角色下拉列表
+*/
+export const userSettingRolelist = ({state, dispatch}, payload) => {
+dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/roleInfo/getRoleListForUser?deptId=${payload.param.id}`, payload.param, payload]}, {root: true})
+}
+/**
+* 用户设置》》新增用户
+*/
+export const userSettingAdd = ({state, dispatch}, payload) => {
+dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/userinfo/addUserInfo`, payload.param, payload]}, {root: true})
+}
+
+
+/**
+* 用户设置》》角色管理》》角色列表
+*/
+export const userSettingroleList = ({state, dispatch}, payload) => {
+dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/roleInfo/getRoleInfoList?pageNum=${payload.param.pageNum}`, payload.param, payload]}, {root: true})
+}
+
+/**
+* 用户设置》》角色管理》》角色列表>>角色修改
+*/
+export const userSettingEditRole = ({state, dispatch}, payload) => {
+dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/roleInfo/editRoleInfo`, payload.param, payload]}, {root: true})
+}
+/**
+* 用户设置》》角色管理》》角色列表>>角色删除
+*/
+export const userSettingDeleteRole = ({state, dispatch}, payload) => {
+dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/roleInfo/deleteRoleInfo?id=${payload.param.id}`, payload.param, payload]}, {root: true})
+}
+/**
+* 用户设置》》角色管理》》角色列表>>角色添加
+*/
+export const userSettingAddRole = ({state, dispatch}, payload) => {
+dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/roleInfo/addRoleInfo`, payload.param, payload]}, {root: true})
+}
+/**
+* 用户设置》》角色管理》》角色列表>>部门下拉列表
+*/
+export const userSettingGetDepList = ({state, dispatch}, payload) => {
+dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/deptInfo/getDeptInfoListForUser`, payload.param, payload]}, {root: true})
+}
+
+
+/**
+* 用户设置》》部门管理》》部门列表
+*/
+export const userSettingDepManList = ({state, dispatch}, payload) => {
+dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/deptInfo/getDeptInfoList?pageNum=${payload.param.pageNum}`, payload.param, payload]}, {root: true})
+}
+
+
+/**
+* 用户设置》》部门管理》》部门内容修改
+*/
+export const userSettingEditDep = ({state, dispatch}, payload) => {
+dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/deptInfo/getDeptInfoList`, payload.param, payload]}, {root: true})
+}
+
+/**
+* 用户设置》》部门管理》》部门内容删除
+*/
+export const userSettingDeleteDep = ({state, dispatch}, payload) => {
+dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/deptInfo/deleteDeptInfo?id=${payload.param.id}`, payload.param, payload]}, {root: true})
+}
+
+
+/**
+* 权限设置》》选择用户的权限设置
+*/
+export const limitsSelectUser = ({state, dispatch}, payload) => {
+dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/powerResourceInfo/getUserPowerResource?roleId=${payload.param.roleId}&deptId=${payload.param.deptId}`, payload.param, payload]}, {root: true})
+}
+/**
+* 权限设置》》权限设置提交
+*/
+export const limitsSet = ({state, dispatch}, payload) => {
+dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/powerResourceInfo/setUserPowerResource?roleId=${payload.param.roleId}&deptId=${payload.param.deptId}`, payload.param, payload]}, {root: true})
+}

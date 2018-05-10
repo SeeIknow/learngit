@@ -49,6 +49,7 @@ export const getOrderDiseaseType = ({state, commit, dispatch, getters, rootGette
     dispatch('api/getOrderDiseaseType', payload, {root: true})
   })
 }
+
 // 图文咨询 》》编辑》》详情页>>二级科室
 export const getOrderDepartment = ({state, commit, dispatch, getters, rootGetters}, data) => {
   const payload = rootGetters['api/payload']
@@ -65,6 +66,23 @@ export const getOrderDepartment = ({state, commit, dispatch, getters, rootGetter
     dispatch('api/getOrderDepartment', payload, {root: true})
   })
 }
+// 图文咨询 》》编辑》》详情页>>疾病分型（三级科室）
+export const getOrderDepartmentThree = ({state, commit, dispatch, getters, rootGetters}, data) => {
+  const payload = rootGetters['api/payload']
+  payload.param = data
+  return new Promise((resolve, reject) => {
+    payload.callback = res => {
+      resolve(res)
+      // console.log(res)
+      commit(LIST.GET_LIST_DEP_THREE,res.data)
+    }
+    payload.error = err => {
+      reject(error)
+    }
+    dispatch('api/getOrderDepartmentThree', payload, {root: true})
+  })
+}
+
 // 图文咨询 》》编辑》》详情页>>分配医生
 export const getOrderDoctor = ({state, commit, dispatch, getters, rootGetters}, data) => {
   const payload = rootGetters['api/payload']

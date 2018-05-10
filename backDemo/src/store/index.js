@@ -9,6 +9,7 @@ import mutations from './mutations'
 
 import user from './user'
 import order from './order'
+import setting from './setting'
 import api from './api'
 
 export default new vuex.Store({
@@ -18,6 +19,7 @@ export default new vuex.Store({
   modules:{
     api,
     user,
-    order
+    order,
+    setting
   }
 })

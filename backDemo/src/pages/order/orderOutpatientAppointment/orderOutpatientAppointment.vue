@@ -96,7 +96,7 @@
           <el-col :span="24">
             <div class="grid-content">
             <span class="spa-left-span">提交时间:</span>
-            <span class="spa-right-span">{{yyDetail.appointmentApplyDate}}</span>
+            <span class="spa-right-span">{{parseTime1(yyDetail.appointmentApplyDate)}}</span>
             </div>
           </el-col>
         </el-row>
@@ -104,7 +104,7 @@
           <el-col :span="24">
             <div class="grid-content">
             <span class="spa-left-span">申请时间:</span>
-            <span class="spa-right-span">{{yyDetail.expectDateEnd}}</span>
+            <span class="spa-right-span">{{parseTime1(yyDetail.expectDateEnd)}}</span>
             </div>
           </el-col>
         </el-row>
@@ -119,28 +119,21 @@
           <el-col :span="12">
             <div class="grid-content">
             <span class="spa-left-span">申请时间:</span>
-            <span class="spa-right-span">{{yyDetail.appointmentApplyDate}}</span>
+            <span class="spa-right-span">{{parseTime1(yyDetail.appointmentApplyDate)}}</span>
           </div>
           </el-col>
         </el-row>
       </div>
       <!-- 沟通记录 -->
-      <div class="infoItem" >
+      <div class="infoItem communicationRecord" >
         <p>沟通记录</p>
-        <el-row>
-          <el-col :span="24">
-            <div class="grid-content">
-            <span class="spa-left-span">沟通记录:</span>
-            </div>
-          </el-col>
         </el-row>
         <template v-for="(item,$index) in outpatientOrderComms">
           <div class="contentBox">
-            <p class="time_c">{{item.inDate}}</p>
-            <p>{{item.communicationRecord}}</p>
+            <p class="time_c">{{$index+1}}.{{parseTime1(item.inDate)}}</p>
+            <p>内容记录：{{item.communicationRecord}}</p>
           </div>
         </template>
-
         <el-row >
             <el-button type="primary" style="margin-left:15px" icon="el-icon-plus" @click="openModal('dialogVisible')">添加沟通记录</el-button>
         </el-row>
@@ -184,7 +177,7 @@
         <el-form-item label="出诊地点">
           <el-select v-model="form1.region2" placeholder="请选择">
             <template v-for="(item,$index) in yyDetailAdress">
-                <el-option :label="item.name" :value="item.id"></el-option>
+                <el-option :label="item.address" :value="item.id"></el-option>
             </template>
           </el-select>
         </el-form-item>
@@ -210,7 +203,7 @@
 
 <script>
 import { mapGetters, mapActions,mapMutations  } from 'vuex'
-import {getNowFormatDate} from '@/utils'
+import {getNowFormatDate,parseTime} from '@/utils'
 export default {
   data(){
     return {
@@ -289,10 +282,13 @@ export default {
             "appointmentDate": getNowFormatDate(),
             "id": this.$route.params.id,
             "realityPlace": this.form1.region2,
-            "refuseReason": '',
+            "refuseReason": this.valueTextArea2,
             "status": status
           }
           return obj;
+    },
+    parseTime1(val){
+      return parseTime(val)
     },
     getParams () {
         // 取到路由带过来的参数

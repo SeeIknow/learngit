@@ -11,6 +11,7 @@
   </div>
 </template>
 <script>
+import { mapGetters, mapActions,mapMutations  } from 'vuex'
 export default {
   data(){
     return{}
@@ -18,7 +19,7 @@ export default {
   methods:{
     goBack(){
       this.$router.go(-1)
-    }
+    },
   }
 }
 </script>

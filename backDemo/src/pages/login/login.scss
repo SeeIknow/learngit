@@ -4,19 +4,22 @@
   height:100%;
   background:#eee;
   position: fixed;
-  background:url(../../assets/images/bg.jpg) no-repeat;
+  background:url(../../assets/images/bg.png) no-repeat;
   background-size:cover;
   background-position: center;
   .demo-ruleForm{
-    width:500px;
-    height:400px;
-    padding:20px;
+    width: 500px;
+    height: 330px;
+    padding: 40px;
+    -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    background:#ccc;
-    position:absolute;
-    left:50%;
-    top:50%;
-    transform: translate(-50%,-50%);
+    background: #fff;
+    opacity: .9;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
     label{
       width:20%!important;
       display: block!important;
@@ -24,6 +27,10 @@
     .inputM{
       width:80%;
     }
+  }
 
+  .login-title{
+    margin:18px 18px 33px 18px;
+    font-size:26px;
   }
 }

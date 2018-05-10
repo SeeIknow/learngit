@@ -19,7 +19,7 @@
       </el-date-picker>
     </div>
 
-    <div class="source input-select-1">
+    <!-- <div class="source input-select-1">
       <span class="label-span">来源渠道:</span>
       <el-select v-model="sourceValue" clearable placeholder="请选择">
         <el-option
@@ -29,7 +29,7 @@
           :value="item.value">
         </el-option>
       </el-select>
-    </div>
+    </div> -->
   </div>
   <div class="select-p-1 clearfix">
     <div class="grid-content bg-purple input-select-1">
@@ -77,6 +77,7 @@
         <el-table-column
           prop="type"
           label="订单类型"
+          :formatter="formatRole1"
           width="80">
         </el-table-column>
         <el-table-column
@@ -110,11 +111,6 @@
           width="80">
         </el-table-column>
         <el-table-column
-          prop="needHelp "
-          label="追问"
-          width="200">
-        </el-table-column>
-        <el-table-column
           prop="status"
           v-if="colmu"
           :formatter="formatRole"
@@ -141,7 +137,7 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :page-size="10"
+        :page-size="12"
         layout="prev, pager, next, jumper"
         :total="list.total">
       </el-pagination>
@@ -157,11 +153,6 @@ export default {
       activeIndex: '0',//当前默认选中菜单
       dateValue:['',''],
       sourceValue:'',
-      sourceOptions:[
-        {value:'1',lable:'渠道1'},
-        {value:'2',lable:'渠道2'},
-        {value:'3',lable:'渠道3'}
-      ],
       nameValue:'',
       cardValue:'',
       phoneValue:'',
@@ -175,6 +166,9 @@ export default {
   },
   mounted(){
     this.getData();
+    if(this.list.total>0){
+      this.showStatus = true;
+    }
   },
   computed:{
     ...mapGetters('order', [
@@ -189,7 +183,7 @@ export default {
       'LIST.GET_LIST',
     ]),
     //参数对象
-    outObj(status = 0,certificateNo='',inDateEnd='',inDateStart='',orderNo='',patientName='',phoneNum='') {
+    outObj(status = 0,certificateNo='',inDateEnd='',inDateStart='',orderNo='',patientName='',phoneNum='',val=1) {
       const data = {
         certificateNo: this.cardValue,
         inDateEnd: this.dateValue[1],
@@ -198,19 +192,23 @@ export default {
         patientName:this.nameValue,
         phoneNum:this.phoneValue,
         type:0,
-        status:this.activeIndex
+        status:this.activeIndex,
+        pageNum:val
       }
       return data
     },
     formatRole(row,column){
       return row.authority == 0 ? "待分诊" : row.authority == 1 ? "待回复" : row.authority == 2 ? "已回复" : row.authority ==3 ? "已采纳" : row.authority ==4 ? "已关闭" :  "未通过";
     },
+    formatRole1(row,column){
+      return row.authority == 0 ? "免费订单" : "专家问诊";
+    },
     // 跳转详情
     goDetial(index,table){
       // index:当前点击对象的下表
       // table:整个表格对象
-      console.log(index);
-      console.log(table[index].id)
+      //console.log(index);
+      //console.log(table[index].id)
       /**
        * [switch description]
        * @param  table[index].status  每一个点击对象所对应的状态值
@@ -237,15 +235,21 @@ export default {
     },
     // // 分页
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      // console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      this.getData(val)
     },
     // 获取数据
-    getData(){
-      console.log(this.dateValue);
-      this.getOrderList(this.outObj())
+    getData(val){
+      //console.log(this.dateValue);
+      this.getOrderList(this.outObj(val)).then(()=>{
+        if(this.list.total>0){
+          this.showStatus = true;
+        }else{
+          this.showStatus = false;
+        }
+      })
     },
     getTime(){
       // 时间组件 清楚内容
@@ -254,10 +258,10 @@ export default {
     // 菜单切换
     handleSelect(key, keyPath) {
       this.activeIndex = key;
-      if (this.activeIndex == 1){
+      if (this.activeIndex == 0){
         this.colmu = true
         this.operation = '审核分诊'
-      }else if(this.activeIndex == 2){
+      }else if(this.activeIndex == 1){
         this.operation = '回复'
         this.colmu = false
       }else{
@@ -266,7 +270,7 @@ export default {
       }
       // 菜单切换 日期组件重新赋值
       this.dateValue = (this.dateValue == null ? ['',''] : this.dateValue)
-       this.getOrderList(this.outObj())
+      this.getData()
      }
   }
 }

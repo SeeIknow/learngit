@@ -22,7 +22,7 @@
       </el-date-picker>
     </div>
 
-    <div class="source input-select-1">
+    <!-- <div class="source input-select-1">
       <span class="label-span">来源渠道:</span>
       <el-select v-model="sourceValue" clearable placeholder="请选择">
         <el-option
@@ -32,7 +32,7 @@
           :value="item.value">
         </el-option>
       </el-select>
-    </div>
+    </div> -->
   </div>
   <div class="select-p-1 clearfix">
     <div class="grid-content bg-purple input-select-1">
@@ -120,6 +120,7 @@
         <el-table-column
           prop="ampm"
           label="就诊时段"
+          :formatter="formatRole1"
           width="120">
         </el-table-column>
         <el-table-column
@@ -139,11 +140,11 @@
           v-if="a2"
           width="80">
         </el-table-column>
-        <el-table-column
+        <!-- <el-table-column
           prop="serviceCategoryType"
           label="渠道"
           width="120">
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column
           prop="serviceCategoryType"
           v-if="a3"
@@ -170,9 +171,9 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :page-size="10"
+        :page-size="12"
         layout="prev, pager, next, jumper"
-        :total="list.total">
+        :total="listYY.total">
       </el-pagination>
     </div>
   </div>
@@ -225,8 +226,11 @@ export default {
     ...mapMutations('order', [
       'LIST.GET_LIST_YY',
     ]),
+    formatRole1(row,column){
+      return row.authority == 1 ? "上午" : "下午";
+    },
     //参数对象
-    outObj(status=0,patientCertificateNo='',inDateEnd='',inDateStart='',orderNo='',patientName='',patientPhoneNum='') {
+    outObj(status=0,patientCertificateNo='',inDateEnd='',inDateStart='',orderNo='',patientName='',patientPhoneNum='',val=1) {
       const data = {
         patientCertificateNo: this.cardValue,
         inDateEnd: this.dateValue[1],//时间组件返回值为一个数组
@@ -235,7 +239,8 @@ export default {
         patientName:this.nameValue,
         patientPhoneNum:this.phoneValue,
         serviceCategoryType:2,
-        status:this.activeIndex
+        status:this.activeIndex,
+        pageNum:val
       }
       return data
     },
@@ -243,8 +248,8 @@ export default {
     goDetial(index,table){
       // index:当前点击对象的下表
       // table:整个表格对象
-      console.log(index);
-      console.log(table[index].id)
+      //console.log(index);
+      //console.log(table[index].id)
       /**
        * [switch description]
        * @param  table[index].status  每一个点击对象所对应的状态值
@@ -265,14 +270,20 @@ export default {
     },
     // 分页
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      //console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      //console.log(`当前页: ${val}`);
     },
     // 获取数据
     getData(){
-      this.getOrderListYY(this.outObj())
+      this.getOrderListYY(this.outObj()).then(() =>{
+        if(this.listYY.total>0){
+          this.showStatus = true;
+        }else{
+          this.showStatus = false;
+        }
+      })
     },
     getTime(){
       // 时间组件 清楚内容

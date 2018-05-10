@@ -4,10 +4,13 @@ import * as actions from './action'
 
 const state = {
   userList:'',
-  doctorDetail:'',
-  doctorOffice:'',
-  doctorLevel:'',
-  medicalAssitant:'',
+  bmList:'',
+  roleList:'',
+  roleTable:'',
+  depList:'',
+  depManList:'',
+  limitsListByLogin:'',
+  limitsListBySeletc:'',
 }
 
 export default {

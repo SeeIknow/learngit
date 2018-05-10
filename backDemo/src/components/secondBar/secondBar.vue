@@ -56,4 +56,8 @@ export default {
   background-color:rgb(103,103,103)!important;
   color:#00abec!important;
 }
+.router-link-exact-active .el-menu-item{
+  background-color:rgb(103,103,103)!important;
+  color:#00abec!important;
+}
 </style>

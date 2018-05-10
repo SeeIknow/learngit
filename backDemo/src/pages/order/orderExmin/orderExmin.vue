@@ -38,7 +38,7 @@
           <el-col :span="12">
             <div class="grid-content">
             <span class="spa-left-span">证件类型:</span>
-            <span class="spa-right-span">{{listItem.inquiryOrderResponse.patientCertificateType }}</span>
+            <span class="spa-right-span">{{listItem.inquiryOrderResponse.patientCertificateTypeName}}</span>
             </div>
           </el-col>
           <el-col :span="12">
@@ -46,6 +46,36 @@
             <span class="spa-left-span">证件号码:</span>
             <span class="spa-right-span">{{listItem.inquiryOrderResponse.patientCertificateNo }}</span>
           </div>
+          </el-col>
+        </el-row>
+      </div>
+      <div class="infoItem" v-if="!depStatus">
+        <el-row>
+          <el-col :span="12">
+            <div class="grid-content">
+            <span class="spa-left-span">专家姓名:</span>
+            <span class="spa-right-span">{{ listItem.inquiryOrderResponse.doctorName  }}</span>
+            </div>
+          </el-col>
+          <el-col :span="12">
+            <div class="grid-content">
+            <span class="spa-left-span">医生职称:</span>
+            <span class="spa-right-span">{{listItem.inquiryOrderResponse.doctorPosition}}</span>
+            </div>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <div class="grid-content">
+            <span class="spa-left-span">执业医院:</span>
+            <span class="spa-right-span">{{ listItem.inquiryOrderResponse.doctorOrganization  }}</span>
+            </div>
+          </el-col>
+          <el-col :span="12">
+            <div class="grid-content">
+            <span class="spa-left-span">服务费用:</span>
+            <span class="spa-right-span">{{listItem.inquiryOrderResponse.servicePrice }}</span>
+            </div>
           </el-col>
         </el-row>
       </div>
@@ -65,7 +95,7 @@
             </div>
           </el-col>
         </el-row>
-        <el-row>
+        <el-row v-if="depStatus">
           <el-col :span="12">
             <div class="grid-content">
             <span class="spa-left-span">一级科室:</span>
@@ -108,7 +138,7 @@
           <el-col :span="24">
             <div class="grid-content">
             <span class="spa-left-span">疾病标签:</span>
-            <span class="spa-right-span">{{listItem.inquiryOrderResponse.diseaseTypeName}}</span>
+            <span class="spa-right-span">{{listItem.inquiryOrderResponse.diseaseName}}</span>
             </div>
           </el-col>
         </el-row>
@@ -230,7 +260,7 @@
       :visible.sync="refuseMod"
       width="30%"
       center>
-      <textarea name="name" rows="8" cols="80">aaa</textarea>
+      <textarea name="name" rows="8" cols="80" v-model="refuseReson"></textarea>
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeModal('doctorMod')">取 消</el-button>
         <el-button type="primary" @click="sureConfirm('doctorMod')">确 定</el-button>
@@ -255,7 +285,9 @@ export default {
       },
       form3:{},
       diseaseInfo:'',
+      diseaseInfoId:'',
       departmentInfo:[],
+      departmentInfoId:'',
       diseaseMod:false,//疾病modal
       depMod:false,//--科室新增modal
       photoMod:false,
@@ -263,12 +295,16 @@ export default {
       refuseMod:false,
       diseasesBox:[],//疾病类型
       departmentTBox:[],//二级科室
+      depStatus:false,// 专家问诊状态 科室不显示 其余状态显示
+      refuseReson:''
     }
   },
   mounted(){
     this.getParams()
     this.diseaseInfo = this.listItem.inquiryOrderResponse.diseaseTypeName//赋值疾病类型 页面弹框选中后重新赋值
-    console.log(this.departmentTList )
+    this.diseaseInfoId = this.listItem.inquiryOrderResponse.diseaseId
+    this.departmentTBoxId = this.listItem.inquiryOrderResponse.twoLevelDepartId
+    this.depStatus = this.listItem.inquiryOrderResponse.type == 0? false:true;//0专家问诊 1免费咨询
   },
   computed:{
     ...mapGetters('order',[
@@ -317,23 +353,21 @@ export default {
     },
     outObj(){
       const data = {
-        "diseaseId": 0,
-        "diseaseName": "string",
-        "diseaseTypeId": 0,
-        "diseaseTypeName": "string",
-        "doctorHospitalId": 0,
-        "doctorHospitalName": "string",
-        "doctorId": 0,
-        "doctorName": "string",
-        "doctorPosition": "string",
-        "doctorPositionType": 0,
-        "id": 0,
-        "oneLevelDepartId": 0,
-        "oneLevelDepartName": "string",
-        "refuseReason": "string",
-        "status": 0,
-        "twoLevelDepartId": 0,
-        "twoLevelDepartName": "string"
+        "diseaseId": this.diseaseInfoId ,
+        "diseaseName": this.diseaseInfo ,
+        "doctorHospitalId": this.listItem.inquiryOrderResponse.doctorOrganizationId  ,
+        "doctorHospitalName": this.listItem.inquiryOrderResponse.doctorOrganization  ,
+        "doctorId": this.listItem.inquiryOrderResponse.doctorId ,
+        "doctorName": this.listItem.inquiryOrderResponse.doctorName ,
+        "doctorPosition": this.listItem.inquiryOrderResponse.doctorPosition  ,
+        "doctorPositionType": this.listItem.inquiryOrderResponse.doctorPositionType,
+        "id": this.listItem.inquiryOrderResponse.id,
+        "oneLevelDepartId": this.listItem.inquiryOrderResponse.oneLevelDepartId ,
+        "oneLevelDepartName": this.listItem.inquiryOrderResponse.oneLevelDepartName ,
+        "refuseReason": this.refuseReson,
+        "status": this.listItem.inquiryOrderResponse.status,
+        "twoLevelDepartId": this.listItem.inquiryOrderResponse.twoLevelDepartId ,
+        "twoLevelDepartName": this.listItem.inquiryOrderResponse.twoLevelDepartName
       }
       return data
     },
@@ -346,8 +380,13 @@ export default {
         // 疾病类型
         this.getOrderDiseaseType(1);
         this.getOrderDepartment({id:this.listItem.inquiryOrderResponse.doctorOrganizationId})
-
-        this.getOrderDoctor({departmentid:this.departmentInfo,type:this.listItem.inquiryOrderResponse.type})
+        // 判断二级科室是否存在
+        if(this.listItem.inquiryOrderResponse.twoLevelDepartId !=''){
+          let depId = this.listItem.inquiryOrderResponse.twoLevelDepartId
+        }else{
+          let depId = this.listItem.inquiryOrderResponse.oneLevelDepartId
+        }
+        this.getOrderDoctor({id:depId})
     },
     goBack(){
       this.$router.go(-1)
@@ -418,12 +457,14 @@ export default {
                 return item.id === value;
             });
             this.diseaseInfo = obj.name ;//重新赋值疾病类型
+            this.diseaseInfoId = obj.id
             break;
         case 'depMod':
             obj = this.departmentTBox.find((item)=>{
                 return item.departmentId === value;
             });
             this.departmentTBox = obj.departmentName ;//重新赋值疾病类型
+            this.departmentTBoxId = obj.departmentId
             break;
         case 'photoMod':
 
@@ -432,7 +473,17 @@ export default {
     },
     // 通过
     submit(){
-        this.doctorMod = true;
+      // 状态为专家问诊的时候 直接提交信息 不需要选择医生
+        if(!this.depStatus){
+          // 提交审核操作
+          this.getOrderSuccess(this.outObj()).then(()=>{
+            this.doctorMod = false;
+            this.$router.push({name:'consultingService'})
+          })
+        }else{
+          this.doctorMod = true;
+        }
+
     },
     //拒绝
     refuse(){

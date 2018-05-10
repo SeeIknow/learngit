@@ -52,7 +52,7 @@ router.beforeEach((to, from, next) => {
       name: 'home'
     })
   }else {
-      next() // 否则全部重定向到登录页
+    next() // 否则全部重定向到登录页
       // NProgress.done()
     }
   })
@@ -60,6 +60,7 @@ router.beforeEach((to, from, next) => {
 router.afterEach(transition => {
   NProgress.done()
   NProgress.remove();
+
 });
 /* eslint-disable no-new */
 new Vue({

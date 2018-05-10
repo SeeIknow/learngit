@@ -64,7 +64,6 @@
         :data="userList.list"
         size="medium">
         <el-table-column
-          fixed
           prop="id"
           label="医生ID"
           width="80">
@@ -102,6 +101,7 @@
         <el-table-column
           prop="certificationStatus"
           label="资格认证"
+          :formatter='formatRole2'
           width="60">
         </el-table-column>
         <el-table-column
@@ -117,15 +117,18 @@
         <el-table-column
           prop="accountCheckStatus"
           label="审核状态"
+          :formatter="formatRole"
           width="120">
         </el-table-column>
         <el-table-column
           prop="accountLockStatus"
           label="冻结状态"
+          :formatter="formatRole1"
           width="120">
         </el-table-column>
         <el-table-column
           label="操作"
+          fixed=right
           width="60">
           <template slot-scope="scope">
             <el-button
@@ -172,9 +175,6 @@ export default {
   },
   mounted(){
     this.getData();
-    if(this.userList.total>0){
-      this.showStatus = true;
-    }
   },
   computed:{
     ...mapGetters('user', [
@@ -188,15 +188,25 @@ export default {
     ...mapMutations('user', [
       'LIST.GET_DOCTOR',
     ]),
+    formatRole(row,column){
+      return row.authority == 1 ? "审核" : "未审核";
+    },
+    formatRole1(row,column){
+      return row.authority == 1 ? "锁定" : "未锁定";
+    },
+    formatRole2(row,column){
+      return row.authority == 1 ? "已认证" : "未认证";
+    },
     //参数对象
-    outObj() {
+    outObj(val  = 1) {
       const data = {
           "accountCheckStatus": this.sourceValue,
           "doctorName": this.nameValue,
           "hospitalName": this.hospitalValue,
           "inDateEnd": this.dateValue[1],
           "inDateStart": this.dateValue[0],
-          "phoneNum": this.phoneValue
+          "phoneNum": this.phoneValue,
+          'pageNum':val
         }
       return data
     },
@@ -204,21 +214,27 @@ export default {
     goDetial(index,table){
       // index:当前点击对象的下表
       // table:整个表格对象
-      console.log(index);
-      console.log(table[index].id)
+      //console.log(index);
+      //console.log(table[index].id)
       this.$router.push({name:'doctorEdit',params:{id:table[index].id}})
     },
     // // 分页
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      // console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      this.getData(val)
     },
     // 获取数据
-    getData(){
-      console.log(this.dateValue);
-      this.getUserList(this.outObj())
+    getData(val){
+      //console.log(this.dateValue);
+      this.getUserList(this.outObj(val)).then( () =>{
+        if(this.userList.total>0){
+          this.showStatus = true;
+        }else{
+          this.showStatus = false;
+        }
+      })
     },
     getTime(){
       // 时间组件 清楚内容

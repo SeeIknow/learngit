@@ -35,7 +35,7 @@ export function parseTime(time, cFormat) {
 }
 /**
  * [formatTime description]
- * @param  获取当前时间 
+ * @param  获取当前时间
  * @param  {[type]} option [description]
  * @return {[type]}        [description]
  */
@@ -78,7 +78,13 @@ export function formatTime(time, option) {
     return d.getMonth() + 1 + '月' + d.getDate() + '日' + d.getHours() + '时' + d.getMinutes() + '分'
   }
 }
-
+// 判断一个对象是否为一个空对象
+export function isEmptyObject(obj) {
+  for (var key in obj) {
+  return false;
+  }
+  return true;
+}
 // 格式化时间
 export function getQueryObject(url) {
   url = url == null ? window.location.href : url

@@ -69,31 +69,19 @@ export default {
   },
   methods:{
     ...mapActions('setting',[
-      'deleteUserInfo',
-      'setUserInfo',
       'getBMlist',
-      'getRolelist'
+      'getRolelist',
+      'setAddDoctor'
     ]),
     onSubmit() {
       const data ={
-        "deptId": 0,
-        "id": 0,
-        "indate": "2018-05-03T10:28:15.516Z",
-        "loginname": "string",
-        "password": "string",
-        "phonenum": "string",
-        "roleId": 0,
-        "status": 0,
-        "username": "string"
-      }
-      this.setUserInfo(data).then(() =>{
-        this.$router.replace({name:'administerList'})
-      })
-    },
-    // 删除
-    deleteInfo(){
-      this.deleteUserInfo({id:this.$route.params.id}).then(() =>{
-        this.message();
+          "deptId": 0,
+          "id": 0,
+          "refId": 0,
+          "roleName": "string",
+          "status": 0
+        }
+      this.setAddDoctor(data).then(() =>{
         this.$router.replace({name:'administerList'})
       })
     },

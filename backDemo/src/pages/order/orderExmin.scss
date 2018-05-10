@@ -1,3 +1,4 @@
+$color:#00abec;
 .orderExmin{
   padding:0 40px;
   .goBack{
@@ -37,5 +38,21 @@
   textarea{
     width:80%;
     height:150px;
+  }
+
+  .communicationRecord{
+    p{
+      padding:0 15px;
+      color:$color;
+      font-size:12px;
+      height:20px;
+      line-height:20px;
+    }
+    .time_c{
+      color:#333;
+      font-size:14px;
+      height:25px;
+      line-height:25px;
+    }
   }
 }
