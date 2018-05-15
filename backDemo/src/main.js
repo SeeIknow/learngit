@@ -41,20 +41,29 @@ router.beforeEach((to, from, next) => {
   // Util.opendPage(router.app, to.name, to.params, to.query, to.meta, to.path)
   NProgress.start();
   const title = to.meta.title
+  console.log(to);
   // Util.title(title)
   if (!localStorage.getItem('userInfo') && to.name !== 'login') {
+    //debugger
     next({
       replace: true,
       name: 'login'
     })
   } else if (localStorage.getItem('userInfo') && to.name === 'login') {
+    // //debugger
     next({
       name: 'home'
     })
-  }else {
-    next() // 否则全部重定向到登录页
+  }else if(localStorage.getItem('userInfo') && to.name !== 'login'){
+    //debugger
       // NProgress.done()
-    }
+       console.log(to);
+       next();
+    // next({...to})
+  }else{
+    //debugger
+     next() // 否则全部重定向到登录页
+  }
   })
 
 router.afterEach(transition => {

@@ -83,8 +83,8 @@ export default {
       },
       goDetail(index,table){
         //console.log(index);
-        //console.log(table[index].id)
-        this.$router.push({name:'managerSetting',params:{id:table[index].id}})
+        console.log(table[index])
+        this.$router.push({name:'managerSetting',params:table[index]})
       },
       add(){
         this.$router.push({name:'managerSettingAdd'})

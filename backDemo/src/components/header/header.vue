@@ -6,7 +6,7 @@
       <div class="rightBox">
 
         <div class="item" title="李白">
-          <img src="../../assets/images/default.jpg" alt="">
+          <img :src="photo" alt="">
           <span class="userName">{{userName}}</span>
         </div>
         <router-link :to="{ name: 'index'}">
@@ -34,7 +34,8 @@
 export default {
   data() {
     return {
-      userName:''
+      userName:'',
+      photo:''
     }
   },
   mounted(){
@@ -50,7 +51,9 @@ export default {
     // 获取用户信息
     getInfo(){
       const info = JSON.parse(localStorage.getItem('userInfo'));
+      const photo = localStorage.getItem('adminPhoto')
       this.userName = info.username
+      this.photo = photo;
       console.log(info.username);
     }
   }

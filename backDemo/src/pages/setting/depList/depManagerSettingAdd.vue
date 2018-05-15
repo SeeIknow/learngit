@@ -1,7 +1,6 @@
 <template lang="html">
   <div class="managerSetting">
     <div class="button-box">
-      <el-button type="danger" plain @click="deleteInfo()">删除</el-button>
       <el-button type="primary" plain>返回</el-button>
     </div>
     <p class="form-title">部门设置</p>
@@ -33,7 +32,8 @@ import {mapGetters,mapMutations,mapActions} from 'vuex'
 export default {
   data(){
     return{
-      form:{}
+      form:{},
+      obj:{},
     }
   },
   computed:{
@@ -47,23 +47,22 @@ export default {
   methods:{
     ...mapActions('setting',[
       'getDepList',
-      'setDepInfo'
+      'AddDepInfo'
     ]),
     onSubmit() {
       const data ={
-          "deptName": "string",
-          "id": 0,
-          "status": 0
+          "deptName": this.obj.deptName,
+          "id": this.obj.id,
+          "status": this.form.delivery == true? '1':'0'
         }
-      this.setDepInfo(data).then(() =>{
+      this.AddDepInfo(data).then(() =>{
         this.$router.replace({name:'depList'})
       })
     },
-    // 删除
-    deleteInfo(){
-      this.deleteRoleInfo({id:this.$route.params.id}).then(() =>{
-        this.message();
-        this.$router.replace({name:'depList'})
+    bmSelect(val){
+      console.log(val);
+      this.obj = this.depList.find((item) =>{
+        return item.id == val
       })
     },
     getData(){

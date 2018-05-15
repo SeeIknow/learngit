@@ -33,7 +33,8 @@ import {mapGetters,mapMutations,mapActions} from 'vuex'
 export default {
   data(){
     return{
-      form:{}
+      form:{},
+      obj:{}
     }
   },
   computed:{
@@ -52,18 +53,27 @@ export default {
     ]),
     onSubmit() {
       const data ={
-          "deptName": "string",
-          "id": 0,
-          "status": 0
+          "deptName": this.obj.deptName,
+          "id": this.obj.id,
+          "status": this.form.delivery == true? '1':'0'
         }
       this.setDepInfo(data).then(() =>{
         this.$router.replace({name:'depList'})
       })
     },
+    bmSelect(val){
+      console.log(val);
+      this.obj = this.depList.find((item) =>{
+        return item.id == val
+      })
+    },
     // 删除
     deleteInfo(){
       this.deleteDepInfo({id:this.$route.params.id}).then(() =>{
-        this.message();
+        this.$message({
+          type:'success',
+          maeeage:'删除成功'
+        });
         this.$router.replace({name:'depList'})
       })
     },

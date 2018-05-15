@@ -31,6 +31,12 @@ export const ajaxMethod = ({state, dispatch}, data) => {
 *https://easy-mock.com/mock/5aa881eb99ed355f274d0e93/system/userInfonormal#!method=get
 */
 /**
+ * 获取用户菜单权限
+ */
+export const getUserPermission = ({state, dispatch}, payload) => {
+  dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/userinfo/afterLoginGetAuth`, payload.param, payload]}, {root: true})
+}
+/**
  * 订单管理》》图文咨询
  */
 export const getOrderList = ({state, dispatch}, payload) => {
@@ -222,7 +228,7 @@ export const deleteHospital = ({state, dispatch}, payload) => {
    * 用户设置》》成员信息删除
    */
    export const userSettingUserDelete = ({state, dispatch}, payload) => {
-    dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/userinfo/deleteUserInfo?id=${payload.params.id}`, payload.param, payload]}, {root: true})
+    dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/userinfo/deleteUserInfo?id=${payload.param.id}`, payload.param, payload]}, {root: true})
    }
 
    /**
@@ -290,9 +296,14 @@ dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/deptInfo/get
 * 用户设置》》部门管理》》部门内容修改
 */
 export const userSettingEditDep = ({state, dispatch}, payload) => {
-dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/deptInfo/getDeptInfoList`, payload.param, payload]}, {root: true})
+dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/deptInfo/editDeptInfo`, payload.param, payload]}, {root: true})
 }
-
+/**
+* 用户设置》》部门管理》》部门内容添加
+*/
+export const userSettingAddDep = ({state, dispatch}, payload) => {
+dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/deptInfo/addDeptInfo`, payload.param, payload]}, {root: true})
+}
 /**
 * 用户设置》》部门管理》》部门内容删除
 */
@@ -312,4 +323,12 @@ dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/powerResourc
 */
 export const limitsSet = ({state, dispatch}, payload) => {
 dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/powerResourceInfo/setUserPowerResource?roleId=${payload.param.roleId}&deptId=${payload.param.deptId}`, payload.param, payload]}, {root: true})
+}
+
+
+/**
+* 首页》》账户设置》》修改密码
+*/
+export const changePass = ({state, dispatch}, payload) => {
+dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/userinfo/editPwd`, payload.param, payload]}, {root: true})
 }

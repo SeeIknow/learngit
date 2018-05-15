@@ -11,24 +11,28 @@
       <div class="userInfoBox" v-if="activeIndex == 0?true:false">
           <p>
             <span class="span-left-c">账户名称:</span>
-            <span>李白</span>
+            <span>{{userInfo.userModelResponse.loginname}}</span>
           </p>
           <p>
+            <span class="span-left-c">使用者姓名:</span>
+            <span>{{userInfo.userModelResponse.username}}</span>
+          </p>
+          <!-- <p>
             <span class="span-left-c">账户名称:</span>
             <el-radio v-model="radio" label="1">男</el-radio>
             <el-radio v-model="radio" label="0">女</el-radio>
-          </p>
+          </p> -->
           <p>
             <span class="span-left-c">手机:</span>
             <!-- <input type="text" name="" value=""value="18772945918" disabled> -->
-            <el-input v-model="phone" value="18772945918" v-bind:disabled="status"></el-input>
-            <el-button type="text" @click="changePhone">修改手机号</el-button>
+            <el-input v-model="userInfo.userModelResponse.phonenum" v-bind:disabled="status"></el-input>
+            <!-- <el-button type="text" @click="changePhone">修改手机号</el-button> -->
           </p>
           <p>
             <span class="span-left-c">注册时间:</span>
-            <span>201718.10</span>
+            <span>{{userInfo.userModelResponse.indate}}</span>
           </p>
-          <el-button type="primary" style="text-align:left">修改</el-button>
+          <!-- <el-button type="primary" style="text-align:left">修改</el-button> -->
       </div>
       <!-- 修改密码 -->
       <div class="passwordBox" v-if="activeIndex == 1?true:false">
@@ -49,16 +53,8 @@
       </div>
       <!-- 修改头像 -->
       <div class="userphoto" v-if="activeIndex == 2?true:false">
-          <img src="@/assets/images/default.jpg"  alt="">
-          <el-upload
-            class="avatar-uploader"
-            :action="photoUrl()"
-            :show-file-list="false"
-            :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload">
-            <img v-if="imageUrl" :src="imageUrl" class="avatar">
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-          </el-upload>
+          <img :src="photo"  alt="">
+          <input type="file" @change="upload">
           <p>从电脑中选择一项你喜欢的照片上传，仅支持JPG、PNG或BMP图片文件，且大小不超过10M。</p>
       </div>
       <div class="userInfoBox" v-if="activeIndex == 3?true:false">
@@ -70,6 +66,7 @@
 
 <script>
 import Vue from'vue'
+import {mapGetters,mapActions} from 'vuex'
 export default {
   data(){
     var checkOld = (rule, value, callback) => {
@@ -99,6 +96,7 @@ export default {
       phone:'18772945918',
       radio:'0',
       status:true,
+      userInfo:'',
       menu:[
         {
           name:'账户信息',
@@ -137,7 +135,15 @@ export default {
 
     }
   },
+  mounted(){
+    this.userInfo = JSON.parse(localStorage.getItem('userInfo'))
+    this.photo = this.userInfo.userModelResponse.photoUrl;
+  },
   methods:{
+    ...mapActions('user',[
+      'setPassswrod',
+      'uploadUserPhoto'
+    ]),
     handleClick(tab, event) {
        console.log(tab, event);
      },
@@ -160,6 +166,24 @@ export default {
          console.log(valid);
          // 验证成功
            if (valid) {
+               if(this.ruleForm2.newPass != this.ruleForm2.pass1){
+                 this.$message({
+                  message: '两次密码不同',
+                  type: 'warning'
+                });
+              }else{
+                const data = {
+                  "newPwd": this.ruleForm2.newPass,
+                  "oldPwd": this.ruleForm2.oldPass
+                }
+                this.setPassswrod(data).then( (res) =>{
+                  this.$message({
+                   message: '密码修改成功',
+                   type: 'success'
+                 });
+                 // localStorage.setItem('userInfo',res.data)
+                })
+              }
 
            } else {
              console.log('error submit!!');
@@ -167,9 +191,17 @@ export default {
            }
          });
        },
-      photoUrl(){
-        // return config.url+'sssss'
-        return 'https://jsonplaceholder.typicode.com/posts'
+      upload(e){
+        let file = e.target.files[0];
+        var formData = new FormData();
+        formData.append("photo",file,file.name);
+        this.uploadUserPhoto({data:formData}).then((res) =>{
+            this.$message({
+             message: '图像修改成功',
+             type: 'success'
+           });
+           this.photo = localStorage.getItem('adminPhoto')
+        })
       },
       handleAvatarSuccess(res, file) {
         this.imageUrl = URL.createObjectURL(file.raw);

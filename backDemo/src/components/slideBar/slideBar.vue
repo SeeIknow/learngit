@@ -109,33 +109,39 @@
 </template>
 <script>
 import SecondBar from '../secondBar/secondBar'
-import filterRoute from '@/router/middle'
-import { sidebar } from './sidebarConfig'
+// import filterRoute from '@/router/middle'
+import {filterTwoName} from '@/router/middle'
+import { getMenu } from './sidebarConfig'
 export default {
   data () {
     return {
-      sidebarRoute: sidebar,
+      sidebarRoute: '',
       routesFilter: [],
       currentName:'index'
     }
   },
   mounted () {
-    // 默认是首页
-    this.routesFilter = filterRoute[1].children.filter((route) => {
-      return route.node === 'index'
-    })
-    this.$router.push({
-      name:this.routesFilter[0].name
-    })
+    this.sidebarRoute = getMenu()
+    // // 默认是首页
+    // this.routesFilter = filterRoute[1].children.filter((route) => {
+    //   return route.node === 'index'
+    // })
+    // this.$router.push({
+    //   name:this.routesFilter[0].name
+    // })
   },
   methods:{
     jump (item) {
       // this.$message.success('即将去'+ item.name + item.title + '路由模块')
-      this.routesFilter = filterRoute[1].children.filter((route) => {
-        if(route.meta.role){
-          return route.node === item.name
-        }
-      })
+      // this.routesFilter = filterRoute[1].children.filter((route) => {
+      //   if(route.meta.role){
+      //     return route.node === item.name
+      //   }
+      // })
+      const routesSource = JSON.parse(localStorage.getItem('permission'))
+      console.log(routesSource)
+      this.routesFilter = filterTwoName(routesSource)
+      console.log(this.routesFilter)
       // console.log(this.routesFilter);
       this.currentName = item.name
       this.$router.push({

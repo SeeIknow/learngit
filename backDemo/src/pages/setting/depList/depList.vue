@@ -45,7 +45,7 @@ export default {
     }
   },
   mounted(){
-    this.getDate()
+    this.getDate(1)
   },
   computed:{
     ...mapGetters('setting',[

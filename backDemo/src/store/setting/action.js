@@ -271,6 +271,25 @@ export const deleteDepInfo = ({state, commit, dispatch, getters, rootGetters}, d
    dispatch('api/userSettingDeleteDep', payload, {root: true})
  })
 }
+/**
+* 设置》》部门内容添加
+*
+*/
+export const AddDepInfo = ({state, commit, dispatch, getters, rootGetters}, data) => {
+ const payload = rootGetters['api/payload']
+ payload.param = data
+ return new Promise((resolve, reject) => {
+   payload.callback = res => {
+     resolve(res)
+      // commit(LIST.DEPMANLIST,res.data)
+     // console.log(res)
+   }
+   payload.error = err => {
+     reject(error)
+   }
+   dispatch('api/userSettingDeleteDep', payload, {root: true})
+ })
+}
 
 /**
 * 设置》》权限管理--选择用户

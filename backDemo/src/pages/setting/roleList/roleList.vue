@@ -31,7 +31,7 @@
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :page-size="10"
+          :page-size="12"
           layout="prev, pager, next, jumper"
           :total="roleTable.total">
         </el-pagination>
@@ -49,7 +49,7 @@ export default {
     }
   },
   mounted(){
-    this.getDate()
+    this.getData(1)
   },
   computed:{
     ...mapGetters('setting',[
@@ -67,13 +67,13 @@ export default {
         // console.log(`当前页: ${val}`);
         this.getData(val)
       },
-      getDate(val){
+      getData(val){
         this.getRole({pageNum:val})
       },
       goDetail(index,table){
         console.log(index);
         console.log(table[index].id)
-        this.$router.push({name:'roleManageSetting',params:{info:table[index]}})
+        this.$router.push({name:'roleManageSetting',params:table[index]})
       },
       add(){
         this.$router.push({name:'roleManagerSettingAdd'})

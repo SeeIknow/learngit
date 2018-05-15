@@ -10,7 +10,7 @@ const state = {
     error: (res) => {}
   },
   server: {
-    server1: 'http://192.168.2.200:8080/ccyl'
+    server1: 'http://172.16.4.10:8080/ccyl'
   }
 }
 

@@ -16,6 +16,7 @@
 </template>
 <script>
 import qs from 'qs'
+import {mapActions,mapGetters,mapMutations} from 'vuex'
 export default {
   data () {
     var checkName = (rule, value, callback) => {
@@ -48,7 +49,18 @@ export default {
      loadingStatus:false
    };
   },
+  computed:{
+    ...mapGetters('permission',[
+      'items'
+    ])
+  },
   methods:{
+    ...mapActions('permission',[
+      'getUserPermission'
+    ]),
+    ...mapMutations('permission',[
+      'LIST.ADD_MENU'
+    ]),
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         console.log(valid);
@@ -58,12 +70,22 @@ export default {
             this.loadingStatus = true;
             setTimeout(() =>{
               this.loadingStatus = false;
-              this.$http.post('http://192.168.2.200:8080/ccyl/login',null,{headers:{'loginname':this.ruleForm2.username,'password':this.ruleForm2.pass}}).then(response => {
+              this.$http.post('http://172.16.4.10:8080/ccyl/login',null,{headers:{'loginname':this.ruleForm2.username,'password':this.ruleForm2.pass}}).then(response => {
                   // success callback
                   console.log(response);
+                  // 本地存储用户信息
                   localStorage.setItem('userInfo',JSON.stringify(response.data))
-                  this.$router.replace({
-                    name: 'index'
+                  // 存储用户图像
+                  localStorage.setItem('adminPhoto',response.data.userModelResponse.photoUrl )
+                  // 获取用户菜单权限
+                  this.getUserPermission().then((data) =>{
+                    // 本地存储菜单权限
+                    localStorage.setItem('permission',JSON.stringify(data.data))
+                    // vuex存储permission
+                    // this.LIST.ADD_MENU(data)
+                    this.$router.replace({
+                      name: 'index'
+                    })
                   })
               }, response => {
                   // error callback

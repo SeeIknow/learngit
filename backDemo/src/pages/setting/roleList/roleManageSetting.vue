@@ -11,7 +11,7 @@
             <el-input v-model="form.roleName"></el-input>
           </el-form-item>
           <el-form-item label="部门">
-            <el-select v-model="form.deptName" placeholder="请选择" @change="bmSelect(form.region)">
+            <el-select v-model="form.deptName" placeholder="请选择" @change="bmSelect(form.deptName)">
               <el-option
                 v-for="item in depList"
                 :key="item.id"
@@ -24,7 +24,7 @@
               <el-button type="text" @click="select">查看并修改</el-button>
           </el-form-item>
           <el-form-item label="状态">
-            <el-switch v-model="form.delivery"></el-switch>
+            <el-switch v-model="form.status"></el-switch>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="onSubmit">保存</el-button>
@@ -49,7 +49,8 @@ export default {
   },
   mounted(){
     this.getData();
-    this.form = this.$route.params.info
+    this.form = this.$route.params
+    console.log(this.form);
   },
   methods:{
     ...mapActions('setting',[
@@ -59,11 +60,11 @@ export default {
     ]),
     onSubmit() {
       const data ={
-          "deptId": 0,
-          "id": 0,
-          "refId": 0,
-          "roleName": "string",
-          "status": 0
+          "deptId": this.form.deptName,
+          "id": this.form.id,
+          "refId":this.form.refId,
+          "roleName": this.form.roleName,
+          "status": this.form.status == true?'1':'0'
         }
       this.setRoleInfo(data).then(() =>{
         this.$router.replace({name:'roleList'})
@@ -72,7 +73,10 @@ export default {
     // 删除
     deleteInfo(){
       this.deleteRoleInfo({id:this.$route.params.id}).then(() =>{
-        this.message();
+        this.$message({
+          message:'修改成功',
+          type:'success'
+        });
         this.$router.replace({name:'roleList'})
       })
     },
@@ -80,7 +84,7 @@ export default {
       this.getDepList();
     },
     select(){
-      this.$router.push({name:'limitEdit',params:{'form1':JSON.stringify(this.form)}})
+      this.$router.push({name:'limitEdit',params:this.form})
     }
   }
 }

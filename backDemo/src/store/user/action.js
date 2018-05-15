@@ -233,6 +233,24 @@ return new Promise((resolve, reject) => {
  dispatch('api/deleteHospital', payload, {root: true})
 })
 }
+
+/**
+ * 首页 账户设置  修改密码
+ */
+
+export const setPassswrod= ({state, commit, dispatch, getters, rootGetters}, data) => {
+const payload = rootGetters['api/payload']
+payload.param = data
+return new Promise((resolve, reject) => {
+ payload.callback = res => {
+   resolve(res)
+ }
+ payload.error = err => {
+   reject(error)
+ }
+ dispatch('api/changePass', payload, {root: true})
+})
+}
  /**
  * 用户管理》》医生管理>>医生详情> 上传头像
  */
@@ -244,6 +262,19 @@ return new Promise((resolve, reject) => {
               console.log(res);
 
               localStorage.setItem('userPhoto',res.data)
+              return res
+            })
+ }
+ /**
+ * 首页》》账户设置> 上传头像
+ */
+ export const uploadUserPhoto = ({state, commit, dispatch, getters, rootGetters},param) =>{
+   console.log(param);
+   axios.post('http://192.168.2.200:8080/ccyl'+`/userinfo/uploadPhoto`,param.data,{headers:{
+              "Authorization": JSON.parse(localStorage.getItem('userInfo')).token
+            }}).then((res) =>{
+              console.log(res);
+              localStorage.setItem('adminPhoto',res.data)
               return res
             })
  }
