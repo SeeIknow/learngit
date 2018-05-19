@@ -38,7 +38,7 @@
           <el-col :span="12">
             <div class="grid-content">
             <span class="spa-left-span">证件类型:</span>
-            <span class="spa-right-span">{{yyDetail.patientCertificateType }}</span>
+            <span class="spa-right-span">{{yyDetail.patientCertificateTypeName }}</span>
             </div>
           </el-col>
           <el-col :span="12">
@@ -60,7 +60,7 @@
           <el-col :span="12">
             <div class="grid-content">
             <span class="spa-left-span">医生职称:</span>
-            <span class="spa-right-span">{{yyDetail.doctorPositionType }}</span>
+            <span class="spa-right-span">{{yyDetail.doctorPosition }}</span>
             </div>
           </el-col>
         </el-row>
@@ -96,7 +96,7 @@
           <el-col :span="24">
             <div class="grid-content">
             <span class="spa-left-span">就诊时间:</span>
-            <span class="spa-right-span">{{yyDetail.appointmentApplyDate}}</span>
+            <span class="spa-right-span">{{parseTime1(yyDetail.appointmentApplyDate)}}</span>
             </div>
           </el-col>
         </el-row>
@@ -104,13 +104,13 @@
           <el-col :span="12">
             <div class="grid-content">
             <span class="spa-left-span">就诊时段:</span>
-            <span class="spa-right-span">{{yyDetail.expectDateEnd}}</span>
+            <span class="spa-right-span">{{parseTime1(yyDetail.expectDateEnd)}}</span>
             </div>
           </el-col>
           <el-col :span="12">
             <div class="grid-content">
             <span class="spa-left-span">就诊地点:</span>
-            <span class="spa-right-span">{{yyDetail.expectDateEnd}}</span>
+            <span class="spa-right-span">{{yyDetail.realityPlace }}</span>
             </div>
           </el-col>
         </el-row>
@@ -125,7 +125,7 @@
           <el-col :span="12">
             <div class="grid-content">
             <span class="spa-left-span">申请时间:</span>
-            <span class="spa-right-span">{{yyDetail.appointmentApplyDate}}</span>
+            <span class="spa-right-span">{{parseTime1(yyDetail.appointmentApplyDate)}}</span>
           </div>
           </el-col>
         </el-row>
@@ -133,7 +133,7 @@
           <el-col :span="12">
             <div class="grid-content">
             <span class="spa-left-span">预约时间:</span>
-            <span class="spa-right-span">{{yyDetail.appointmentApplyDate}}</span>
+            <span class="spa-right-span">{{parseTime1(yyDetail.appointmentApplyDate)}}</span>
             </div>
           </el-col>
         </el-row>
@@ -141,13 +141,13 @@
       <!-- 沟通记录 -->
       <div class="infoItem communicationRecord" >
         <p>沟通记录</p>
-        <el-row>
+        <!-- <el-row>
           <el-col :span="24">
             <div class="grid-content">
             <span class="spa-left-span">沟通记录:</span>
             </div>
           </el-col>
-        </el-row>
+        </el-row> -->
         <template v-for="(item,$index) in outpatientOrderComms">
           <div class="contentBox">
 
@@ -161,7 +161,7 @@
         </el-row>
       </div>
       <!-- 沟通记录 -->
-      <div class="infoItem" >
+      <!-- <div class="infoItem" >
         <p>沟通记录</p>
         <el-row>
           <el-col :span="24">
@@ -176,7 +176,7 @@
             <p>内容记录：{{item.communicationRecord}}</p>
           </div>
         </template>
-      </div>
+      </div> -->
       <div class="infoItem">
         <el-button type="primary" plain @click="openModal('successMod')">就诊确认</el-button>
       </div>
@@ -259,7 +259,7 @@ export default {
       'getOrderYy_detail',
       'getOrderYy_detailRecord',
       'getOrderYy_address',
-      'getOrderYy_check_j',
+      'getOrderYy_check_j_s',
     ]),
     parseTime1(val){
       return parseTime(val)
@@ -306,10 +306,10 @@ export default {
         case 'successMod':
               const obj1 = {
                 "id": this.$route.params.id,
-                "nonMedicalReasons": '',
+                "clinicDate": this.dateVal,
                 "status":2
               }
-              this.getOrderYy_check_j(obj1).then(()=>{
+              this.getOrderYy_check_j_s(obj1).then(()=>{
                 this.successMod = false;
                 this.$router.replace({name:'appointmentService'})
               }).catch(()=>{
@@ -336,9 +336,9 @@ export default {
                */
               const obj = {
                 "communicationRecord": this.valueTextArea1,
-                "id": this.$route.params.id,
+                // "id": this.$route.params.id,
                 "inDate": getNowFormatDate(),
-                "outpatientOrderId": 0
+                "outpatientOrderId": this.$route.params.id
               }
               // 添加沟通记录
               this.getOrderYy_detailRecord(obj).then( ()=>{

@@ -38,7 +38,7 @@
           <el-col :span="12">
             <div class="grid-content">
             <span class="spa-left-span">证件类型:</span>
-            <span class="spa-right-span">{{yyDetail.patientCertificateType }}</span>
+            <span class="spa-right-span">{{yyDetail.patientCertificateTypeName }}</span>
             </div>
           </el-col>
           <el-col :span="12">
@@ -60,7 +60,7 @@
           <el-col :span="12">
             <div class="grid-content">
             <span class="spa-left-span">医生职称:</span>
-            <span class="spa-right-span">{{yyDetail.doctorPositionType }}</span>
+            <span class="spa-right-span">{{yyDetail.doctorPosition }}</span>
             </div>
           </el-col>
         </el-row>
@@ -216,6 +216,7 @@ export default {
       dateVal:'',
       diseasesBox:[],
       outpatientOrderComms:[],
+      address_c:'',
     }
   },
   computed:{
@@ -238,7 +239,7 @@ export default {
     sureConfirm(val){
       switch(val){
         case 'successMod':
-        console.log(1111);
+        //console.log(1111);
             this.getOrderYy_check(this.outObj(1)).then(()=>{
               this.$router.replace({name:'appointmentService'})
             }).catch(()=>{
@@ -259,29 +260,34 @@ export default {
              */
             const obj = {
               "communicationRecord": this.valueTextArea1,
-              "id": this.$route.params.id,
+              // "id": this.$route.params.id,
               "inDate": getNowFormatDate(),
-              "outpatientOrderId": 0
+              "outpatientOrderId": this.$route.params.id
             }
             // 添加沟通记录
             this.getOrderYy_detailRecord(obj).then( ()=>{
-              this.dialogVisible = false;
               const obj = {
                 communicationRecord:this.valueTextArea1,
                 inDate:getNowFormatDate()
               }
               this.outpatientOrderComms.push(obj);//新增沟通记录
+              this.dialogVisible = false;
             })
             break;
       }
     },
     //审核参数定义对象
     outObj(status){
+      for(let i in  this.yyDetailAdress){
+        if(this.yyDetailAdress[i].id == this.form1.region2){
+          this.address_c = this.yyDetailAdress[i].address
+        }
+      }
       const obj = {
             "ampm": this.form1.region1,
             "appointmentDate": getNowFormatDate(),
             "id": this.$route.params.id,
-            "realityPlace": this.form1.region2,
+            "realityPlace": this.address_c,
             "refuseReason": this.valueTextArea2,
             "status": status
           }

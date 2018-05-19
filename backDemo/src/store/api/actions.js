@@ -40,7 +40,7 @@ export const getUserPermission = ({state, dispatch}, payload) => {
  * 订单管理》》图文咨询
  */
 export const getOrderList = ({state, dispatch}, payload) => {
-  dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/inquiryOrder/orders?status=${payload.param.status}`, payload.param, payload]}, {root: true})
+  dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/inquiryOrder/orders?pageNum=${payload.param.pageNum}&status=${payload.param.status}`, payload.param, payload]}, {root: true})
 }
 
 /**
@@ -79,7 +79,7 @@ export const getOrderList = ({state, dispatch}, payload) => {
    * 订单管理》》图文咨询>>详情>>分配医生
    */
    export const getOrderDoctor = ({state, dispatch}, payload) => {
-     dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/inquiryOrder/${payload.param.id}/allocation/doctors`, payload.param,payload]}, {root: true})
+     dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/inquiryOrder/${payload.param.id}/allocation/doctors?hospitalId=${payload.param.hospitalId}`, payload.param,payload]}, {root: true})
    }
   /**
    * 订单管理》》图文咨询>>详情>>订单审核通过
@@ -129,6 +129,12 @@ export const getOrderList = ({state, dispatch}, payload) => {
     export const getOrderYy_check_j = ({state, dispatch}, payload) => {
       dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/outpatientOrder/outpatient/outpatientOrder`, payload.param, payload]}, {root: true})
     }
+    /**
+     * 订单管理》》门诊预约》详情》》就诊订单确认
+     */
+     export const getOrderYy_check_j_s = ({state, dispatch}, payload) => {
+       dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/outpatientOrder/outpatient/affirm`, payload.param, payload]}, {root: true})
+     }
  /**
   * 用户管理》》医生管理
   */
@@ -196,7 +202,7 @@ export const hospitalDetails = ({state, dispatch}, payload) => {
 * 用户管理》》医生管理>>医生详情>服务管理
 */
 export const serviceMange = ({state, dispatch}, payload) => {
- dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/doctor/${payload.params.id}/services`, payload.param, payload]}, {root: true})
+ dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/doctor/${payload.param.id}/services`, payload.param.data, payload]}, {root: true})
 }
 
 /**
@@ -331,4 +337,17 @@ dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/powerResour
 */
 export const changePass = ({state, dispatch}, payload) => {
 dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/userinfo/editPwd`, payload.param, payload]}, {root: true})
+}
+
+/**
+* 统计》》交易统计
+*/
+export const tradeStatistics = ({state, dispatch}, payload) => {
+dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/transaction/getOrderTransaction?statisticType=${payload.param.statisticType}&orderType=${payload.param.orderType}&startDate=${payload.param.startDate}&endDate=${payload.param.endDate}`, payload.param, payload]}, {root: true})
+}
+/**
+* 统计》》交易统计 订单数据
+*/
+export const orderStatistics = ({state, dispatch}, payload) => {
+dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/transaction/getOrderSource?statisticType=${payload.param.statisticType}&orderType=${payload.param.orderType}&startDate=${payload.param.startDate}&endDate=${payload.param.endDate}`, payload.param, payload]}, {root: true})
 }

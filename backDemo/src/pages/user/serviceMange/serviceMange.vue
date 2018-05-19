@@ -10,7 +10,7 @@
             <el-form-item :label="item.serviceItemName">
               <el-input v-model="item.serviceprice"></el-input>
               <el-switch
-                v-model="item.switchOnOff"
+                v-model="switchOnOff[$index]"
                 active-color="#13ce66"
                 inactive-color="#ff4949">
               </el-switch>
@@ -90,6 +90,7 @@ export default {
       value4:true,
       value5:true,
       value6:true,
+      switchOnOff:[],
     }
   },
   computed:{
@@ -97,63 +98,34 @@ export default {
       'doctorDetail',
     ]),
   },
+  mounted(){
+    for(let i in this.doctorDetail.services){
+      const aa = this.changeStatus(this.doctorDetail.services[i].switchOnOff)
+      this.switchOnOff.push(aa)
+    }
+    console.log(this.switchOnOff)
+  },
   methods:{
     ...mapActions('user',[
       'setServiceMange',
     ]),
+    changeStatus(val){
+      const status = val == 1?true:false;
+      return status
+    },
+    changeBack(val){
+      const status = val == true?'1':'0';
+      return status
+    },
     // 保存提交
     set(){
-      const data = [
-        {
-          "doctorId": 0,
-          "id": 0,
-          "serviceItemId": 0,
-          "serviceItemName": "string",
-          "serviceprice": 0,
-          "switchOnOff": 0
-        },
-        {
-          "doctorId": 0,
-          "id": 0,
-          "serviceItemId": 0,
-          "serviceItemName": "string",
-          "serviceprice": 0,
-          "switchOnOff": 0
-        },
-        {
-          "doctorId": 0,
-          "id": 0,
-          "serviceItemId": 0,
-          "serviceItemName": "string",
-          "serviceprice": 0,
-          "switchOnOff": 0
-        },
-        {
-          "doctorId": 0,
-          "id": 0,
-          "serviceItemId": 0,
-          "serviceItemName": "string",
-          "serviceprice": 0,
-          "switchOnOff": 0
-        },
-        {
-          "doctorId": 0,
-          "id": 0,
-          "serviceItemId": 0,
-          "serviceItemName": "string",
-          "serviceprice": 0,
-          "switchOnOff": 0
-        },
-        {
-          "doctorId": 0,
-          "id": 0,
-          "serviceItemId": 0,
-          "serviceItemName": "string",
-          "serviceprice": 0,
-          "switchOnOff": 0
-        },
-      ]
-      this.setServiceMange({id:doctorId,data:data}).then(() =>{
+      // const data = this.doctorDetail.services
+      for(let i in this.doctorDetail.services){
+        this.doctorDetail.services[i].switchOnOff = this.changeBack(this.switchOnOff[i])
+      }
+      console.log(this.doctorDetail.services);
+      // return;
+      this.setServiceMange({id:this.$route.params.id,data:this.doctorDetail.services}).then(() =>{
         this.$router.replace({name:'doctorEdit'})
       })
     },

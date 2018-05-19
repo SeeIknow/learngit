@@ -8,6 +8,7 @@ const state = {
   doctorOffice:'',
   doctorLevel:'',
   medicalAssitant:'',
+  server1:'http://172.16.4.10:8080/ccyl'
 }
 
 export default {

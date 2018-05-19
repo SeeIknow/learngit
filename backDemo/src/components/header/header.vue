@@ -44,6 +44,8 @@ export default {
   methods: {
     loginOut(){
        localStorage.removeItem('userInfo');
+       localStorage.removeItem('permission');
+       localStorage.removeItem('adminPhoto');
        setTimeout(() =>{
          location.reload();
        },500)
@@ -54,7 +56,7 @@ export default {
       const photo = localStorage.getItem('adminPhoto')
       this.userName = info.username
       this.photo = photo;
-      console.log(info.username);
+      //console.log(info.username);
     }
   }
 }

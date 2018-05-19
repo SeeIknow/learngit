@@ -109,47 +109,48 @@
 </template>
 <script>
 import SecondBar from '../secondBar/secondBar'
-// import filterRoute from '@/router/middle'
-import {filterTwoName} from '@/router/middle'
+import {filterTwoName,constantTouter} from '@/router/middle'
 import { getMenu } from './sidebarConfig'
 export default {
   data () {
     return {
-      sidebarRoute: '',
-      routesFilter: [],
+      sidebarRoute: '',//一级菜单盒子
+      routesFilter: [],//二级菜单盒子过滤
       currentName:'index'
     }
   },
   mounted () {
+  	//console.log(constantTouter);
     this.sidebarRoute = getMenu()
-    // // 默认是首页
-    // this.routesFilter = filterRoute[1].children.filter((route) => {
-    //   return route.node === 'index'
-    // })
-    // this.$router.push({
-    //   name:this.routesFilter[0].name
-    // })
+    // 默认是首页
+    this.routesFilter = constantTouter[1].children;
+    this.$router.push({
+      name:this.routesFilter[0].name
+    })
   },
   methods:{
     jump (item) {
-      // this.$message.success('即将去'+ item.name + item.title + '路由模块')
-      // this.routesFilter = filterRoute[1].children.filter((route) => {
-      //   if(route.meta.role){
-      //     return route.node === item.name
-      //   }
-      // })
-      const routesSource = JSON.parse(localStorage.getItem('permission'))
-      console.log(routesSource)
-      this.routesFilter = filterTwoName(routesSource)
-      console.log(this.routesFilter)
-      // console.log(this.routesFilter);
-      this.currentName = item.name
-      this.$router.push({
-        name:this.routesFilter[0].name,
-        params:{
-          name:item.title
-        }
-      })
+    	//console.log(item);
+    	const menus = JSON.parse(localStorage.getItem('permission'));
+    	//console.log(menus);
+      if(item.name == 'index'){
+        this.currentName = item.name
+        this.routesFilter = constantTouter[1].children;
+        this.$router.push({
+          name:this.routesFilter[0].name
+        })
+      }else{
+        this.routesFilter= filterTwoName(menus.menus,item.name)
+        // this.$message.success('即将去'+ item.name + item.title + '路由模块')
+         //console.log(this.routesFilter);
+        this.currentName = item.name
+        this.$router.push({
+          name:this.routesFilter[0].name,
+          params:{
+            name:item.title
+          }
+        })
+      }
     }
   },
   components:{

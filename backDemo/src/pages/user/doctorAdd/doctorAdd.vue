@@ -16,6 +16,26 @@
                 <el-radio label="女"></el-radio>
               </el-radio-group>
             </el-form-item>
+            <el-form-item label="医院">
+              <el-select v-model="form.hospitalName  " placeholder="请选择" @change="hosChange(form.hospitalName)">
+                <el-option
+                  v-for="item in hospitalList"
+                  :key="item.id"
+                  :label="item.hospitalName"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="科室">
+              <el-select v-model="form.departmentName" placeholder="请选择">
+                <el-option
+                  v-for="item in departmentTList"
+                  :key="item.id"
+                  :label="item.departmentName"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
             <el-form-item label="职称">
               <el-select v-model="form.positionName " placeholder="请选择">
                 <el-option
@@ -36,13 +56,17 @@
                 </el-option>
               </el-select>
             </el-form-item>
+            <el-form-item label="医生性质">
+              <el-radio v-model="radio" label="1">内部</el-radio>
+              <el-radio v-model="radio" label="0">外部</el-radio>
+            </el-form-item>
             <el-form-item label="联系方式">
               <el-input v-model="form.phoneNum"></el-input>
             </el-form-item>
           </el-form>
           <div class="peopleImg">
-            <img src="https://avatars3.githubusercontent.com/u/15126380?s=88&v=4" alt="">
-            <el-button size="small" type="primary">点击上传</el-button>
+            <img :src="images[0]" alt="">
+            <input  type="file" name="点击上传" @change="onFileChange" id="photo">
           </div>
         </div>
         </div>
@@ -111,8 +135,8 @@
         <div class="module-i doctorIntro">
           <p class="module-i-title">医生简介</p>
           <div class="form-box">
-            <div class="introContent" :contenteditable="editStatus" v-model="dcoInfomation">
-            </div>
+            <textarea class="introContent" :disabled="editStatus" v-model="dcoInfomation">
+            </textarea>
             <el-button type="primary" plain class="prymaryBtn" @click="doctorIntro()">编辑简介</el-button>
           </div>
         </div>
@@ -222,7 +246,7 @@
     center>
     <el-form ref="form" :model="form" label-width="110px">
       <el-form-item label="一级疾病(必选)">
-        <el-select v-model="form.region" placeholder="请选择一级疾病" :change="searchFromThis(form.region)">
+        <el-select v-model="form.region" placeholder="请选择一级疾病" @change="searchFromThis(form.region)">
           <el-option
             v-for="item in diseaseTypeList"
             :key="item.id"
@@ -242,7 +266,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="三级疾病(可选)">
-        <el-select v-model="form.region3" placeholder="请选择三级疾病" :change="searchFromThree(form.region3)">
+        <el-select v-model="form.region3" placeholder="请选择三级疾病" @change="searchFromThree(form.region3)">
           <el-option
              v-for="item in depList_three"
              :key="item.id"
@@ -301,18 +325,26 @@ export default {
       dcoInfomation:'',
       assistant:'',
       assistantId:'',
-
+      hospitalList:[],
+      hospitalId:'',
+      departmentId:'',
+      images:[],
+      files:'',
+      position:'',
+      doctorLevel1:'',
+      radio:'1'
     }
   },
   computed:{
     ...mapGetters('user', [
       'doctorOffice',
       'doctorLevel',
-      'medicalAssitant'
+      'medicalAssitant',
     ]),
     ...mapGetters('order', [
       'diseaseTypeList',
       'depList_three',
+      'departmentTList',
     ])
   },
   mounted(){
@@ -324,10 +356,13 @@ export default {
       'getDoctorLevel',
       'getMedicalAssitant',
       'getMedicalAssitant',
-      'setDoctorInfo'
+      'setDoctorInfo',
+      'getHospitalList',
+      'uploadPhoto'
     ]),
     ...mapActions('order', [
       'getOrderDiseaseType',
+      'getOrderDepartment',
       'getOrderDepartmentThree'
     ]),
     handleClose(tag,type) {
@@ -337,10 +372,43 @@ export default {
         this.dynamicTags1.splice(this.dynamicTags1.indexOf(tag), 1);
       }
     },
+    onFileChange(e) {
+        this.files = e.target.files || e.dataTransfer.files;
+        if (!this.files.length)return;
+        this.createImage(this.files);
+
+    },
+    createImage(file) {
+        if(typeof FileReader==='undefined'){
+            alert('您的浏览器不支持图片上传，请升级您的浏览器');
+            return false;
+        }
+        var image = new Image();
+        var vm = this;
+        var leng=file.length;
+        for(var i=0;i<leng;i++){
+            var reader = new FileReader();
+            reader.readAsDataURL(file[i]);
+            reader.onload =function(e){
+            vm.images.push(e.target.result);
+            };
+        }
+        //console.log(this.images);
+    },
     getData(){
       this.getDoctorOffice();
       this.getDoctorLevel()
       this.getMedicalAssitant()
+
+      this.getOrderDiseaseType()
+      this.getHospitalList().then((res) =>{
+        this.hospitalList = res.data;
+      })
+    },
+    hosChange(val){
+      this.hospitalId = val
+      this.getOrderDepartment({id:val})
+      //console.log(this.departmentTList)
     },
     // 弹框
     closeUserAlt(val){
@@ -381,7 +449,7 @@ export default {
           obj = this.medicalAssitant.find((item)=>{//这里的userList就是上面遍历的数据源
               return item.id === this.form2.region;//筛选出匹配数据
           });
-          console.log(obj);
+          //console.log(obj);
           this.assistant = obj.username
           this.assistantId = obj.id;
           this.userSelectAlt= false;
@@ -416,9 +484,6 @@ export default {
     doctorIntro(){
       this.editStatus = true;
     },
-    goBack(){
-      this.$router.go(-1)
-    },
     // 判断对象是否为空
     isEmptyObject(obj) {
       for (var key in obj) {
@@ -428,7 +493,7 @@ export default {
     },
     //科室
     searchFromThis(id){
-      console.log(id);
+      //console.log(id);
       for (var i in this.diseaseTypeList) {
         if (this.diseaseTypeList[i].id == id) {
           //一级疾病
@@ -440,7 +505,7 @@ export default {
     },
     // 获取疾病类型
     changeValue(value) {
-      console.log(value);
+      //console.log(value);
         for (var i in this.diseasesBox) {
           if (this.diseasesBox[i].id == value) {
             // 二级疾病
@@ -452,7 +517,7 @@ export default {
     },
     // 获取疾病类型三级
     searchFromThree(value) {
-      console.log(value);
+      //console.log(value);
         for (var i in this.depList_three) {
           if (this.depList_three[i].id == value) {
             // 三级级疾病
@@ -467,31 +532,71 @@ export default {
       const diseaseIds = this.dynamicTags1.map((i) =>{
         return i.diseaseId
       })
-      console.log(diseaseIds);
+      // 解析职称
+      for(let i in this.doctorOffice){
+        if(this.doctorOffice[i].value == this.form.positionName){
+          this.position = this.doctorOffice[i].label
+        }
+      }
+      // 解析级别
+      for(let i in this.doctorLevel){
+        if(this.doctorLevel[i].value == this.form.doctorLevel){
+          this.doctorLevel1 = this.doctorLevel[i].label
+        }
+      }
+      this.position
+      //console.log(diseaseIds);
+      var reg = /(?!^\d+$)(?!^[a-zA-Z]+$)[0-9a-zA-Z]{1,23}/
+      if(!reg.test(this.form1.name)){
+        this.$message({
+          type:'error',
+          message:'账户名只能输入数字字母！'
+        })
+        return;
+      }
       const data = {
-        "account":this.form.name ,
-        "accountCheckStatus": this.form1.checkStatus,
-        "accountLockStatus": this.form1.blockingStatus,
+        "account":this.form1.name ,
+        "accountCheckStatus": this.form1.checkStatus== true?'1':'0',
+        "accountLockStatus": this.form1.blockingStatus == true?'1':'0',
         "accountPwd": this.form1.password,
         "assistant": this.assistant,
         "assistantId": this.assistantId,
         "description": this.dcoInfomation,
         "diseaseIds": diseaseIds,
+        'hospitalId':this.hospitalId,
+        'departmentId':this.form.departmentName,
         // "doctorId": this.doctorDetail.doctor.doctorId,
         "intro": this.dcoInfomation,
         "label": this.dynamicTags.join('、'),
         "levelId": this.form.doctorLevel,//未知
-        "levelName": this.form.doctorLevel,
-        "name": this.form1.name,
+        "levelName": this.doctorLevel1,
+        "name": this.form.name,
+        "type":this.radio,
         "phoneNum": this.form.phoneNum,
         "positionId": this.form.positionName ,
-        "positionName": this.form.positionName ,
-        "sex": this.form.sex == '女'?'1':'2',
+        "positionName": this.position ,
+        "sex": this.form.sex == '女'?'2':'1',
       }
-      this.setDoctorInfo(data).then(() =>{
+      this.setDoctorInfo(data).then((res) =>{
+        // 调取上传图片方法
+        this.upload(res.data)
         this.$router.replace({name:'doctorManager'})
       })
     },
+    goBack(){
+      this.$router.go(-1)
+    },
+    //上传图片
+    upload(id){
+      var formData = new FormData();
+      formData.append("multipartFile",this.files[0],this.files[0].name);
+      this.uploadPhoto({id:id,data:formData}).then((res)=>{
+        //console.log(localStorage.getItem('userPhoto'))
+        setTimeout(() =>{
+            this.doctorDetail.doctor.photoUrl = localStorage.getItem('userPhoto')
+        },1000)
+      })
+    }
   }
 }
 </script>

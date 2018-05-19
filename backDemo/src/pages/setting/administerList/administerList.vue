@@ -72,18 +72,18 @@ export default {
       'getUserList'
     ]),
       handleSizeChange(val) {
-        //console.log(`每页 ${val} 条`);
+        ////console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
-        //console.log(`当前页: ${val}`);
+        ////console.log(`当前页: ${val}`);
         this.getData(val)
       },
       getDate(val=1){
         this.getUserList({pageNum:val})
       },
       goDetail(index,table){
-        //console.log(index);
-        console.log(table[index])
+        ////console.log(index);
+        //console.log(table[index])
         this.$router.push({name:'managerSetting',params:table[index]})
       },
       add(){

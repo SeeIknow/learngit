@@ -98,7 +98,7 @@ export default {
       this.$router.go(-1)
     },
     bmSelect(val){
-      console.log(val);
+      //console.log(val);
       this.getRolelist({'id':val})
     }
   }

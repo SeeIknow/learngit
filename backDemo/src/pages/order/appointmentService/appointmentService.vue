@@ -21,7 +21,21 @@
         end-placeholder="结束日期">
       </el-date-picker>
     </div>
-
+    <div class="source input-select-1">
+      <span class="label-span">订单类型:</span>
+      <el-select v-model="typeValue" clearable placeholder="请选择">
+        <el-option
+          key="1"
+          label="免费咨询"
+          value="1">
+        </el-option>
+        <el-option
+          key="2"
+          label="专家"
+          value="2">
+        </el-option>
+      </el-select>
+    </div>
     <!-- <div class="source input-select-1">
       <span class="label-span">来源渠道:</span>
       <el-select v-model="sourceValue" clearable placeholder="请选择">
@@ -199,13 +213,14 @@ export default {
       nameValue:'',
       cardValue:'',
       phoneValue:"",
-      showStatus:false,
+      showStatus:true,
       dateValue:['',''],
       operation:'预约',//操作按钮
+      typeValue:''
     }
   },
   mounted(){
-    this.getData();
+    this.getData(1);
     if(this.listYY.total>0){
       this.showStatus = true;
     }
@@ -226,7 +241,7 @@ export default {
       return row.authority == 1 ? "上午" : "下午";
     },
     //参数对象
-    outObj(status=0,patientCertificateNo='',inDateEnd='',inDateStart='',orderNo='',patientName='',patientPhoneNum='',val=1) {
+    outObj(val) {
       const data = {
         patientCertificateNo: this.cardValue,
         inDateEnd: this.dateValue[1],//时间组件返回值为一个数组
@@ -244,8 +259,8 @@ export default {
     goDetial(index,table){
       // index:当前点击对象的下表
       // table:整个表格对象
-      //console.log(index);
-      //console.log(table[index].id)
+      ////console.log(index);
+      ////console.log(table[index].id)
       /**
        * [switch description]
        * @param  table[index].status  每一个点击对象所对应的状态值
@@ -258,7 +273,13 @@ export default {
         case 1:
           var routerName = 'orderOutpatientAppointment1';
           break;
-        case 3||2||4||5:
+        case 3:
+          var routerName = 'orderOutpatientAppointment2';
+        case 2:
+          var routerName = 'orderOutpatientAppointment2';
+        case 4:
+          var routerName = 'orderOutpatientAppointment2';
+        case 5:
           var routerName = 'orderOutpatientAppointment2';
           break;
       }
@@ -266,10 +287,10 @@ export default {
     },
     // 分页
     handleSizeChange(val) {
-      //console.log(`每页 ${val} 条`);
+      ////console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
-      //console.log(`当前页: ${val}`);
+      ////console.log(`当前页: ${val}`);
       this.getData(val)
     },
     // 获取数据
@@ -284,6 +305,7 @@ export default {
     },
     getTime(){
       // 时间组件 清楚内容
+      //console.log(this.dateValue);
       this.dateValue = (this.dateValue == null ? ['',''] : this.dateValue)
     },
     // 菜单切换
@@ -308,7 +330,7 @@ export default {
       }
       // 菜单切换 日期组件重新赋值
       this.dateValue = (this.dateValue == null ? ['',''] : this.dateValue)
-         this.getData()
+         this.getData(1)
      }
   }
 }

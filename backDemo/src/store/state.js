@@ -1,5 +1,6 @@
 export const state ={
   role:false,
   firstMenu:'',
-  secondMenuu:''
+  secondMenuu:'',
+  trade:''
 }

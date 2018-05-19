@@ -145,7 +145,7 @@ export default {
       'uploadUserPhoto'
     ]),
     handleClick(tab, event) {
-       console.log(tab, event);
+       //console.log(tab, event);
      },
      select(item,index){
        this.activeIndex = index;
@@ -154,7 +154,7 @@ export default {
             Vue.set(item,'active',false)
         });
         Vue.set(item,'active',true)
-            console.log(item.active);
+            //console.log(item.active);
         });
      },
      // 更改手机号
@@ -163,7 +163,7 @@ export default {
      },
      submit (formName) {
        this.$refs[formName].validate((valid) => {
-         console.log(valid);
+         //console.log(valid);
          // 验证成功
            if (valid) {
                if(this.ruleForm2.newPass != this.ruleForm2.pass1){
@@ -186,7 +186,7 @@ export default {
               }
 
            } else {
-             console.log('error submit!!');
+             //console.log('error submit!!');
              return false;
            }
          });

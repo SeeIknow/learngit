@@ -38,7 +38,7 @@
           <el-col :span="12">
             <div class="grid-content">
             <span class="spa-left-span">证件类型:</span>
-            <span class="spa-right-span">{{yyDetail.patientCertificateType}}</span>
+            <span class="spa-right-span">{{yyDetail.patientCertificateTypeName}}</span>
             </div>
           </el-col>
           <el-col :span="12">
@@ -60,7 +60,7 @@
           <el-col :span="12">
             <div class="grid-content">
             <span class="spa-left-span">医生职称:</span>
-            <span class="spa-right-span">{{yyDetail.doctorPositionType}}</span>
+            <span class="spa-right-span">{{yyDetail.doctorPosition}}</span>
             </div>
           </el-col>
         </el-row>
@@ -96,7 +96,7 @@
           <el-col :span="24">
             <div class="grid-content">
             <span class="spa-left-span">提交时间:</span>
-            <span class="spa-right-span">{{yyDetail.appointmentApplyDate}}</span>
+            <span class="spa-right-span">{{parseTime(yyDetail.appointmentApplyDate)}}</span>
             </div>
           </el-col>
         </el-row>
@@ -104,37 +104,37 @@
           <el-col :span="24">
             <div class="grid-content">
             <span class="spa-left-span">申请时间:</span>
-            <span class="spa-right-span">{{yyDetail.appointmentApplyDate}}</span>
+            <span class="spa-right-span">{{parseTime(yyDetail.appointmentApplyDate)}}</span>
             </div>
           </el-col>
         </el-row>
       </div>
       <div class="infoItem">
         <el-row>
-          <el-col :span="12">
+          <!-- <el-col :span="12">
             <div class="grid-content">
             <span class="spa-left-span">订单状态:</span>
             <span class="spa-right-span">待预约</span>
             </div>
-          </el-col>
+          </el-col> -->
           <el-col :span="12">
             <div class="grid-content">
             <span class="spa-left-span">申请时间:</span>
-            <span class="spa-right-span">{{yyDetail.appointmentApplyDate}}</span>
+            <span class="spa-right-span">{{parseTime(yyDetail.appointmentApplyDate)}}</span>
           </div>
           </el-col>
         </el-row>
-        <!--未预约独有  -->
+        <!--预约失败 -->
         <el-row v-show="a">
           <el-col :span="12">
             <div class="grid-content">
-            <span class="spa-left-span">预约时间:</span>
-            <span class="spa-right-span">待预约</span>
+            <span class="spa-left-span">订单状态:</span>
+            <span class="spa-right-span">预约失败</span>
             </div>
           </el-col>
           <el-col :span="12">
             <div class="grid-content">
-            <span class="spa-left-span">预约失败:</span>
+            <span class="spa-left-span">预约失败原因:</span>
             <span class="spa-right-span">{{yyDetail.refuseReason }}</span>
           </div>
           </el-col>
@@ -144,7 +144,7 @@
           <el-col :span="12">
             <div class="grid-content">
             <span class="spa-left-span">订单状态:</span>
-            <span class="spa-right-span">待预约</span>
+            <span class="spa-right-span">已取消</span>
             </div>
           </el-col>
           <el-col :span="12">
@@ -158,8 +158,8 @@
         <el-row v-show="c">
           <el-col :span="12">
             <div class="grid-content">
-            <span class="spa-left-span">就诊时间:</span>
-            <span class="spa-right-span">待预约</span>
+            <span class="spa-left-span">订单状态:</span>
+            <span class="spa-right-span">未就诊</span>
             </div>
           </el-col>
           <el-col :span="12">
@@ -169,18 +169,18 @@
           </div>
           </el-col>
         </el-row>
-        <!--已完成独有  -->
+        <!--已完成独有  已就诊-->
         <el-row v-show="d">
           <el-col :span="12">
             <div class="grid-content">
-            <span class="spa-left-span">预约时间:</span>
-            <span class="spa-right-span">待预约</span>
+            <span class="spa-left-span">订单状态:</span>
+            <span class="spa-right-span">已就诊</span>
             </div>
           </el-col>
           <el-col :span="12">
             <div class="grid-content">
             <span class="spa-left-span">就诊时间:</span>
-            <span class="spa-right-span">{{yyDetail.patientName}}</span>
+            <span class="spa-right-span">{{parseTime(yyDetail.clinicDate )}}</span>
           </div>
           </el-col>
         </el-row>
@@ -191,11 +191,12 @@
 
 <script>
 import { mapGetters, mapActions,mapMutations  } from 'vuex'
+import {parseTime} from '@/utils'
 export default {
   data(){
     return {
       value:'',
-      yyDetail:'',
+      // yyDetail:'',
       a:false,
       b:false,
       c:false,
@@ -215,6 +216,12 @@ export default {
     ...mapActions('order', [
       'getOrderYy_detail',
     ]),
+    parseTime(val){
+      if(val == null){
+        return ''
+      }
+      return parseTime(val)
+    },
     getParams () {
         // 取到路由带过来的参数
         let routerParams = {
@@ -228,16 +235,16 @@ export default {
          */
          switch(routerParams.status){
            case 2:
-               this.a = true;
-               break;
-           case 3:
-               this.b = true;
-               break;
-           case 4:
-               this.c = true;
+               this.d = true;
                break;
            case 5:
-               this.d = true;
+               this.b = true;
+               break;
+           case 3:
+               this.c = true;
+               break;
+           case 4:
+               this.a = true;
                break;
          }
         this.getOrderYy_detail({id:routerParams.id})

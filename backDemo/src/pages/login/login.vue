@@ -16,6 +16,7 @@
 </template>
 <script>
 import qs from 'qs'
+import {AddRouteRootMap} from '@/router/middle'
 import {mapActions,mapGetters,mapMutations} from 'vuex'
 export default {
   data () {
@@ -59,11 +60,11 @@ export default {
       'getUserPermission'
     ]),
     ...mapMutations('permission',[
-      'LIST.ADD_MENU'
+      'ADD_MENU'
     ]),
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
-        console.log(valid);
+        //console.log(valid);
         // 验证成功
           if (valid) {
             // 按钮加载中
@@ -72,7 +73,7 @@ export default {
               this.loadingStatus = false;
               this.$http.post('http://172.16.4.10:8080/ccyl/login',null,{headers:{'loginname':this.ruleForm2.username,'password':this.ruleForm2.pass}}).then(response => {
                   // success callback
-                  console.log(response);
+                  //console.log(response);
                   // 本地存储用户信息
                   localStorage.setItem('userInfo',JSON.stringify(response.data))
                   // 存储用户图像
@@ -81,19 +82,21 @@ export default {
                   this.getUserPermission().then((data) =>{
                     // 本地存储菜单权限
                     localStorage.setItem('permission',JSON.stringify(data.data))
+                    this.$router.addRoutes(AddRouteRootMap(data.data.menus))
+                    //console.log(AddRouteRootMap(data.data.menus))
                     // vuex存储permission
-                    // this.LIST.ADD_MENU(data)
+                     this.ADD_MENU(data.data.menus)
                     this.$router.replace({
                       name: 'index'
                     })
                   })
               }, response => {
                   // error callback
-                  console.log(response);
+                  //console.log(response);
               })
             },1000)
           } else {
-            console.log('error submit!!');
+            //console.log('error submit!!');
             return false;
           }
         });

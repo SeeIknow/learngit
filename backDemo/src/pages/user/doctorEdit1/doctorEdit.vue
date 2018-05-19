@@ -8,13 +8,33 @@
         <div class="form-box info">
           <el-form ref="form" :model="form" label-width="80px">
             <el-form-item label="医生姓名">
-              <el-input v-model="doctorDetail.doctor.name" :disabled="true"></el-input>
+              <el-input v-model="doctorDetail.doctor.name == undefined?'':doctorDetail.doctor.name " ></el-input>
             </el-form-item>
             <el-form-item label="会员性别">
-              <el-radio-group v-model="doctorDetail.doctor.sex.toString()">
+              <el-radio-group v-model="doctorDetail.doctor.sex">
                 <el-radio :label="1">男</el-radio>
                 <el-radio :label="2">女</el-radio>
               </el-radio-group>
+            </el-form-item>
+            <el-form-item label="医院">
+              <el-select v-model="doctorDetail.doctor.hospitalName  " placeholder="请选择" @change="hosChange(doctorDetail.doctor.hospitalName)">
+                <el-option
+                  v-for="item in hospitalList"
+                  :key="item.id"
+                  :label="item.hospitalName"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="科室">
+              <el-select v-model="doctorDetail.doctor.departmentName" placeholder="请选择">
+                <el-option
+                  v-for="item in departmentTList"
+                  :key="item.id"
+                  :label="item.departmentName"
+                  :value="item.id">
+                </el-option>
+              </el-select>
             </el-form-item>
             <el-form-item label="职称">
               <el-select v-model="doctorDetail.doctor.positionName " placeholder="请选择">
@@ -35,6 +55,12 @@
                   :value="item.value">
                 </el-option>
               </el-select>
+            </el-form-item>
+            <el-form-item label="医生性质">
+              <el-radio-group v-model="doctorDetail.doctor.type">
+                <el-radio :label="1">内部</el-radio>
+                <el-radio :label="0">外部</el-radio>
+              </el-radio-group>
             </el-form-item>
             <el-form-item label="联系方式">
               <el-input v-model="doctorDetail.doctor.phoneNum"></el-input>
@@ -93,8 +119,9 @@
           <p class="module-i-title">擅长治疗</p>
           <div class="form-box" style="width:auto">
             <el-tag
-              v-for="tag in dynamicTags1"
+              v-for="(tag,$index) in dynamicTags1"
               :disable-transitions="false"
+              :key= $index
               @close="handleClose(tag,0)">
               {{tag.diseaseName}}
             </el-tag>
@@ -106,8 +133,9 @@
           <p class="module-i-title">社会标签</p>
           <div class="form-box">
             <el-tag
-              v-for="tag in  dynamicTags"
+              v-for="(tag,$index) in  dynamicTags"
               closable
+              :key = $index
               :disable-transitions="false"
               @close="handleClose(tag,1)">
               {{tag}}
@@ -118,9 +146,9 @@
         <div class="module-i doctorIntro">
           <p class="module-i-title">医生简介</p>
           <div class="form-box">
-            <div class="introContent" :contenteditable="editStatus">
+            <textarea class="introContent" :disabled="editStatus">
               {{doctorDetail.doctor.description}}
-            </div>
+            </textarea>
             <el-button type="primary" plain class="prymaryBtn"  @click="doctorIntro()">编辑简介</el-button>
           </div>
         </div>
@@ -151,7 +179,7 @@
                 label="门诊费用">
               </el-table-column>
               <el-table-column
-                prop="hospitalType "
+                prop="hospitalType"
                 :formatter="formatRole"
                 label="出诊类型">
               </el-table-column>
@@ -181,7 +209,7 @@
                 </template>
               </el-table-column>
             </el-table>
-            <!-- <el-button type="primary" plain class="prymaryBtn" @click="addHospitalList()">医院管理</el-button> -->
+            <el-button type="primary" plain class="prymaryBtn" @click="addHospital()">出诊医院添加</el-button>
           </div>
         </div>
 
@@ -245,7 +273,7 @@
     center>
     <el-form ref="form" :model="form" label-width="110px">
       <el-form-item label="一级疾病(必选)">
-        <el-select v-model="form.region" placeholder="请选择一级疾病" :change="searchFromThis(form.region)">
+        <el-select v-model="form.region" placeholder="请选择一级疾病" @change="searchFromThis(form.region)">
           <el-option
             v-for="item in diseaseTypeList"
             :key="item.id"
@@ -265,7 +293,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="三级疾病(可选)">
-        <el-select v-model="form.region3" placeholder="请选择三级疾病" :change="searchFromThree(form.region3)">
+        <el-select v-model="form.region3" placeholder="请选择三级疾病" @change="searchFromThree(form.region3)">
           <el-option
              v-for="item in depList_three"
              :key="item.id"
@@ -323,6 +351,9 @@ export default {
       obj1:{},
       obj2:{},
       obj3:{},
+      hospitalList:[],
+      hospitalId:'',
+      departmentId:'',
     }
   },
   computed:{
@@ -335,14 +366,15 @@ export default {
     ...mapGetters('order', [
       'diseaseTypeList',
       'depList_three',
+      'departmentTList'
     ])
 
   },
   mounted(){
+    console.log(this.doctorDetail)
     this.getData()
-    this.dynamicTags1 = this.doctorDetail.diseases
-    this.dynamicTags = this.doctorDetail.doctor.label.split('、')
-    console.log(this.medicalAssitant)
+    console.log(this.doctorDetail)
+    //console.log(this.medicalAssitant)
   },
   methods:{
     ...mapActions('user', [
@@ -351,11 +383,13 @@ export default {
       'getDoctorLevel',
       'setDoctorInfo',
       'getMedicalAssitant',
-      'uploadPhoto'
+      'uploadPhoto',
+      'getHospitalList'
     ]),
     ...mapActions('order', [
       'getOrderDiseaseType',
-      'getOrderDepartmentThree'
+      'getOrderDepartmentThree',
+      'getOrderDepartment'
     ]),
     handleClose(tag,type) {
       if(type == 1){
@@ -366,14 +400,22 @@ export default {
 
     },
     formatRole(row,column){
-      return row.authority == 1 ? "医生所属医院" : row.authority == 2 ? "默认医院" : "多点执业医院" ;
+      console.log(row.hospitalType);
+      return row.hospitalType == 1?"医生所属医院" : row.hospitalType == 2 ? "默认医院" : "多点执业医院" ;
     },
     formatRole1(row,column){
-      return row.authority == 1 ? "开通" :  "未开通" ;
+      return row.switchOnOff == 1 ? "开通" :  "未开通" ;
+    },
+    hosChange(val){
+      this.hospitalId = val
+      this.getOrderDepartment({id:val})
     },
     getData(){
       // 医生详情
-      this.doctorDetail1({id:this.$route.params.id})
+      this.doctorDetail1({id:this.$route.params.id}).then(() =>{
+        this.dynamicTags1 = this.doctorDetail.diseases
+        this.dynamicTags = this.doctorDetail.doctor.label.split('、')
+      })
       // 医生职称
       this.getDoctorOffice()
       // 医生级别
@@ -382,6 +424,10 @@ export default {
       this.getOrderDiseaseType();
       // 医学助理
       this.getMedicalAssitant();
+
+      this.getHospitalList().then((res) =>{
+        this.hospitalList = res.data;
+      })
     },
     // 弹框
     closeUserAlt(val){
@@ -430,7 +476,7 @@ export default {
         //点击确定 添加三级疾病
           this.dynamicTags1.push(this.obj1,this.obj2,this.obj3)
           this.diseaseSelectAlt= false;
-          console.log(this.dynamicTags1)
+          //console.log(this.dynamicTags1)
           break;
         case 'label':
           /**
@@ -455,17 +501,20 @@ export default {
       this.editStatus = true;
     },
     goDetial(index,table){
-      console.log(table[index])
+      //console.log(table[index])
       // 带参数进子页 然后再带参数返回详情页
-      this.$router.push({name:'addHospitalList',params:{id:this.$route.params.id,hosId:table[index].hospitalId}})
+      this.$router.push({name:'addHospitalList',params:{id:this.$route.params.id,hosId:table[index].id}})
     },
     serviceMange(){
       // 带参数进子页 然后再带参数返回详情页
       this.$router.push({name:'serviceMange',params:{id:this.$route.params.id}})
     },
+    addHospital(index,table){
+      this.$router.push({name:'addHospital'})
+    },
     //科室
     searchFromThis(id){
-      console.log(id);
+      //console.log(id);
       for (var i in this.diseaseTypeList) {
         if (this.diseaseTypeList[i].id == id) {
           //一级疾病
@@ -477,7 +526,7 @@ export default {
     },
     // 获取疾病类型
     changeValue(value) {
-      console.log(value);
+      //console.log(value);
         for (var i in this.diseasesBox) {
           if (this.diseasesBox[i].id == value) {
             // 二级疾病
@@ -489,7 +538,7 @@ export default {
     },
     // 获取疾病类型三级
     searchFromThree(value) {
-      console.log(value);
+      //console.log(value);
         for (var i in this.depList_three) {
           if (this.depList_three[i].id == value) {
             // 三级级疾病
@@ -504,19 +553,22 @@ export default {
       const diseaseIds = this.dynamicTags1.map((i) =>{
         return i.diseaseId
       })
-      console.log(diseaseIds);
+      //console.log(diseaseIds);
       const data = {
         "account":this.doctorDetail.doctor.account ,
-        "accountCheckStatus": this.doctorDetail.doctor.accountCheckStatus,
-        "accountLockStatus": this.doctorDetail.doctor.accountLockStatus,
+        "accountCheckStatus": this.doctorDetail.doctor.accountCheckStatus == true?'1':'0',
+        "accountLockStatus": this.doctorDetail.doctor.accountLockStatus == true?'1':'0',
         "accountPwd": this.doctorDetail.doctor.accountPwd,
         "assistant": this.doctorDetail.doctor.assistant,
         "assistantId": this.doctorDetail.doctor.assistantId,
         "description": this.doctorDetail.doctor.description,
         "diseaseIds": diseaseIds,
-        "doctorId": this.doctorDetail.doctor.doctorId,
+        'hospitalId':this.hospitalId,
+        'departmentId':this.form.departmentName,
+        "doctorId": this.doctorDetail.doctor.id,
         "intro": this.doctorDetail.doctor.description,
         "label": this.dynamicTags.join('、'),
+        "type":this.doctorDetail.doctor.type,
         "levelId": this.doctorDetail.doctor.levelId,//未知
         "levelName": this.doctorDetail.doctor.levelName,
         "name": this.doctorDetail.doctor.name,
@@ -533,12 +585,15 @@ export default {
     //上传图片
     upload(e){
       let file = e.target.files[0];
-      console.log(file);
+      //console.log(file);
       var formData = new FormData();
       formData.append("multipartFile",file,file.name);
       this.uploadPhoto({id:this.$route.params.id,data:formData}).then((res)=>{
-        console.log(localStorage.getItem('userPhoto'))
-        this.doctorDetail.doctor.photoUrl = localStorage.getItem('userPhoto');
+        //console.log(localStorage.getItem('userPhoto'))
+        setTimeout(() =>{
+            this.doctorDetail.doctor.photoUrl = localStorage.getItem('userPhoto')
+        },1000)
+
       })
     }
   }

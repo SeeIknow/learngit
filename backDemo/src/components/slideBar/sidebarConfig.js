@@ -30,18 +30,25 @@
 //     name: 'setting'
 //   }
 // ]
-const sidebar =[
+//const sidebar =[
+//{
+//  title: '首页',
+//  icon: 'home',
+//  name: 'index'
+//},
+//];
+
+
+export function getMenu(){
+	const sidebar =[
   {
     title: '首页',
     icon: 'home',
     name: 'index'
   },
 ];
-
-
-export function getMenu(){
   const menuList = JSON.parse(localStorage.getItem('permission'))
-  console.log(menuList);
+  //console.log(menuList);
   for(var i in menuList.menus){
     const obj ={};
     obj.title= menuList.menus[i].menuName;
@@ -50,5 +57,5 @@ export function getMenu(){
     sidebar.push(obj)
   }
    return sidebar;
-  console.log(sidebar)
+  //console.log(sidebar)
 }

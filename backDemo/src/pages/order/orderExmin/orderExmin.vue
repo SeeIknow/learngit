@@ -96,13 +96,19 @@
           </el-col>
         </el-row>
         <el-row v-if="depStatus">
-          <el-col :span="12">
+          <el-col :span="8">
+            <div class="grid-content">
+            <span class="spa-left-span">医院:</span>
+            <span class="spa-right-span">{{listItem.inquiryOrderResponse.doctorOrganization  }}</span>
+            </div>
+          </el-col>
+          <el-col :span="8">
             <div class="grid-content">
             <span class="spa-left-span">一级科室:</span>
             <span class="spa-right-span">{{listItem.inquiryOrderResponse.oneLevelDepartName }}</span>
             </div>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="8">
             <div class="grid-content">
             <span class="spa-left-span">二级科室:</span>
             <span class="spa-right-span">{{listItem.inquiryOrderResponse.twoLevelDepartName }}</span>
@@ -209,17 +215,24 @@
       width="30%"
       center>
       <el-form ref="form" :model="form" label-width="110px">
+        <el-form-item label="医院">
+          <el-select v-model="form.region0" placeholder="请选择" @change="searchFromHos(form.region0,'depMod')">
+            <template v-for="(item,$index) in hospitalList">
+                <el-option :label="item.hospitalName" :value="item.id"></el-option>
+            </template>
+          </el-select>
+        </el-form-item>
         <el-form-item label="一级科室">
-          <el-select v-model="form.region" placeholder="请选择" :change="searchFromThis(form.region,'depMod')">
+          <el-select v-model="form.region" placeholder="请选择" @change="searchFromThis(form.region,'depMod')">
             <template v-for="(item,$index) in departmentTList">
-                <el-option :label="item.departmentName" :value="item.departmentId"></el-option>
+                <el-option :label="item.departmentName" :value="item.id"></el-option>
             </template>
           </el-select>
         </el-form-item>
         <el-form-item label="二级科室">
           <el-select v-model="form.region1" placeholder="请选择" @change="changeValue(form.region1,'depMod')">
             <template v-for="(item,$index) in departmentTBox">
-                <el-option :label="item.departmentName" :value="item.departmentId"></el-option>
+                <el-option :label="item.departmentName" :value="item.id"></el-option>
             </template>
           </el-select>
         </el-form-item>
@@ -243,7 +256,7 @@
       width="30%">
       <el-form ref="form3" :model="form3" label-width="110px">
         <el-form-item label="分配医生">
-          <el-select v-model="form3.region" placeholder="请选择" :change="searchFromThis(form3.region,'doctorMod')">
+          <el-select v-model="form3.region" placeholder="请选择" @change="searchFromThis(form3.region,'doctorMod')">
             <template v-for="(item,$index) in doctorList_fp">
                 <el-option :label="item.name" :value="item.id"></el-option>
             </template>
@@ -262,8 +275,8 @@
       center>
       <textarea name="name" rows="8" cols="80" v-model="refuseReson"></textarea>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="closeModal('doctorMod')">取 消</el-button>
-        <el-button type="primary" @click="sureConfirm('doctorMod')">确 定</el-button>
+        <el-button @click="closeModal('refuseMod')">取 消</el-button>
+        <el-button type="primary" @click="sureConfirm('refuseMod')">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -295,8 +308,12 @@ export default {
       refuseMod:false,
       diseasesBox:[],//疾病类型
       departmentTBox:[],//二级科室
+      departmentTBoxName:'',
       depStatus:false,// 专家问诊状态 科室不显示 其余状态显示
-      refuseReson:''
+      refuseReson:'',
+      hospitalList:[],
+      hospitalId:'',
+      departmentId:'',
     }
   },
   mounted(){
@@ -304,7 +321,14 @@ export default {
     this.diseaseInfo = this.listItem.inquiryOrderResponse.diseaseTypeName//赋值疾病类型 页面弹框选中后重新赋值
     this.diseaseInfoId = this.listItem.inquiryOrderResponse.diseaseId
     this.departmentTBoxId = this.listItem.inquiryOrderResponse.twoLevelDepartId
-    this.depStatus = this.listItem.inquiryOrderResponse.type == 0? false:true;//0专家问诊 1免费咨询
+    this.depStatus = this.listItem.inquiryOrderResponse.type == 1? false:true;//1专家问诊 0免费咨询
+    alert(this.depStatus)
+    // 医院 科室选中填充
+    this.form.region0 = this.listItem.inquiryOrderResponse.doctorOrganization
+    this.form.region = this.listItem.inquiryOrderResponse.oneLevelDepartName
+    this.form.region1 = this.listItem.inquiryOrderResponse.twoLevelDepartName
+    this.departmentTBoxName = this.listItem.inquiryOrderResponse.twoLevelDepartName
+    this.hospitalName = this.listItem.inquiryOrderResponse.doctorOrganization
   },
   computed:{
     ...mapGetters('order',[
@@ -323,6 +347,9 @@ export default {
       'getOrderSuccess',
 
     ]),
+    ...mapActions('user',[
+      'getHospitalList'
+    ]),
     sureConfirm(val){
       // this.dialogVisible = false;
       switch(val){
@@ -331,27 +358,58 @@ export default {
             break;
         case 'dep':
             this.depMod = false;
+            console.log(this.departmentTBox)
+            console.log(this.departmentTList)
+            // 页面重新渲染 数据
+            let obj = {}
+            let obj1 ={}
+            let obj2 ={}
+            obj = this.hospitalList.find((item) =>{
+              return item.id ==this.hospitalId
+            })
+            obj1 = this.departmentTList.find((item) =>{
+              return item.id == this.departmentId
+            })
+            obj2 = this.departmentTBox.find((item) =>{
+              return item.id == this.departmentTBoxId
+            })
+
+            console.log(obj)
+            console.log(obj1)
+            console.log(obj2)
+            // 赋值
+            this.listItem.inquiryOrderResponse.doctorOrganization = obj.hospitalName
+            this.listItem.inquiryOrderResponse.oneLevelDepartName = obj1.departmentName
+            this.listItem.inquiryOrderResponse.twoLevelDepartName = obj2.departmentName
             break;
         case 'photo':
             this.photoMod = false;
             break;
         case 'doctorMod':
+        // 判断审核分诊医生是否为空
+            if(this.doctorList_fp.length ==0){
+              this.$message({
+                type:'error',
+                message:'审核分诊医生必须选！'
+              })
+              return
+            }
             // 提交审核操作
-            this.getOrderSuccess(this.outObj()).then(()=>{
+            this.getOrderSuccess(this.outObj(1)).then(()=>{
               this.doctorMod = false;
               this.$router.push({name:'consultingService'})
             })
             break;
         case 'refuseMod':
             // 提交审核操作
-            this.getOrderSuccess(this.outObj()).then(()=>{
+            this.getOrderSuccess(this.outObj(5)).then(()=>{
               this.refuseMod = false;
               this.$router.push({name:'consultingService'})
             })
             break;
       }
     },
-    outObj(){
+    outObj(status){
       const data = {
         "diseaseId": this.diseaseInfoId ,
         "diseaseName": this.diseaseInfo ,
@@ -361,11 +419,13 @@ export default {
         "doctorName": this.listItem.inquiryOrderResponse.doctorName ,
         "doctorPosition": this.listItem.inquiryOrderResponse.doctorPosition  ,
         "doctorPositionType": this.listItem.inquiryOrderResponse.doctorPositionType,
+        'hospitalId':this.hospitalId,
+        'hospitalName':this.hospitalName,
         "id": this.listItem.inquiryOrderResponse.id,
         "oneLevelDepartId": this.listItem.inquiryOrderResponse.oneLevelDepartId ,
         "oneLevelDepartName": this.listItem.inquiryOrderResponse.oneLevelDepartName ,
         "refuseReason": this.refuseReson,
-        "status": this.listItem.inquiryOrderResponse.status,
+        "status": status,
         "twoLevelDepartId": this.listItem.inquiryOrderResponse.twoLevelDepartId ,
         "twoLevelDepartName": this.listItem.inquiryOrderResponse.twoLevelDepartName
       }
@@ -379,14 +439,21 @@ export default {
         })
         // 疾病类型
         this.getOrderDiseaseType(1);
+        //加载默认医院
+        this.getHospitalList().then((res) =>{
+          this.hospitalList = res.data;
+        })
+        // 记载默认科室
         this.getOrderDepartment({id:this.listItem.inquiryOrderResponse.doctorOrganizationId})
         // 判断二级科室是否存在
         if(this.listItem.inquiryOrderResponse.twoLevelDepartId !=''){
-          let depId = this.listItem.inquiryOrderResponse.twoLevelDepartId
+          this.departmentId = this.listItem.inquiryOrderResponse.twoLevelDepartId
         }else{
-          let depId = this.listItem.inquiryOrderResponse.oneLevelDepartId
+          this.departmentId = this.listItem.inquiryOrderResponse.oneLevelDepartId
         }
-        this.getOrderDoctor({id:depId})
+        //加载默认的医生
+        this.hospitalId = this.listItem.inquiryOrderResponse.doctorOrganizationId
+        // this.getOrderDoctor({id:this.departmentId,hospitalId:this.hospitalId })
     },
     goBack(){
       this.$router.go(-1)
@@ -396,7 +463,7 @@ export default {
       switch(val){
         case 'disease':
             this.diseaseMod = true;
-            console.log(this.form1)
+            //console.log(this.form1)
             break;
         case 'dep':
             this.depMod = true;
@@ -422,49 +489,78 @@ export default {
             break;
       }
     },
+    searchFromHos(id,type){
+      for (var i in this.hospitalList) {
+        if (this.hospitalList[i].id == id) {
+          this.hospitalName = this.hospitalList[i].hospitalName
+        }
+      }
+      // 根据医院id获取科室
+      this.hospitalId = id
+      this.getOrderDepartment({id:id})
+    },
     searchFromThis(id,type){
-      console.log(id);
+      //console.log(id);
       switch(type){
         case 'diseaseMod':
             for (var i in this.diseaseTypeList) {
               if (this.diseaseTypeList[i].id == id) {
                 this.diseasesBox = this.diseaseTypeList[i].diseases
+
+                this.diseaseInfo = this.diseaseTypeList[i].name ;//重新赋值疾病类型
+                this.diseaseInfoId = this.diseaseTypeList[i].id
               }
             }
             break;
         case 'depMod':
+        console.log(this.departmentTList)
             for (var i in this.departmentTList) {
-              if (this.departmentTList[i].departmentId == id) {
+              if (this.departmentTList[i].id == id) {
                 this.departmentTBox = this.departmentTList[i].departments
               }
             }
+            this.departmentId = id
+            console.log(this.departmentTBox)
             break;
         case 'photoMod':
             this.photoMod = false;
             break;
         case 'doctorMod':
           // 提交操作
+          for (var i in this.doctorList_fp) {
+            if (this.doctorList_fp[i].id == id) {
+              //分诊医生相关信息
+              this.doctorList_fpName = this.doctorList_fp[i].name
+              this.listItem.inquiryOrderResponse.doctorName = this.doctorList_fp[i].name//name
+              this.listItem.inquiryOrderResponse.doctorId = id
+              this.listItem.inquiryOrderResponse.doctorPosition = this.doctorList_fp[i].positionName
+              this.listItem.inquiryOrderResponse.doctorPositionType =  this.doctorList_fp[i].positionId
+            }
+          }
             break;
       }
     },
     // 获取疾病类型
     changeValue(value,type) {
-      console.log(value);
+      //console.log(value);
       let obj = {};
       switch(type){
         case 'diseaseMod':
             obj = this.diseasesBox.find((item)=>{
                 return item.id === value;
             });
+            console.log(obj.name)
             this.diseaseInfo = obj.name ;//重新赋值疾病类型
             this.diseaseInfoId = obj.id
+            console.log(  this.diseaseInfo )
             break;
         case 'depMod':
             obj = this.departmentTBox.find((item)=>{
-                return item.departmentId === value;
+                return item.id === value;
             });
-            this.departmentTBox = obj.departmentName ;//重新赋值疾病类型
-            this.departmentTBoxId = obj.departmentId
+            this.departmentTBoxName = obj.departmentName ;//重新赋值疾病类型
+            this.form.region1 = obj.departmentName
+            this.departmentTBoxId = obj.id
             break;
         case 'photoMod':
 
@@ -476,12 +572,14 @@ export default {
       // 状态为专家问诊的时候 直接提交信息 不需要选择医生
         if(!this.depStatus){
           // 提交审核操作
-          this.getOrderSuccess(this.outObj()).then(()=>{
+          this.getOrderSuccess(this.outObj(1)).then(()=>{
             this.doctorMod = false;
             this.$router.push({name:'consultingService'})
           })
         }else{
           this.doctorMod = true;
+          // 再次获取审核医生列表
+          this.getOrderDoctor({id:this.departmentId,hospitalId:this.hospitalId })
         }
 
     },

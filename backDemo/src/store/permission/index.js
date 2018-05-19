@@ -6,6 +6,7 @@ const state = {
   items: [],//当前选中路由
   isLoadRoutes: false,//是否初次登录
   twoLevleMenu:'',
+  routers:'',
 }
 
 export default {

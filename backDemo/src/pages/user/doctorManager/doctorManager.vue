@@ -214,20 +214,20 @@ export default {
     goDetial(index,table){
       // index:当前点击对象的下表
       // table:整个表格对象
-      //console.log(index);
-      //console.log(table[index].id)
+      ////console.log(index);
+      ////console.log(table[index].id)
       this.$router.push({name:'doctorEdit',params:{id:table[index].id}})
     },
     // // 分页
     handleSizeChange(val) {
-      // console.log(`每页 ${val} 条`);
+      // //console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
       this.getData(val)
     },
     // 获取数据
     getData(val){
-      //console.log(this.dateValue);
+      ////console.log(this.dateValue);
       this.getUserList(this.outObj(val)).then( () =>{
         if(this.userList.total>0){
           this.showStatus = true;

@@ -212,7 +212,7 @@ export default {
     }
   },
   mounted(){
-    this.getData();
+    this.getData(1);
   },
   computed:{
     ...mapGetters('order', [
@@ -230,7 +230,7 @@ export default {
       return row.authority == 1 ? "上午" : "下午";
     },
     //参数对象
-    outObj(status=0,patientCertificateNo='',inDateEnd='',inDateStart='',orderNo='',patientName='',patientPhoneNum='',val=1) {
+    outObj(val) {
       const data = {
         patientCertificateNo: this.cardValue,
         inDateEnd: this.dateValue[1],//时间组件返回值为一个数组
@@ -248,8 +248,8 @@ export default {
     goDetial(index,table){
       // index:当前点击对象的下表
       // table:整个表格对象
-      //console.log(index);
-      //console.log(table[index].id)
+      ////console.log(index);
+      ////console.log(table[index].id)
       /**
        * [switch description]
        * @param  table[index].status  每一个点击对象所对应的状态值
@@ -262,7 +262,16 @@ export default {
         case 1:
           var routerName = 'orderOutpatientAppointment3';//就诊新增
           break;
-        case 3||2||4||5:
+        case 2:
+          var routerName = 'orderOutpatientAppointment4';//就诊新增
+          break;
+        case 3:
+          var routerName = 'orderOutpatientAppointment4';//就诊新增
+          break;
+        case 4:
+          var routerName = 'orderOutpatientAppointment4';//就诊新增
+          break;
+        case 5:
           var routerName = 'orderOutpatientAppointment4';//就诊新增
           break;
       }
@@ -270,14 +279,15 @@ export default {
     },
     // 分页
     handleSizeChange(val) {
-      //console.log(`每页 ${val} 条`);
+      ////console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
-      //console.log(`当前页: ${val}`);
+      ////console.log(`当前页: ${val}`);
+      this.getData(val)
     },
     // 获取数据
-    getData(){
-      this.getOrderListYY(this.outObj()).then(() =>{
+    getData(val){
+      this.getOrderListYY(this.outObj(val)).then(() =>{
         if(this.listYY.total>0){
           this.showStatus = true;
         }else{
@@ -311,7 +321,7 @@ export default {
       }
       // 菜单切换 日期组件重新赋值
       this.dateValue = (this.dateValue == null ? ['',''] : this.dateValue)
-       this.getData()
+       this.getData(1)
      }
   }
 }

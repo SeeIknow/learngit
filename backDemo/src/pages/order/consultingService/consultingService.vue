@@ -165,7 +165,7 @@ export default {
     }
   },
   mounted(){
-    this.getData();
+    this.getData(1);
     if(this.list.total>0){
       this.showStatus = true;
     }
@@ -183,7 +183,7 @@ export default {
       'LIST.GET_LIST',
     ]),
     //参数对象
-    outObj(status = 0,certificateNo='',inDateEnd='',inDateStart='',orderNo='',patientName='',phoneNum='',val=1) {
+    outObj(val) {
       const data = {
         certificateNo: this.cardValue,
         inDateEnd: this.dateValue[1],
@@ -191,24 +191,23 @@ export default {
         orderNo: this.list.orderNo,
         patientName:this.nameValue,
         phoneNum:this.phoneValue,
-        type:0,
         status:this.activeIndex,
         pageNum:val
       }
       return data
     },
     formatRole(row,column){
-      return row.authority == 0 ? "待分诊" : row.authority == 1 ? "待回复" : row.authority == 2 ? "已回复" : row.authority ==3 ? "已采纳" : row.authority ==4 ? "已关闭" :  "未通过";
+      return row.status  == 0 ? "待分诊" : row.authority == 1 ? "待回复" : row.authority == 2 ? "已回复" : row.authority ==3 ? "已采纳" : row.authority ==4 ? "已关闭" :  "未通过";
     },
     formatRole1(row,column){
-      return row.authority == 0 ? "免费订单" : "专家问诊";
+      return row.type  == 0 ? "免费订单" : "专家问诊";
     },
     // 跳转详情
     goDetial(index,table){
       // index:当前点击对象的下表
       // table:整个表格对象
-      //console.log(index);
-      //console.log(table[index].id)
+      ////console.log(index);
+      ////console.log(table[index].id)
       /**
        * [switch description]
        * @param  table[index].status  每一个点击对象所对应的状态值
@@ -218,31 +217,35 @@ export default {
         case 0:
           var routerName = 'orderExmin';
           break;
-        case 1||2:
+        case 1:
+          var routerName = 'orderExmin1';
+          break;
+        case 2:
           var routerName = 'orderExmin1';
           break;
         case 3:
-          var routerName = 'orderExmin2';
+          var routerName = 'orderExmin4';
           break;
         case 4:
           var routerName = 'orderExmin3';
           break;
         case 5:
-          var routerName = 'orderExmin4';
+          var routerName = 'orderExmin2';
           break;
       }
-      this.$router.push({name:routerName,params:{id:table[index].id}})
+      this.$router.push({name:routerName,params:{id:table[index].id,type:table[index].status}})
     },
     // // 分页
     handleSizeChange(val) {
-      // console.log(`每页 ${val} 条`);
+      // //console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
+      console.log(val)
       this.getData(val)
     },
     // 获取数据
     getData(val){
-      //console.log(this.dateValue);
+      ////console.log(this.dateValue);
       this.getOrderList(this.outObj(val)).then(()=>{
         if(this.list.total>0){
           this.showStatus = true;
@@ -270,7 +273,7 @@ export default {
       }
       // 菜单切换 日期组件重新赋值
       this.dateValue = (this.dateValue == null ? ['',''] : this.dateValue)
-      this.getData()
+      this.getData(1)
      }
   }
 }

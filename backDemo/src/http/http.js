@@ -27,7 +27,7 @@ axios.interceptors.response.use(
                     },1500)
                     break;
                 default:
-                console.log(error.response);
+                //console.log(error.response);
                 Message.error(error.response.data.errorMessage)
             }
         }

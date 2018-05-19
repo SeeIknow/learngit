@@ -62,7 +62,7 @@ export default {
       })
     },
     bmSelect(val){
-      console.log(val);
+      //console.log(val);
       this.obj = this.depList.find((item) =>{
         return item.id == val
       })

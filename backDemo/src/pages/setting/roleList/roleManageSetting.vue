@@ -50,7 +50,7 @@ export default {
   mounted(){
     this.getData();
     this.form = this.$route.params
-    console.log(this.form);
+    //console.log(this.form);
   },
   methods:{
     ...mapActions('setting',[

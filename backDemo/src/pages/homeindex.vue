@@ -12,6 +12,10 @@ import AppMain from '@/components/appMain/appMain'
 import SideBar from '@/components/slideBar/slideBar'
 import HeaderTop from '@/components/header/header'
 import FooterBottom from '@/components/footer/footer'
+
+import {AddRouteRootMap} from '@/router/middle'
+
+import {mapGetters,mapActions} from 'vuex'
 export default {
   data () {
     return {
@@ -23,6 +27,16 @@ export default {
     HeaderTop,
     FooterBottom
   },
+  computed:{
+  	...mapGetters('permission',[
+  		'routers'
+  	])
+  },
+  created(){
+  	const menus = JSON.parse(localStorage.getItem('permission'));
+  	this.$router.addRoutes(AddRouteRootMap(menus.menus))
+  	//console.log(AddRouteRootMap(menus.menus))
+  }
 }
 </script>
 

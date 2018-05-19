@@ -7,7 +7,7 @@ export const getOrderList = ({state, commit, dispatch, getters, rootGetters}, da
   return new Promise((resolve, reject) => {
     payload.callback = res => {
       resolve(res)
-      // console.log(res)
+      // //console.log(res)
       commit(LIST.GET_LIST,res.data)
     }
     payload.error = err => {
@@ -23,7 +23,7 @@ export const getOrderListDetial = ({state, commit, dispatch, getters, rootGetter
   return new Promise((resolve, reject) => {
     payload.callback = res => {
       resolve(res)
-      // console.log(res)
+      // //console.log(res)
       commit(LIST.GET_LISTITEM,res.data)
     }
     payload.error = err => {
@@ -40,7 +40,7 @@ export const getOrderDiseaseType = ({state, commit, dispatch, getters, rootGette
   return new Promise((resolve, reject) => {
     payload.callback = res => {
       resolve(res)
-      // console.log(res)
+      // //console.log(res)
       commit(LIST.GET_DISEASELIST,res.data)
     }
     payload.error = err => {
@@ -57,7 +57,7 @@ export const getOrderDepartment = ({state, commit, dispatch, getters, rootGetter
   return new Promise((resolve, reject) => {
     payload.callback = res => {
       resolve(res)
-      // console.log(res)
+      // //console.log(res)
       commit(LIST.GET_DEPARTMRNT_T,res.data)
     }
     payload.error = err => {
@@ -73,7 +73,7 @@ export const getOrderDepartmentThree = ({state, commit, dispatch, getters, rootG
   return new Promise((resolve, reject) => {
     payload.callback = res => {
       resolve(res)
-      // console.log(res)
+      // //console.log(res)
       commit(LIST.GET_LIST_DEP_THREE,res.data)
     }
     payload.error = err => {
@@ -90,7 +90,7 @@ export const getOrderDoctor = ({state, commit, dispatch, getters, rootGetters}, 
   return new Promise((resolve, reject) => {
     payload.callback = res => {
       resolve(res)
-      // console.log(res)
+      // //console.log(res)
       commit(LIST.GET_ORDER_DOCTOR,res.data)
     }
     payload.error = err => {
@@ -107,7 +107,7 @@ export const getOrderSuccess = ({state, commit, dispatch, getters, rootGetters},
   return new Promise((resolve, reject) => {
     payload.callback = res => {
       resolve(res)
-      // console.log(res)
+      // //console.log(res)
       // commit(LIST.GET_ORDER_DOCTOR,res.data)
       // 提交审核 返回列表页
     }
@@ -124,7 +124,7 @@ export const getOrderReply = ({state, commit, dispatch, getters, rootGetters}, d
   return new Promise((resolve, reject) => {
     payload.callback = res => {
       resolve(res)
-      // console.log(res)
+      // //console.log(res)
        // commit(LIST.GET_ORDER_DOCTOR,res.data)
       // 提交回复 返回列表页
     }
@@ -142,7 +142,7 @@ export const getOrderListYY = ({state, commit, dispatch, getters, rootGetters}, 
   return new Promise((resolve, reject) => {
     payload.callback = res => {
       resolve(res)
-      console.log(res)
+      //console.log(res)
       commit(LIST.GET_LIST_YY,res.data)
     }
     payload.error = err => {
@@ -158,7 +158,7 @@ export const getOrderYy_detail = ({state, commit, dispatch, getters, rootGetters
   return new Promise((resolve, reject) => {
     payload.callback = res => {
       resolve(res)
-      console.log(res)
+      //console.log(res)
       commit(LIST.GET_LIST_YY_DETAIL,res.data)
     }
     payload.error = err => {
@@ -222,5 +222,20 @@ export const getOrderYy_check_j = ({state, commit, dispatch, getters, rootGetter
       reject(error)
     }
     dispatch('api/getOrderYy_check_j', payload, {root: true})
+  })
+}
+
+// 预约列表详情>>就诊确认
+export const getOrderYy_check_j_s = ({state, commit, dispatch, getters, rootGetters}, data) => {
+  const payload = rootGetters['api/payload']
+  payload.param = data
+  return new Promise((resolve, reject) => {
+    payload.callback = res => {
+      resolve(res)
+    }
+    payload.error = err => {
+      reject(error)
+    }
+    dispatch('api/getOrderYy_check_j_s', payload, {root: true})
   })
 }

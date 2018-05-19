@@ -1,13 +1,9 @@
 import {LIST} from './mutation-type.js'
 
 export default {
-  [LIST.ADD_MENU] (state, res) {
-    console.log(state);
-    if (menuItems.length === 0) {
-      state.items = []
-    } else {
-      state.items = res;
-    }
+  ADD_MENU(state, res) {
+    //console.log(state);
+      state.routers = res;
   },
   [LIST.LOAD_ROUTES] (state,res) {
     state.isLoadRoutes = !state.isLoadRoutes

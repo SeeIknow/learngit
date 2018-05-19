@@ -114,8 +114,8 @@ export default {
   },
   mounted(){
     this.getData();
-    console.log(this.$route.params);
-    console.log(this.limitsListBySeletc)
+    //console.log(this.$route.params);
+    //console.log(this.limitsListBySeletc)
   },
   methods:{
     ...mapActions('setting',[
@@ -148,7 +148,7 @@ export default {
         }
       }
 
-      console.log(menuArr);
+      //console.log(menuArr);
       const data = {
         roleId:this.$route.params.refId,
         deptId:this.$route.params.deptId,

@@ -38,7 +38,7 @@
           <el-col :span="12">
             <div class="grid-content">
             <span class="spa-left-span">证件类型:</span>
-            <span class="spa-right-span">{{yyDetail.patientCertificateType }}</span>
+            <span class="spa-right-span">{{yyDetail.patientCertificateTypeName }}</span>
             </div>
           </el-col>
           <el-col :span="12">
@@ -60,7 +60,7 @@
           <el-col :span="12">
             <div class="grid-content">
             <span class="spa-left-span">医生职称:</span>
-            <span class="spa-right-span">{{yyDetail.doctorPositionType }}</span>
+            <span class="spa-right-span">{{yyDetail.doctorPosition }}</span>
             </div>
           </el-col>
         </el-row>
@@ -235,7 +235,12 @@ export default {
       'getOrderYy_check_j',
     ]),
     parseTime1(val){
-      return parseTime(val)
+      if(val == null){
+        return ''
+      }else{
+        return parseTime(val)
+      }
+
     },
     getParams () {
         // 取到路由带过来的参数
@@ -250,7 +255,17 @@ export default {
     openModal(val){
       switch(val){
         case 'successMod':
-            this.successMod = true;
+            // this.successMod = true;
+            const obj1 = {
+              "id": this.$route.params.id,
+              "status":2
+            }
+            this.getOrderYy_check_j(obj1).then(()=>{
+              this.successMod = false;
+              this.$router.replace({name:'appointmentService'})
+            }).catch(()=>{
+              // this.successMod = false;
+            })
             break;
         case 'failMod':
             this.failMod = true;
@@ -277,16 +292,16 @@ export default {
     sureConfirm(val){
       switch(val){
         case 'successMod':
-              const obj1 = {
-                "id": this.$route.params.id,
-                "status":2
-              }
-              this.getOrderYy_check_j(obj1).then(()=>{
+              // const obj1 = {
+              //   "id": this.$route.params.id,
+              //   "status":2
+              // }
+              // this.getOrderYy_check_j(obj1).then(()=>{
+              //   this.successMod = false;
+              //   this.$router.replace({name:'appointmentService'})
+              // }).catch(()=>{
                 this.successMod = false;
-                this.$router.replace({name:'appointmentService'})
-              }).catch(()=>{
-                this.successMod = false;
-              })
+              // })
             break;
         case 'failMod':
               const obj2 = {
@@ -308,7 +323,7 @@ export default {
                */
               const obj = {
                 "communicationRecord": this.valueTextArea1,
-                "id": this.$route.params.id,
+                // "id": this.$route.params.id,
                 "inDate": getNowFormatDate(),
                 "outpatientOrderId": this.yyDetail.id
               }

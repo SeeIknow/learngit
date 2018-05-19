@@ -56,6 +56,36 @@ export function getNowFormatDate() {
             + seperator2 + date.getSeconds();
     return currentdate;
 }
+/**
+ * [formatTime description]
+ * @param  获取当前月份的第一天 最后一天
+ * @param  {[type]} option [description]
+ * @return {[type]}        [description]
+ */
+export function getMonthDays() {
+  function GetDateStr(AddDayCount) {
+     var dd = new Date();
+     dd.setDate(dd.getDate()+AddDayCount);//获取AddDayCount天后的日期
+     var y = dd.getFullYear();
+     var m = dd.getMonth()+1;//获取当前月份的日期
+     var d = dd.getDate();
+     return y+"-"+m+"-"+d;
+     }
+     var $scope ={};
+    $scope.zuotian = GetDateStr(-1);//昨天
+
+    var date_ = new Date();
+    var year = date_.getFullYear();
+    var month = date_.getMonth() + 1;
+    $scope.firstdate = year + '-' + month + '-01';//当月第一天
+    $scope.sevenDaysF =  GetDateStr(-3);//当月最后一天
+    $scope.sevenDaysL = GetDateStr(4);//当月最后一天
+    $scope.thirtyDaysF = GetDateStr(-15);//当月最后一天
+    $scope.thirtyDaysL =  GetDateStr(15);//当月最后一天
+    var day = new Date(year,month,0);
+    $scope.lastdate = year + '-' + month + '-' + day.getDate();//当月最后一天
+    return $scope;
+}
 export function formatTime(time, option) {
   time = +time * 1000
   const d = new Date(time)
@@ -175,7 +205,7 @@ export function scrollTo(element, to, duration) {
   const difference = to - element.scrollTop
   const perTick = difference / duration * 10
   setTimeout(() => {
-    console.log(new Date())
+    //console.log(new Date())
     element.scrollTop = element.scrollTop + perTick
     if (element.scrollTop === to) return
     scrollTo(element, to, duration - 10)

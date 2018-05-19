@@ -7,7 +7,7 @@ export const getUserPermission = ({state, commit, dispatch, getters, rootGetters
   return new Promise((resolve, reject) => {
     payload.callback = res => {
       resolve(res)
-      // console.log(res)
+      // //console.log(res)
       // commit(LIST.ADD_MENU,res.data)
     }
     payload.error = err => {

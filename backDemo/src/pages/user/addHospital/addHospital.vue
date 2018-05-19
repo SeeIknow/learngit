@@ -6,7 +6,7 @@
       <div class="formContent">
         <el-form ref="form" :model="form" label-width="80px">
           <el-form-item label="医院名称">
-            <el-select v-model="form.hospitalName " placeholder="请选择医院" :change="searchFromThree(form.region3)">
+            <el-select v-model="form.hosId " placeholder="请选择医院" @change="searchFromThree">
               <el-option
                  v-for="item in hosList"
                  :key="item.id"
@@ -17,7 +17,7 @@
           </el-form-item>
           <el-form-item label="科室名称">
             <el-input v-model="form.depName" disabled></el-input>
-            <el-button type="text" plain>选择科室</el-button>
+            <el-button type="text" plain @click="selectDep">选择科室</el-button>
           </el-form-item>
           <el-form-item label="服务费">
               <el-input v-model="form.servicePrice"></el-input>
@@ -29,11 +29,11 @@
               <el-input v-model="form.takeNoPlace"></el-input>
           </el-form-item>
           <el-form-item label="特殊资源">
-            <el-checkbox-group v-model="form.type">
-              <el-checkbox label="所属医院" name="type"></el-checkbox>
-              <el-checkbox label="默认医院" name="type"></el-checkbox>
-              <el-checkbox label="多点执业医院" name="type"></el-checkbox>
-            </el-checkbox-group>
+            <el-radio-group v-model="radios2">
+              <el-radio :label="1">所属医院</el-radio>
+              <el-radio :label="2">默认医院</el-radio>
+              <el-radio :label="3">多点执业医院</el-radio>
+            </el-radio-group>
           </el-form-item>
         </el-form>
         <el-button type="primary" plain @click="setHos()">保存</el-button>
@@ -46,23 +46,23 @@
       center>
       <el-form ref="form1" :model="form1" label-width="110px">
         <el-form-item label="一级科室">
-          <el-select v-model="form1.region" placeholder="请选择" :change="searchFromThis(form1.region,'depMod')">
-            <template v-for="(item,$index) in depList">
-                <el-option :label="item.departmentName" :value="item.departmentId"></el-option>
+          <el-select v-model="form1.region" placeholder="请选择" @change="searchFromThis(form1.region,'depMod')">
+            <template v-for="(item,$index) in departmentTList">
+                <el-option :label="item.departmentName" :value="item.id"></el-option>
             </template>
           </el-select>
         </el-form-item>
         <el-form-item label="二级科室">
           <el-select v-model="form1.region1" placeholder="请选择" @change="changeValue(form1.region1,'depMod')">
             <template v-for="(item,$index) in departmentTBox">
-                <el-option :label="item.departmentName" :value="item.departmentId"></el-option>
+                <el-option :label="item.departmentName" :value="item.id"></el-option>
             </template>
           </el-select>
         </el-form-item>
         <el-form-item label="三级科室">
           <el-select v-model="form1.region2" placeholder="请选择">
             <template v-for="(item,$index) in departmentTBox1">
-                <el-option :label="item.departmentName" :value="item.departmentId"></el-option>
+                <el-option :label="item.departmentName" :value="item.id"></el-option>
             </template>
           </el-select>
         </el-form-item>
@@ -84,16 +84,27 @@ export default {
         depName:'',
         number:'',
         address:'',
-        type:[]
+        hosId:""
       },
+      radios2:1,
       form1:{},
       hosList:[],
       depList:[],
       departmentTBox:[],
       departmentTBox1:[],
       depMod:false,
-
+      departmentId:'',
+      hospitalName1:'',
     }
+  },
+  computed:{
+    ...mapGetters('order',[
+      'departmentTList'
+    ])
+  },
+  mounted(){
+    this.getData();
+    console.log(this.departmentTList)
   },
   methods:{
     // 保存提交
@@ -114,24 +125,63 @@ export default {
         this.hosList = res.data;
       })
     },
-    searchFromThis(id,type){
-      this.getOrderDepartment({id:id}).then((res) =>{
-        this.depList = res.data
-      })
+    selectDep(){
+      this.depMod = true;
+    },
+    closeModal(){
+      this.depMod = false;
+    },
+    sureConfirm(){
+      // console.log(this.form1.region,this.form1.region1,this.form1.region2)
+      // 循环遍历科室
+      if(this.form1.region != undefined&& this.form1.region1!= undefined&& this.form1.region2 !=undefined){
+        console.log(this.departmentTBox1);
+        this.departmentId = this.form1.region2
+        for(let i in this.departmentTBox1){
+          if(this.departmentTBox1[i].id = this.form1.region2){
+            this.form.depName = this.departmentTBox1[i].departmentName
+          }
+        }
+      }else if(this.form1.region != undefined&& this.form1.region1!= undefined ){
+          this.departmentId = this.form1.region1
+        for(let i in this.departmentTBox){
+          console.log(this.departmentTBox);
+          if(this.departmentTBox[i].id = this.form1.region1){
+            this.form.depName = this.departmentTBox[i].departmentName
+          }
+        }
+      }else{
+        console.log(this.departmentTBox1);
+          this.departmentId = this.form1.region
+        for(let i in this.departmentTList){
+          if(this.departmentTList[i].id = this.form1.region){
+            this.form.depName = this.departmentTList[i].departmentName
+          }
+        }
+      }
+      this.depMod = false;
+    },
+    searchFromThree(data){
+      let obj = {};
+      obj = this.hosList.find((item)=>{//这里的userList就是上面遍历的数据源
+          return item.id === data;//筛选出匹配数据
+      });
+      this.hospitalName1 = obj.hospitalName
+      this.getOrderDepartment({id:data})
     },
     searchFromThis(id,type){
-      console.log(id);
-      for (var i in this.depList) {
-        if (this.depList[i].departmentId == id) {
-          this.diseasesBox = this.depList[i].diseases
+      //console.log(id);
+      for (var i in this.departmentTList) {
+        if (this.departmentTList[i].id == id) {
+          this.departmentTBox = this.departmentTList[i].departments
         }
       }
     },
   // 获取疾病类型
   changeValue(value,type) {
-    console.log(value);
+    //console.log(value);
     let obj = {};
-    obj = this.diseasesBox.find((item)=>{
+    obj = this.departmentTBox.find((item)=>{
         return item.id === value;
     });
     this.getOrderDepartmentThree({id:obj.id}).then((res) =>{
@@ -144,11 +194,12 @@ export default {
     setHos(){
       const data = {
           "address": this.form.address,
-          "departmentId": this.baseInfo.departmentId,
-          "departmentName":this.form.departmentName,
-          "hospitalId": this.form.hospitalId,
-          "hospitalName": this.form.hospitalName,
-          "hospitalType": this.form.type,
+          "departmentId": this.departmentId,
+          "departmentName":this.form.depName,
+          "hospitalId": this.form.hosId ,
+          "hospitalName": this.hospitalName1,
+          "doctorId":this.$route.params.id,
+          "hospitalType": this.radios2,
           "servicePrice": this.form.servicePrice,
           "takeNoPlace": this.form.takeNoPlace
         }

@@ -194,7 +194,7 @@
           <el-col :span="12">
             <div class="grid-content">
             <span class="spa-left-span">订单状态:</span>
-            <span class="spa-right-span">回复中</span>
+            <span class="spa-right-span">{{orderType}}</span>
             </div>
           </el-col>
           <el-col :span="12">
@@ -212,7 +212,7 @@
             </div>
           </el-col>
         </el-row>
-        <el-row class="btnBox">
+        <el-row class="btnBox" v-if="buttonStatus">
           <el-button type="primary" @click="reply()">回复</el-button>
         </el-row>
       </div>
@@ -253,11 +253,17 @@ export default {
       replyMod:false,
       replyContent:'',//回复内容
       depStatus:false,
+      orderType:'回复中',
+      buttonStatus:true
     }
   },
   mounted(){
     this.getParams()
     this.depStatus = this.listItem.inquiryOrderResponse.type == 0? false:true;//0专家问诊 1免费咨询
+    if(this.$route.params.type == 2){
+      this.orderType = '已回复'
+      this.buttonStatus = false;
+    }
   },
   computed:{
     ...mapGetters('order',[
@@ -278,7 +284,7 @@ export default {
         case 'replyMod':
             // 提交回复操作
             const obj ={
-              id:this.listItem.id,
+              id:this.listItem.inquiryOrderResponse.id,
               content:this.replyContent
             }
             this.getOrderReply(obj).then(()=>{

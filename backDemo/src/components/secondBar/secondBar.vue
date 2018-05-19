@@ -2,7 +2,7 @@
   <div class="secondBar">
     <div class="menu-s-box">
       <el-menu
-       default-active="0"
+       :default-active="$route.path"
        class="el-menu-vertical-demo"
        background-color="#ccc"
        text-color="#333"
@@ -21,9 +21,9 @@
            </el-submenu>
          </template> -->
          <!-- <template v-else> -->
-           <router-link :to="item.name" :key="item.name" class="route-link" >
+           <router-link :to="item.name" :key="item.routeName" class="route-link" >
              <el-menu-item :index="String($index)">
-                 <span slot="title">{{ item.meta.title }}</span>
+                 <span slot="title">{{ item.title}}</span>
              </el-menu-item>
            </router-link>
          <!-- </template> -->
@@ -45,7 +45,7 @@ export default {
   },
   props:['menulist'],
   mounted(){
-    // console.log(this.menulist);
+    // //console.log(this.menulist);
   }
 }
 </script>

@@ -10,7 +10,7 @@
           <el-col :span="12">
             <div class="grid-content">
             <span class="spa-left-span">患者姓名:</span>
-            <span class="spa-right-span">{{listItem.inquiryOrderResponse.patientName}}</span>
+            <span class="spa-right-span">{{listItem.inquiryOrderResponse.patientName == undefined? '':listItem.inquiryOrderResponse.patientName}}</span>
             </div>
           </el-col>
           <el-col :span="12">

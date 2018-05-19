@@ -30,7 +30,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="角色">
-            <el-select v-model="form.roleName" placeholder="请选择">
+            <el-select v-model="form.roleName" placeholder="请选择"  @change="roleSelect(form.roleName)">
               <el-option
                 v-for="item in roleList"
                 :key="item.id"
@@ -40,7 +40,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="状态">
-            <el-switch v-model="form.status == 1?true:false"></el-switch>
+            <el-switch v-model="roleStatus"></el-switch>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="onSubmit">保存</el-button>
@@ -56,7 +56,9 @@ import {getNowFormatDate} from '@/utils'
 export default {
   data(){
     return{
-      form:{}
+      form:{},
+      roleStatus:'',
+      roleId:'',
     }
   },
   computed:{
@@ -68,6 +70,8 @@ export default {
   mounted(){
     this.getData();
     this.form = this.$route.params;
+    this.roleId = this.form.roleId
+    this.roleStatus = this.changeStatus(this.form.status)
   },
   methods:{
     ...mapActions('setting',[
@@ -76,6 +80,12 @@ export default {
       'getBMlist',
       'getRolelist'
     ]),
+    changeStatus(val){
+      return val == 1?true:false
+    },
+    changeBack(val){
+      return val == true?1:0
+    },
     onSubmit() {
       const data ={
         "deptId": this.form.deptId,
@@ -84,8 +94,8 @@ export default {
         "loginname":this.form.loginname ,
         "password": this.form.password,
         "phonenum": this.form.phonenum,
-        "roleId": this.form.roleId,
-        "status": this.form.status,
+        "roleId": this.roleId,
+        "status": this.changeBack(this.roleStatus),
         "username": this.form.username
       }
       this.setUserInfo(data).then(() =>{
@@ -110,8 +120,16 @@ export default {
       this.getBMlist({'id':this.form.deptId})
     },
     bmSelect(val){
-      console.log(val);
+      //console.log(val);
       this.getRolelist({'id':val})
+    },
+    roleSelect(val){
+      let obj = {};
+      obj = this.roleList.find((item) =>{
+        return item.id == val
+      })
+      this.roleName = obj.roleName
+      this.roleId = obj.roleId
     }
   }
 }
