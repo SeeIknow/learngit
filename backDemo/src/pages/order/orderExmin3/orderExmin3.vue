@@ -74,7 +74,7 @@
           <el-col :span="12">
             <div class="grid-content">
             <span class="spa-left-span">服务费用:</span>
-            <span class="spa-right-span">{{listItem.inquiryOrderResponse.servicePrice }}</span>
+            <span class="spa-right-span">{{listItem.inquiryOrderResponse.servicePrice +'元' }}</span>
             </div>
           </el-col>
         </el-row>
@@ -87,8 +87,8 @@
           </el-col>
           <el-col :span="12">
             <div class="grid-content">
-            <span class="spa-left-span">疾病类型:</span>
-            <span class="spa-right-span">{{listItem.inquiryOrderResponse.diseaseTypeName}}</span>
+            <span class="spa-left-span">订单类型:</span>
+            <span class="spa-right-span">{{listItem.inquiryOrderResponse.diseaseTypeName == 1?'专家问诊':'免费咨询'}}</span>
             </div>
           </el-col>
         </el-row>
@@ -133,8 +133,8 @@
         <el-row>
           <el-col :span="24">
             <div class="grid-content">
-            <span class="spa-left-span">疾病标签:</span>
-            <span class="spa-right-span">{{listItem.inquiryOrderResponse.diseaseTypeName}}</span>
+            <span class="spa-left-span">疾病:</span>
+            <span class="spa-right-span">{{listItem.inquiryOrderResponse.diseaseName}}</span>
             </div>
           </el-col>
         </el-row>
@@ -241,7 +241,6 @@ export default {
   },
   mounted(){
     this.getParams()
-    this.depStatus = this.listItem.inquiryOrderResponse.type == 0? false:true;//0专家问诊 1免费咨询
   },
   computed:{
     ...mapGetters('order',[
@@ -256,7 +255,9 @@ export default {
         // 取到路由带过来的参数
         // let routerParams = this.$route.params.id
         this.getOrderListDetial({
-          id:this.$route.params.id
+          id:this.$route.query.id
+        }).then(() =>{
+          this.depStatus = this.listItem.inquiryOrderResponse.type == 0? false:true;//0专家问诊 1免费咨询
         })
     },
     goBack(){

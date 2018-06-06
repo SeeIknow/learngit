@@ -5,7 +5,7 @@ import {constantTouter} from '@/router/middle'
 // import HelloWorld from '@/components/HelloWorld'
 
 Vue.use(Router)
-//console.log(constantTouter);
+////console.log(constantTouter);
 
 export default new Router({
   routes:constantTouter,

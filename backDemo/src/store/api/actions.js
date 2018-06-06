@@ -316,7 +316,12 @@ dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/deptInfo/ad
 export const userSettingDeleteDep = ({state, dispatch}, payload) => {
 dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/deptInfo/deleteDeptInfo?id=${payload.param.id}`, payload.param, payload]}, {root: true})
 }
-
+/**
+* 用户设置》》医生模板下载
+*/
+export const doctorExcelDown = ({state, dispatch}, payload) => {
+dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/doctor/excel/downloadExcel`, payload.param, payload]}, {root: true})
+}
 
 /**
 * 权限设置》》选择用户的权限设置

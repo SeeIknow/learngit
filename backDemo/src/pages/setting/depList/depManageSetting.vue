@@ -2,20 +2,13 @@
   <div class="managerSetting">
     <div class="button-box">
       <el-button type="danger" plain @click="deleteInfo()">删除</el-button>
-      <el-button type="primary" plain>返回</el-button>
+      <el-button type="primary" plain @click="goBack">返回</el-button>
     </div>
     <p class="form-title">部门设置</p>
     <div class="form-box">
         <el-form ref="form" :model="form" label-width="80px">
           <el-form-item label="部门名称">
-            <el-select v-model="form.region" placeholder="请选择" @change="bmSelect(form.region)">
-              <el-option
-                v-for="item in depList"
-                :key="item.id"
-                :label="item.deptName"
-                :value="item.id">
-              </el-option>
-            </el-select>
+            <el-input v-model="info.deptName" placeholder="请输入部门"></el-input>
           </el-form-item>
           <el-form-item label="状态">
             <el-switch v-model="form.delivery"></el-switch>
@@ -33,8 +26,11 @@ import {mapGetters,mapMutations,mapActions} from 'vuex'
 export default {
   data(){
     return{
-      form:{},
-      obj:{}
+      form:{
+        delivery:false
+      },
+      obj:{},
+      info:''
     }
   },
   computed:{
@@ -43,7 +39,9 @@ export default {
     ])
   },
   mounted(){
-    this.getData();
+    this.info = this.$route.query.table
+    //console.log(this.info)
+    this.change1()
   },
   methods:{
     ...mapActions('setting',[
@@ -51,10 +49,21 @@ export default {
       'setDepInfo',
       'deleteDepInfo',
     ]),
+    goBack(){
+      this.$router.go(-1)
+    },
+    change1(){
+      if(this.info.status == 0){
+          this.form.delivery =false
+      }else{
+        this.form.delivery =true
+      }
+
+    },
     onSubmit() {
       const data ={
-          "deptName": this.obj.deptName,
-          "id": this.obj.id,
+          "deptName": this.info.deptName,
+          "id": this.info.id,
           "status": this.form.delivery == true? '1':'0'
         }
       this.setDepInfo(data).then(() =>{
@@ -62,23 +71,20 @@ export default {
       })
     },
     bmSelect(val){
-      //console.log(val);
+      ////console.log(val);
       this.obj = this.depList.find((item) =>{
         return item.id == val
       })
     },
     // 删除
     deleteInfo(){
-      this.deleteDepInfo({id:this.$route.params.id}).then(() =>{
+      this.deleteDepInfo({id:this.$route.query.table.id}).then(() =>{
         this.$message({
           type:'success',
-          maeeage:'删除成功'
+          massage:'删除成功'
         });
         this.$router.replace({name:'depList'})
       })
-    },
-    getData(){
-      this.getDepList();
     },
   }
 }

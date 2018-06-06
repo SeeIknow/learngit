@@ -1,20 +1,13 @@
 <template lang="html">
   <div class="managerSetting">
     <div class="button-box">
-      <el-button type="primary" plain>返回</el-button>
+      <el-button type="primary" plain @click="goBack">返回</el-button>
     </div>
     <p class="form-title">部门设置</p>
     <div class="form-box">
         <el-form ref="form" :model="form" label-width="80px">
           <el-form-item label="部门名称">
-            <el-select v-model="form.region" placeholder="请选择" @change="bmSelect(form.region)">
-              <el-option
-                v-for="item in depList"
-                :key="item.id"
-                :label="item.deptName"
-                :value="item.id">
-              </el-option>
-            </el-select>
+            <el-input v-model="dep" placeholder="请输入部门"></el-input>
           </el-form-item>
           <el-form-item label="状态">
             <el-switch v-model="form.delivery"></el-switch>
@@ -34,6 +27,7 @@ export default {
     return{
       form:{},
       obj:{},
+      dep:''
     }
   },
   computed:{
@@ -49,20 +43,16 @@ export default {
       'getDepList',
       'AddDepInfo'
     ]),
+    goBack(){
+      this.$router.go(-1)
+    },
     onSubmit() {
       const data ={
-          "deptName": this.obj.deptName,
-          "id": this.obj.id,
+          "deptName": this.dep,
           "status": this.form.delivery == true? '1':'0'
         }
       this.AddDepInfo(data).then(() =>{
         this.$router.replace({name:'depList'})
-      })
-    },
-    bmSelect(val){
-      //console.log(val);
-      this.obj = this.depList.find((item) =>{
-        return item.id == val
       })
     },
     getData(){

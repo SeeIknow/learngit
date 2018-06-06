@@ -88,7 +88,7 @@
           <el-col :span="12">
             <div class="grid-content">
             <span class="spa-left-span">服务费用:</span>
-            <span class="spa-right-span">{{yyDetail.servicePrice}}</span>
+            <span class="spa-right-span">{{yyDetail.servicePrice +'元'}}</span>
           </div>
           </el-col>
         </el-row>
@@ -149,8 +149,8 @@
           </el-col>
           <el-col :span="12">
             <div class="grid-content">
-            <span class="spa-left-span">取消失败:</span>
-            <span class="spa-right-span">{{yyDetail.refuseReason}}</span>
+            <span class="spa-left-span">取消原因:</span>
+            <span class="spa-right-span">{{yyDetail.countermandReason}}</span>
           </div>
           </el-col>
         </el-row>
@@ -225,8 +225,8 @@ export default {
     getParams () {
         // 取到路由带过来的参数
         let routerParams = {
-          id:this.$route.params.id,
-          status:this.$route.params.status
+          id:this.$route.query.id,
+          status:this.$route.query.status
         }
         /**
          * [id description]

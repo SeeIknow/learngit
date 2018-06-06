@@ -54,7 +54,7 @@
         <div class="charts-b">
           <div class="table-trade">
             <span>统计类型:</span>
-            <el-select v-model="value" placeholder="请选择">
+            <el-select v-model="statisticType1" placeholder="请选择">
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -63,14 +63,15 @@
               </el-option>
             </el-select>
             <span>订单类型:</span>
-            <el-select v-model="value" placeholder="请选择">
+            <el-select v-model="orderType1" placeholder="请选择">
               <el-option
-                v-for="item in options"
+                v-for="item in options1"
                 :key="item.value"
                 :label="item.label"
                 :value="item.value">
               </el-option>
             </el-select>
+            <el-button type="primary" style="margin-left:60px;" @click="search()">搜索</el-button>
           </div>
           <div id="main2" style="width: 600px; height: 400px;"></div>
         </div>
@@ -88,26 +89,31 @@ export default {
       radio3:'本月',
       date:['',''],
       options: [{
-          value: '1',
+          value: 1,
           label: '订单数量'
         }, {
           value: '2',
           label: '订单金额'
         }],
     options1: [{
-        value: '1',
+        value: 0,
         label: '全部订单'
       },{
+        value: '1',
+        label: '专家问诊'
+      },{
         value: '2',
-        label: '图文咨询'
+        label: '门诊预约'
       },{
         value: '3',
-        label: '门诊预约'
+        label: '就诊服务'
       }],
         value:'',
         value1:'',
         statisticType:'',
+        statisticType:'',
         orderType:'',
+        orderType1:'',
         startDate:'',
         endDate:'',
     }
@@ -115,7 +121,9 @@ export default {
   mounted(){
   //初始化赋值
   this.statisticType = 1
-  this.orderType = 1
+  this.orderType = 0
+  this.statisticType1 = 1
+  this.orderType1 = 0
   this.startDate = getMonthDays().firstdate
   this.endDate = getMonthDays().lastdate
   this.charts();
@@ -164,7 +172,17 @@ export default {
         'startDate':this.startDate,
         'endDate':this.endDate
       }
-      return data;
+      const data1 = {
+        'statisticType':this.statisticType,
+        'orderType':this.orderType,
+        'startDate':this.startDate,
+        'endDate':this.endDate
+      }
+      const dataA = {
+        'data':data,
+        'data1':data1
+      }
+      return dataA;
     },
     charts(){
       let myChart = this.$echarts.init(document.getElementById('main'));
@@ -242,7 +260,7 @@ export default {
 	        }]
 		};
     // 交易统计折线图
-    this.getTradeStatic(this.exportData()).then((res) =>{
+    this.getTradeStatic(this.exportData().data).then((res) =>{
       const jsons = res.data;
       const Item = function() {
 					return {
@@ -268,7 +286,7 @@ export default {
         myChart.setOption(option);
     })
     myChart1.showLoading();// 加载动画
-    this.getOrderStatic(this.exportData()).then((res) =>{
+    this.getOrderStatic(this.exportData().data1).then((res) =>{
       //console.log(res);
       myChart1.setOption({
 				       series:[{

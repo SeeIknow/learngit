@@ -61,19 +61,19 @@ export default {
       'getRole'
     ]),
       handleSizeChange(val) {
-        //console.log(`每页 ${val} 条`);
+        ////console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
-        // //console.log(`当前页: ${val}`);
+        // ////console.log(`当前页: ${val}`);
         this.getData(val)
       },
       getData(val){
         this.getRole({pageNum:val})
       },
       goDetail(index,table){
-        //console.log(index);
-        //console.log(table[index].id)
-        this.$router.push({name:'roleManageSetting',params:table[index]})
+        ////console.log(index);
+        ////console.log(table[index].id)
+        this.$router.push({name:'roleManageSetting',query:table[index]})
       },
       add(){
         this.$router.push({name:'roleManagerSettingAdd'})

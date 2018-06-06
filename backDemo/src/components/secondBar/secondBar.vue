@@ -7,7 +7,7 @@
        background-color="#ccc"
        text-color="#333"
        active-text-color="#00abec">
-       <template v-for="(item,$index) in menulist">
+       <template v-for="(item,$index) in menuList">
         <!-- <template v-if="item.children && item.children.length >= 1">
            <el-submenu :index="item.name" :key="item.name">
              <template slot="title">
@@ -36,16 +36,26 @@
 
 <script>
 export default {
-  mounted(){
-    // alert(this.$route.path)
-  },
   data () {
     return {
+      menuList:'',
     }
   },
-  props:['menulist'],
+  // props:['menulist'],
   mounted(){
-    // //console.log(this.menulist);
+    // ////console.log(this.menulist);
+    // 初始化 赋值
+      this.menuList = this.$store.state.routerTwoBox
+  },
+  methods:{
+    getSecondBar(){
+      this.menuList = this.$store.state.routerTwoBox
+      //console.log(this.menuList);
+    }
+  },
+  watch:{
+    // 监听路由变化 重新获取二级导航
+    '$route':'getSecondBar'
   }
 }
 </script>

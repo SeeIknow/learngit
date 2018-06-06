@@ -88,7 +88,7 @@
           <el-col :span="12">
             <div class="grid-content">
             <span class="spa-left-span">服务费用:</span>
-            <span class="spa-right-span">{{yyDetail.servicePrice }}</span>
+            <span class="spa-right-span">{{yyDetail.servicePrice +'元'}}</span>
           </div>
           </el-col>
         </el-row>
@@ -104,7 +104,7 @@
           <el-col :span="24">
             <div class="grid-content">
             <span class="spa-left-span">申请时间:</span>
-            <span class="spa-right-span">{{parseTime1(yyDetail.expectDateEnd)}}</span>
+            <span class="spa-right-span">{{ parseTime1(yyDetail.expectDateStart ) +'--'+ parseTime1(yyDetail.expectDateEnd)}}</span>
             </div>
           </el-col>
         </el-row>
@@ -227,7 +227,6 @@ export default {
   },
   mounted(){
     this.getParams()
-    this.outpatientOrderComms = this.yyDetail.outpatientOrderComms;//初次赋值 以后添加后 push新值
   },
   methods:{
     ...mapActions('order', [
@@ -239,7 +238,7 @@ export default {
     sureConfirm(val){
       switch(val){
         case 'successMod':
-        //console.log(1111);
+        ////console.log(1111);
             this.getOrderYy_check(this.outObj(1)).then(()=>{
               this.$router.replace({name:'appointmentService'})
             }).catch(()=>{
@@ -262,7 +261,7 @@ export default {
               "communicationRecord": this.valueTextArea1,
               // "id": this.$route.params.id,
               "inDate": getNowFormatDate(),
-              "outpatientOrderId": this.$route.params.id
+              "outpatientOrderId": this.$route.query.id
             }
             // 添加沟通记录
             this.getOrderYy_detailRecord(obj).then( ()=>{
@@ -286,7 +285,7 @@ export default {
       const obj = {
             "ampm": this.form1.region1,
             "appointmentDate": getNowFormatDate(),
-            "id": this.$route.params.id,
+            "id": this.$route.query.id,
             "realityPlace": this.address_c,
             "refuseReason": this.valueTextArea2,
             "status": status
@@ -298,8 +297,9 @@ export default {
     },
     getParams () {
         // 取到路由带过来的参数
-        let routerParams = this.$route.params.id
+        let routerParams = this.$route.query.id
         this.getOrderYy_detail({id:routerParams}).then(() =>{
+          this.outpatientOrderComms = this.yyDetail.outpatientOrderComms;//初次赋值 以后添加后 push新值
             this.getOrderYy_address({id:this.yyDetail.doctorId});//出诊地点
         })
 

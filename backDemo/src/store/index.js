@@ -24,7 +24,7 @@ export default new vuex.Store({
       return new Promise((resolve, reject) => {
         payload.callback = res => {
           resolve(res)
-          //console.log(res.data)
+          ////console.log(res.data)
           // commit('tradeStatistics',res.data)
         }
         payload.error = err => {
@@ -39,7 +39,7 @@ export default new vuex.Store({
       return new Promise((resolve, reject) => {
         payload.callback = res => {
           resolve(res)
-          //console.log(res.data)
+          ////console.log(res.data)
           // commit('tradeStatistics',res.data)
         }
         payload.error = err => {

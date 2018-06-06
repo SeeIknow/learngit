@@ -1,34 +1,35 @@
 <template lang="html">
   <div class="detail-c-box">
+    <el-button type="primary" @click="goBack()">返回</el-button>
     <p class="form-title">管理员设置</p>
     <div class="module-i">
       <p class="role-b-top">
-        <span>角色名称：{{$route.params.roleName}}</span>
-        <span>所属部门：{{$route.params.deptName}}</span>
+        <span>角色名称：{{$route.query.roleName}}</span>
+        <span>所属部门：{{$route.query.deptName}}</span>
       </p>
       <div class="limit-outer-box">
         <!-- 操作功能权限 -->
-        <div class="limit-item">
+        <!-- <div class="limit-item">
           <p class="limit-title">操作功能权限</p>
           <div class="limit-inner-box">
             <template v-for="(item,$index) in limitsListBySeletc.operationInfo">
               <el-checkbox :checked="item.BView == 0?false:true" v-model="item.BView">{{item.operationName}}</el-checkbox>
-            </template>
+            </template> -->
             <!-- <el-checkbox-group v-model="checkboxGroup1" size="small">
               <el-checkbox label="创建" border></el-checkbox>
               <el-checkbox label="编辑" border></el-checkbox>
               <el-checkbox label="删除" border></el-checkbox>
               <el-checkbox label="查看" border></el-checkbox>
             </el-checkbox-group> -->
-          </div>
-        </div>
-        <template v-for="(item,$index) in limitsListBySeletc.menuInfo">
+          <!-- </div>
+        </div> -->
+        <template v-for="(item,$index) in menuInfo.menuInfo">
           <!-- 订单管理 -->
           <div class="limit-item">
             <p class="limit-title">{{item.menuName}}</p>
             <div class="limit-inner-box">
               <template v-for="(item1,$index1) in item.childrenMenuInfo">
-                <el-checkbox v-model="item1.BView" :checked="item.BView == 0?false:true">{{item1.menuName}}</el-checkbox>
+                <el-checkbox v-model="item1.BView" :checked="item1.BView == 0?false:true">{{item1.menuName}}</el-checkbox>
               </template>
             </div>
           </div>
@@ -104,7 +105,8 @@ export default {
       checkboxGroup2:[],
       checkboxGroup3:[],
       checkboxGroup4:[],
-      checkboxGroup5:[]
+      checkboxGroup5:[],
+      menuInfo:''
     }
   },
   computed:{
@@ -114,20 +116,29 @@ export default {
   },
   mounted(){
     this.getData();
-    //console.log(this.$route.params);
-    //console.log(this.limitsListBySeletc)
+    ////console.log(this.$route.params);
+
   },
   methods:{
     ...mapActions('setting',[
       'setLimitsBySelectUser',
       'getLimitsBySelectUser'
     ]),
+    changeVla(){
+
+    },
+    goBack(){
+      this.$router.go(-1)
+    },
     getData(){
       const data = {
-        roleId:this.$route.params.refId,
-        deptId:this.$route.params.deptId
+        roleId:this.$route.query.id,
+        deptId:this.$route.query.deptId
       }
-      this.getLimitsBySelectUser(data)
+      this.getLimitsBySelectUser(data).then( () =>{
+          this.menuInfo = this.limitsListBySeletc
+          console.log(this.limitsListBySeletc)
+      })
     },
     commitInfo(){
       // this.limitsListBySeletc.roleId = this.$route.params.refId;
@@ -143,19 +154,27 @@ export default {
       for(let i in this.limitsListBySeletc.menuInfo){
         for(let j in this.limitsListBySeletc.menuInfo[i].childrenMenuInfo){
           if(this.limitsListBySeletc.menuInfo[i].childrenMenuInfo[j].BView == true){
+            //循环遍历 子
+            for(let m in this.limitsListBySeletc.menuInfo[i].childrenMenuInfo[j].childrenMenuInfo){
+              menuArr.push(this.limitsListBySeletc.menuInfo[i].childrenMenuInfo[j].childrenMenuInfo[m].id)
+            }
             menuArr.push(this.limitsListBySeletc.menuInfo[i].childrenMenuInfo[j].id)
+            // push一级菜单
+              menuArr.push(this.limitsListBySeletc.menuInfo[i].id)
           }
         }
       }
 
-      //console.log(menuArr);
+      ////console.log(menuArr);
       const data = {
-        roleId:this.$route.params.refId,
-        deptId:this.$route.params.deptId,
+        roleId:this.$route.query.id,
+        deptId:this.$route.query.deptId,
         menuInfo:menuArr,
         operationInfo:operationArr
       }
-      this.setLimitsBySelectUser(data)
+      this.setLimitsBySelectUser(data).then(() =>{
+        this.$router.push({name:'roleList'})
+      })
     }
   }
 }

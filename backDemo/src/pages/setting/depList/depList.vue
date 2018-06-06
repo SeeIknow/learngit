@@ -57,19 +57,19 @@ export default {
       'getDepManList'
     ]),
       handleSizeChange(val) {
-        //console.log(`每页 ${val} 条`);
+        ////console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
-        //console.log(`当前页: ${val}`);
+        ////console.log(`当前页: ${val}`);
         this.getData(val)
       },
       getDate(val){
         this.getDepManList({pageNum:val})
       },
       goDetail(index,table){
-        //console.log(index);
-        //console.log(table[index].id)
-        this.$router.push({name:'depManageSetting',params:{id:table[index].id}})
+        ////console.log(index);
+        ////console.log(table[index].id)
+        this.$router.push({name:'depManageSetting',query:{table:table[index]}})
       },
       add(){
         this.$router.push({name:'depManagerSettingAdd'})

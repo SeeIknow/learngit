@@ -64,16 +64,17 @@ export default {
     ]),
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
-        //console.log(valid);
+        ////console.log(valid);
         // 验证成功
           if (valid) {
             // 按钮加载中
             this.loadingStatus = true;
             setTimeout(() =>{
               this.loadingStatus = false;
+              // this.$http.post('http://www.doctormdt.com/ccyl/login',null,{headers:{'loginname':this.ruleForm2.username,'password':this.ruleForm2.pass}}).then(response => {
               this.$http.post('http://172.16.4.10:8080/ccyl/login',null,{headers:{'loginname':this.ruleForm2.username,'password':this.ruleForm2.pass}}).then(response => {
                   // success callback
-                  //console.log(response);
+                  ////console.log(response);
                   // 本地存储用户信息
                   localStorage.setItem('userInfo',JSON.stringify(response.data))
                   // 存储用户图像
@@ -83,8 +84,9 @@ export default {
                     // 本地存储菜单权限
                     localStorage.setItem('permission',JSON.stringify(data.data))
                     this.$router.addRoutes(AddRouteRootMap(data.data.menus))
-                    //console.log(AddRouteRootMap(data.data.menus))
+                    ////console.log(AddRouteRootMap(data.data.menus))
                     // vuex存储permission
+                    this.$store.state.user.imgUrl = response.data.userModelResponse.photoUrl
                      this.ADD_MENU(data.data.menus)
                     this.$router.replace({
                       name: 'index'
@@ -92,11 +94,11 @@ export default {
                   })
               }, response => {
                   // error callback
-                  //console.log(response);
+                  ////console.log(response);
               })
             },1000)
           } else {
-            //console.log('error submit!!');
+            ////console.log('error submit!!');
             return false;
           }
         });

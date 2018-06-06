@@ -9,7 +9,7 @@ export const constantTouter =
     component: () => import('@/pages/login/login.vue')
   },
   {
-    path: '/home',
+    path: '/index',
     component:() => import('@/pages/homeindex.vue'), // 模板页面
     redirect:'index',
     children: [
@@ -387,6 +387,13 @@ export const constantTouter =
     component:() => import('@/pages/homeindex.vue'), // 模板页面
 //  redirect:'index',
     children: [
+    {
+        path: 'operationalData',
+        name: 'operationalData',
+        node: 'count',
+          title: '交易统计',
+        component: () => import('@/pages/count/operationalData/operationalData.vue')
+      },
       {
         path: 'operationalData1',
         name: 'operationalData1',
@@ -424,6 +431,7 @@ export const constantTouter =
          obj.name = `${route.routeName}`
          obj.path = `/${route.routeName}`
          obj.icon = route.icon
+         obj.node = route.icon
          obj.component = map[route.routeName] // 路由映射
          result.push(obj)
        }

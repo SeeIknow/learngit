@@ -211,7 +211,7 @@ export default {
   mounted(){
     this.getParams()
     this.imagesUrl = this.$store.state.order.listItem.imagesUrl
-    //console.log(this.imagesUrl)
+    ////console.log(this.imagesUrl)
   },
   methods:{
     sureConfirm(){
@@ -222,7 +222,7 @@ export default {
         // 取到路由带过来的参数
         let routerParams = this.$route.params.id
         this.$store.dispatch('order/getListDetail',routerParams)
-        //console.log(routerParams)
+        ////console.log(routerParams)
     },
     goBack(){
       this.$router.go(-1)

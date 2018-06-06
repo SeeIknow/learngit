@@ -103,7 +103,7 @@ export default {
       const aa = this.changeStatus(this.doctorDetail.services[i].switchOnOff)
       this.switchOnOff.push(aa)
     }
-    console.log(this.switchOnOff)
+    //console.log(this.switchOnOff)
   },
   methods:{
     ...mapActions('user',[
@@ -123,14 +123,14 @@ export default {
       for(let i in this.doctorDetail.services){
         this.doctorDetail.services[i].switchOnOff = this.changeBack(this.switchOnOff[i])
       }
-      console.log(this.doctorDetail.services);
+      //console.log(this.doctorDetail.services);
       // return;
-      this.setServiceMange({id:this.$route.params.id,data:this.doctorDetail.services}).then(() =>{
-        this.$router.replace({name:'doctorEdit'})
+      this.setServiceMange({id:this.$route.query.id,data:this.doctorDetail.services}).then(() =>{
+        this.$router.replace({name:'doctorEdit',query:{id:this.$route.query.id}})
       })
     },
     goBack(){
-        this.$router.go(-1)
+        this.$router.replace({name:'doctorEdit'})
     }
   }
 }

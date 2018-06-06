@@ -8,7 +8,7 @@
     <div class="form-box">
         <el-form ref="form" :model="form" label-width="80px">
           <el-form-item label="账号">
-            <el-input v-model="form.loginname"></el-input>
+            <el-input v-model="form.loginname" disabled></el-input>
           </el-form-item>
           <el-form-item label="密码">
             <el-input v-model="form.password"></el-input>
@@ -120,7 +120,7 @@ export default {
       this.getBMlist({'id':this.form.deptId})
     },
     bmSelect(val){
-      //console.log(val);
+      ////console.log(val);
       this.getRolelist({'id':val})
     },
     roleSelect(val){

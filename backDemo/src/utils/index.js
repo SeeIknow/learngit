@@ -69,6 +69,9 @@ export function getMonthDays() {
      var y = dd.getFullYear();
      var m = dd.getMonth()+1;//获取当前月份的日期
      var d = dd.getDate();
+     if(m<10){
+       m = '0'+m
+     }
      return y+"-"+m+"-"+d;
      }
      var $scope ={};
@@ -77,6 +80,9 @@ export function getMonthDays() {
     var date_ = new Date();
     var year = date_.getFullYear();
     var month = date_.getMonth() + 1;
+    if(month<10){
+      month = '0'+month;
+    }
     $scope.firstdate = year + '-' + month + '-01';//当月第一天
     $scope.sevenDaysF =  GetDateStr(-3);//当月最后一天
     $scope.sevenDaysL = GetDateStr(4);//当月最后一天
@@ -205,7 +211,7 @@ export function scrollTo(element, to, duration) {
   const difference = to - element.scrollTop
   const perTick = difference / duration * 10
   setTimeout(() => {
-    //console.log(new Date())
+    ////console.log(new Date())
     element.scrollTop = element.scrollTop + perTick
     if (element.scrollTop === to) return
     scrollTo(element, to, duration - 10)

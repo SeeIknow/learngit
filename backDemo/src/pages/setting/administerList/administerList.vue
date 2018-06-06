@@ -20,7 +20,7 @@
           label="使用者姓名">
         </el-table-column>
         <el-table-column
-          prop="roleName "
+          prop="roleName"
           label="角色分组">
         </el-table-column>
         <el-table-column
@@ -72,18 +72,18 @@ export default {
       'getUserList'
     ]),
       handleSizeChange(val) {
-        ////console.log(`每页 ${val} 条`);
+        //////console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
-        ////console.log(`当前页: ${val}`);
+        //////console.log(`当前页: ${val}`);
         this.getData(val)
       },
       getDate(val=1){
         this.getUserList({pageNum:val})
       },
       goDetail(index,table){
-        ////console.log(index);
-        //console.log(table[index])
+        //////console.log(index);
+        ////console.log(table[index])
         this.$router.push({name:'managerSetting',params:table[index]})
       },
       add(){

@@ -97,7 +97,7 @@
       <second-bar></second-bar>
     </div> -->
     <div class="slideBox">
-      <div class="menuItem" v-for="item in sidebarRoute" :key="item.title" @click="jump(item)" :class="{'active':currentName === item.name}">
+      <div class="menuItem" v-for="item in sidebarRoute" :key="item.title" @click="jump(item)" :class="{'active':$store.state.routerActiveOne == item.name}">
         <div class="svgBox">
           <svg-icon :name="item.icon"></svg-icon>
         </div>
@@ -119,30 +119,41 @@ export default {
       currentName:'index'
     }
   },
+  updated(){
+  },
   mounted () {
-  	//console.log(constantTouter);
+  	////console.log(constantTouter);
     this.sidebarRoute = getMenu()
+
+
     // 默认是首页
     this.routesFilter = constantTouter[1].children;
-    this.$router.push({
-      name:this.routesFilter[0].name
-    })
+    // 初始化赋值二级导航
+    this.$store.state.routerTwoBox = this.routesFilter
+    // this.$router.push({
+    //   name:this.routesFilter[0].name
+    // })
   },
   methods:{
+  	setCurrentName(){
+  		this.currentName = this.$store.state.routerActiveOne
+  		//console.log(this.currentName)
+  	},
     jump (item) {
-    	//console.log(item);
     	const menus = JSON.parse(localStorage.getItem('permission'));
-    	//console.log(menus);
+    	////console.log(menus);
       if(item.name == 'index'){
         this.currentName = item.name
         this.routesFilter = constantTouter[1].children;
+        this.$store.state.routerTwoBox = this.routesFilter
         this.$router.push({
           name:this.routesFilter[0].name
         })
       }else{
         this.routesFilter= filterTwoName(menus.menus,item.name)
+        // this.$store.state.routerTwoBox = this.routesFilter
         // this.$message.success('即将去'+ item.name + item.title + '路由模块')
-         //console.log(this.routesFilter);
+         ////console.log(this.routesFilter);
         this.currentName = item.name
         this.$router.push({
           name:this.routesFilter[0].name,
@@ -155,7 +166,11 @@ export default {
   },
   components:{
     SecondBar
+  },
+  watch:{
+  	"$route": "setCurrentName"
   }
+
 }
 </script>
 

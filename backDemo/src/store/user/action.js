@@ -7,7 +7,7 @@ export const getUserList = ({state, commit, dispatch, getters, rootGetters}, dat
   return new Promise((resolve, reject) => {
     payload.callback = res => {
       resolve(res)
-      // //console.log(res)
+      // ////console.log(res)
       commit(LIST.GET_DOCTOR,res.data)
     }
     payload.error = err => {
@@ -26,7 +26,7 @@ export const getUserList = ({state, commit, dispatch, getters, rootGetters}, dat
    return new Promise((resolve, reject) => {
      payload.callback = res => {
        resolve(res)
-       // //console.log(res)
+       // ////console.log(res)
        commit(LIST.GET_DOCTOR,res.data)
      }
      payload.error = err => {
@@ -45,8 +45,8 @@ export const getUserList = ({state, commit, dispatch, getters, rootGetters}, dat
     payload.param = data
     return new Promise((resolve, reject) => {
       payload.callback = res => {
-        // resolve(res)
-         // //console.log(res)
+        resolve(res)
+         // ////console.log(res)
         commit(LIST.DOCTORDETAIL,res.data)
       }
       payload.error = err => {
@@ -66,7 +66,7 @@ export const getUserList = ({state, commit, dispatch, getters, rootGetters}, dat
      return new Promise((resolve, reject) => {
        payload.callback = res => {
          resolve(res)
-           //console.log(res)
+           ////console.log(res)
          commit(LIST.DOCTORLEVEL,res.data)
        }
        payload.error = err => {
@@ -85,7 +85,7 @@ export const getUserList = ({state, commit, dispatch, getters, rootGetters}, dat
       return new Promise((resolve, reject) => {
         payload.callback = res => {
           resolve(res)
-            //console.log(res)
+            ////console.log(res)
           commit(LIST.DOCTOROFFICE,res.data)
         }
         payload.error = err => {
@@ -255,11 +255,11 @@ return new Promise((resolve, reject) => {
  * 用户管理》》医生管理>>医生详情> 上传头像
  */
  export const uploadPhoto = ({state, commit, dispatch, getters, rootGetters},param) =>{
-   //console.log(param);
+   ////console.log(param);
    axios.post(state.server1+`/doctor/upload/doctorHeader?doctorId=${param.id}`,param.data,{headers:{
               "Authorization": JSON.parse(localStorage.getItem('userInfo')).token
             }}).then((res) =>{
-              //console.log(res);
+              ////console.log(res);
 
               localStorage.setItem('userPhoto',res.data)
               return res
@@ -268,13 +268,43 @@ return new Promise((resolve, reject) => {
  /**
  * 首页》》账户设置> 上传头像
  */
- export const uploadUserPhoto = ({state, commit, dispatch, getters, rootGetters},param) =>{
-   //console.log(param);
-   axios.post('http://192.168.2.200:8080/ccyl'+`/userinfo/uploadPhoto`,param.data,{headers:{
+ export const uploadUserPhoto = ({state, commit, dispatch, getters, rootGetters,rootState},param) =>{
+   ////console.log(param);
+   axios.post(state.server1+`/userinfo/uploadPhoto`,param.data,{headers:{
               "Authorization": JSON.parse(localStorage.getItem('userInfo')).token
             }}).then((res) =>{
-              //console.log(res);
+              ////console.log(res);
               localStorage.setItem('adminPhoto',res.data)
+              state.imgUrl = res.data
+              return res
+            })
+ }
+ /**
+  * 用户设置》》医生模板下载
+  */
+
+ export const doctorExcelDown= ({state, commit, dispatch, getters, rootGetters}, data) => {
+ const payload = rootGetters['api/payload']
+ payload.param = data
+ return new Promise((resolve, reject) => {
+  payload.callback = res => {
+    resolve(res)
+  }
+  payload.error = err => {
+    reject(error)
+  }
+  dispatch('api/doctorExcelDown', payload, {root: true})
+ })
+ }
+ /**
+ * 用户设置》》医生模板导入
+ */
+ export const doctorExcelUp = ({state, commit, dispatch, getters, rootGetters,rootState},param) =>{
+   ////console.log(param);
+   axios.post(state.server1+`/doctor/excel/executeImport`,param.data,{headers:{
+              "Authorization": JSON.parse(localStorage.getItem('userInfo')).token
+            }}).then((res) =>{
+              ////console.log(res);
               return res
             })
  }

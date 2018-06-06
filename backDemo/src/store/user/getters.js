@@ -18,3 +18,8 @@ export const doctorLevel = state =>{
 export const medicalAssitant = state =>{
   return state.medicalAssitant
 }
+
+//医生级别
+export const doctorId = state =>{
+  return state.doctorId
+}

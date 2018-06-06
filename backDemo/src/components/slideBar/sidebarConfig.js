@@ -48,7 +48,8 @@ export function getMenu(){
   },
 ];
   const menuList = JSON.parse(localStorage.getItem('permission'))
-  //console.log(menuList);
+  ////console.log(menuList);
+  if(menuList == undefined)return;
   for(var i in menuList.menus){
     const obj ={};
     obj.title= menuList.menus[i].menuName;
@@ -57,5 +58,5 @@ export function getMenu(){
     sidebar.push(obj)
   }
    return sidebar;
-  //console.log(sidebar)
+  ////console.log(sidebar)
 }

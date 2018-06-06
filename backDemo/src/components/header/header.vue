@@ -6,21 +6,21 @@
       <div class="rightBox">
 
         <div class="item" title="李白">
-          <img :src="photo" alt="">
+          <img :src="$store.state.user.imgUrl" alt="">
           <span class="userName">{{userName}}</span>
         </div>
-        <router-link :to="{ name: 'index'}">
-          <div class="item" title="首页">
+        <!-- <router-link :to="{ name: 'index'}"> -->
+          <div class="item" title="首页" @click="reload">
             <svg-icon name="home"></svg-icon>
             <span>首页</span>
           </div>
-        </router-link>
-        <router-link :to="{ name: 'userSetting'}">
+        <!-- </router-link> -->
+        <!-- <router-link :to="{ name: 'userSetting'}">
           <div class="item" title="设置">
             <svg-icon name="setting"></svg-icon>
             <span>设置</span>
           </div>
-        </router-link>
+        </router-link> -->
         <div class="item" title="退出" @click="loginOut">
           <svg-icon name="sign_out"></svg-icon>
           <span>退出</span>
@@ -54,9 +54,12 @@ export default {
     getInfo(){
       const info = JSON.parse(localStorage.getItem('userInfo'));
       const photo = localStorage.getItem('adminPhoto')
-      this.userName = info.username
+      this.userName = info.userModelResponse.username
       this.photo = photo;
-      //console.log(info.username);
+      ////console.log(info.username);
+    },
+    reload(){
+      this.$router.push({name:'index'})
     }
   }
 }

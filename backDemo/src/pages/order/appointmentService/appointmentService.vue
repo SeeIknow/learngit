@@ -21,7 +21,7 @@
         end-placeholder="结束日期">
       </el-date-picker>
     </div>
-    <div class="source input-select-1">
+    <!-- <div class="source input-select-1">
       <span class="label-span">订单类型:</span>
       <el-select v-model="typeValue" clearable placeholder="请选择">
         <el-option
@@ -35,7 +35,7 @@
           value="2">
         </el-option>
       </el-select>
-    </div>
+    </div> -->
     <!-- <div class="source input-select-1">
       <span class="label-span">来源渠道:</span>
       <el-select v-model="sourceValue" clearable placeholder="请选择">
@@ -77,7 +77,7 @@
         </el-input>
     </div>
     <div class="grid-content bg-purple input-select-1">
-      <el-button type="primary" icon="el-icon-search" @click="getData()">查询</el-button>
+      <el-button type="primary" icon="el-icon-search" @click="getData(1)">查询</el-button>
     </div>
   </div>
   <div class="tableBox">
@@ -117,17 +117,17 @@
           width="80">
         </el-table-column>
         <el-table-column
-          prop="doctorOrganization "
+          prop="doctorOrganization"
           label="出诊医院"
           width="160">
         </el-table-column>
         <el-table-column
-          prop="departmentName "
+          prop="departmentName"
           label="科室"
           width="60">
         </el-table-column>
         <el-table-column
-          prop="needHelp "
+          prop="clinicDate"
           label="就诊日期"
           width="120">
         </el-table-column>
@@ -142,7 +142,7 @@
           label="服务费"
           width="80">
         </el-table-column>
-        <el-table-column
+        <!-- <el-table-column
           prop="servicePrice"
           v-if="a1"
           label="陪诊"
@@ -153,7 +153,7 @@
           label="陪诊人"
           v-if="a2"
           width="80">
-        </el-table-column>
+        </el-table-column> -->
         <!-- <el-table-column
           prop="serviceCategoryType"
           label="渠道"
@@ -249,7 +249,7 @@ export default {
         orderNo: '',
         patientName:this.nameValue,
         patientPhoneNum:this.phoneValue,
-        serviceCategoryType:1,
+        type:1,
         status:this.activeIndex,
         pageNum:val
       }
@@ -259,8 +259,8 @@ export default {
     goDetial(index,table){
       // index:当前点击对象的下表
       // table:整个表格对象
-      ////console.log(index);
-      ////console.log(table[index].id)
+      //////console.log(index);
+      //////console.log(table[index].id)
       /**
        * [switch description]
        * @param  table[index].status  每一个点击对象所对应的状态值
@@ -283,18 +283,19 @@ export default {
           var routerName = 'orderOutpatientAppointment2';
           break;
       }
-      this.$router.push({name:routerName,params:{id:table[index].id,status:table[index].status}})
+      this.$router.push({name:routerName,query:{id:table[index].id,status:table[index].status}})
     },
     // 分页
     handleSizeChange(val) {
-      ////console.log(`每页 ${val} 条`);
+      //////console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
-      ////console.log(`当前页: ${val}`);
+      //////console.log(`当前页: ${val}`);
       this.getData(val)
     },
     // 获取数据
     getData(val){
+      this.dateValue = (this.dateValue == null ? ['',''] : this.dateValue)
       this.getOrderListYY(this.outObj(val)).then(() =>{
       if(this.listYY.total>0){
         this.showStatus = true;
@@ -305,7 +306,7 @@ export default {
     },
     getTime(){
       // 时间组件 清楚内容
-      //console.log(this.dateValue);
+      ////console.log(this.dateValue);
       this.dateValue = (this.dateValue == null ? ['',''] : this.dateValue)
     },
     // 菜单切换
@@ -329,7 +330,7 @@ export default {
         this.operation = '查看'
       }
       // 菜单切换 日期组件重新赋值
-      this.dateValue = (this.dateValue == null ? ['',''] : this.dateValue)
+      this.dateValue = ['','']
          this.getData(1)
      }
   }

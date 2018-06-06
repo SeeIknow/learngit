@@ -17,7 +17,7 @@
               </el-radio-group>
             </el-form-item>
             <el-form-item label="医院">
-              <el-select v-model="form.hospitalName  " placeholder="请选择" @change="hosChange(form.hospitalName)">
+              <el-select v-model="form.hospitalName" placeholder="请选择" @change="hosChange(form.hospitalName)">
                 <el-option
                   v-for="item in hospitalList"
                   :key="item.id"
@@ -26,10 +26,20 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="科室">
-              <el-select v-model="form.departmentName" placeholder="请选择">
+            <el-form-item label="一级科室">
+              <el-select v-model="form.departmentName" placeholder="请选择" @change="seletDep(form.departmentName)">
                 <el-option
                   v-for="item in departmentTList"
+                  :key="item.id"
+                  :label="item.departmentName"
+                  :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="二级科室">
+              <el-select v-model="form.dep" placeholder="请选择" @change="depTwoChange(form.dep)">
+                <el-option
+                  v-for="item in depBox"
                   :key="item.id"
                   :label="item.departmentName"
                   :value="item.id">
@@ -66,7 +76,8 @@
           </el-form>
           <div class="peopleImg">
             <img :src="images[0]" alt="">
-            <input  type="file" name="点击上传" @change="onFileChange" id="photo">
+            <el-button type="primary" >点击上传</el-button>
+            <input  type="file" name="点击上传" @change="upload" style="opacity:0;margin-left:-130px;z-index:1000" id="photo">
           </div>
         </div>
         </div>
@@ -82,23 +93,23 @@
                 <el-input v-model="form1.password"></el-input>
               </el-form-item>
               <el-form-item label="医学助理">
-                <el-input v-model="assistant" :disabled="true"></el-input>
+                <el-input v-model="assistant" :disabled="true" placeholder="请选择"></el-input>
                 <el-button type="text" @click="openUserAlt('user')">更改</el-button>
               </el-form-item>
               <el-form-item label="审核状态">
-                <el-input v-model="form1.checkStatus == false?'未审核':'审核'" :disabled="true"></el-input>
+                <el-input v-model="form1.checkStatus == false?'未审核':'已审核'" :disabled="true"></el-input>
                 <el-switch v-model="form1.checkStatus"></el-switch>
               </el-form-item>
               <el-form-item label="冻结状态">
-                <el-input v-model="form1.blockingStatus== false?'未锁定':'锁定'" :disabled="true"></el-input>
+                <el-input v-model="form1.blockingStatus== false?'未锁定':'已锁定'" :disabled="true"></el-input>
                 <el-switch v-model="form1.blockingStatus"></el-switch>
               </el-form-item>
-              <el-form-item label="注册时间">
+              <!-- <el-form-item label="注册时间">
                 <el-input v-model="form.name" ></el-input>
               </el-form-item>
               <el-form-item label="来源渠道">
                 <el-input v-model="form.name"></el-input>
-              </el-form-item>
+              </el-form-item> -->
             </el-form>
           </div>
         </div>
@@ -225,12 +236,15 @@
     <el-form ref="form2" :model="form2" label-width="110px">
       <el-form-item label="选择商务人员">
         <el-select v-model="form2.region" placeholder="请选择商务人员">
-          <el-option
+          <template v-for="(item,$index) in medicalAssitant">
+              <el-option :label="item.username" :value="item.id"></el-option>
+          </template>
+          <!-- <el-option
             v-for="item in medicalAssitant"
             :key="item.id"
             :label="item.username"
             :value="item.id">
-          </el-option>
+          </el-option> -->
         </el-select>
       </el-form-item>
     </el-form>
@@ -247,32 +261,41 @@
     <el-form ref="form" :model="form" label-width="110px">
       <el-form-item label="一级疾病(必选)">
         <el-select v-model="form.region" placeholder="请选择一级疾病" @change="searchFromThis(form.region)">
-          <el-option
+          <template v-for="(item,$index) in diseaseTypeList">
+              <el-option :label="item.name" :value="item.id"></el-option>
+          </template>
+          <!-- <el-option
             v-for="item in diseaseTypeList"
             :key="item.id"
             :label="item.name"
             :value="item.id">
-          </el-option>
+          </el-option> -->
         </el-select>
       </el-form-item>
       <el-form-item label="二级疾病(可选)">
         <el-select v-model="form.region1" placeholder="请选择二级疾病" @change="changeValue(form.region1)">
-           <el-option
+          <template v-for="(item,$index) in diseasesBox">
+              <el-option :label="item.name" :value="item.id"></el-option>
+          </template>
+           <!-- <el-option
               v-for="item in diseasesBox"
               :key="item.id"
               :label="item.name"
               :value="item.id">
-            </el-option>
+            </el-option> -->
         </el-select>
       </el-form-item>
       <el-form-item label="三级疾病(可选)">
         <el-select v-model="form.region3" placeholder="请选择三级疾病" @change="searchFromThree(form.region3)">
-          <el-option
+          <template v-for="(item,$index) in depList_three">
+              <el-option :label="item.diseaseTypeName" :value="item.id"></el-option>
+          </template>
+          <!-- <el-option
              v-for="item in depList_three"
              :key="item.id"
              :label="item.diseaseTypeName"
              :value="item.id">
-           </el-option>
+           </el-option> -->
         </el-select>
       </el-form-item>
     </el-form>
@@ -306,8 +329,17 @@ export default {
     return {
       dynamicTags:[],
       dynamicTags1:[],
-      form:{},
-      form1:{},
+      form:{
+        region1:'',
+        region3:'',
+        region:'',
+        dep:'',
+        departmentName:''
+      },
+      form1:{
+        blockingStatus:false,
+        checkStatus:false,
+      },
       form2:{},
       form3:{},
       tableData:[],
@@ -332,7 +364,8 @@ export default {
       files:'',
       position:'',
       doctorLevel1:'',
-      radio:'1'
+      radio:'1',
+      depBox:[],
     }
   },
   computed:{
@@ -365,6 +398,38 @@ export default {
       'getOrderDepartment',
       'getOrderDepartmentThree'
     ]),
+    // 校验检查
+    examineValue(){
+      if(!this.form.name){
+        this.$message({
+          type:'error',
+          message:'医生姓名不能为空！'
+        })
+        return false
+      }
+      if(!this.form.hospitalName){
+        this.$message({
+          type:'error',
+          message:'医院不能为空！'
+        })
+        return false
+      }
+      if(!this.form1.name){
+        this.$message({
+          type:'error',
+          message:'账户不能为空！'
+        })
+      return false
+      }
+      if(!this.form1.password){
+        this.$message({
+          type:'error',
+          message:'密码不能为空！'
+        })
+        return false
+      }
+      return true
+    },
     handleClose(tag,type) {
       if(type == 1){
         this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
@@ -377,6 +442,14 @@ export default {
         if (!this.files.length)return;
         this.createImage(this.files);
 
+    },
+    seletDep(val){
+      let obj ={};
+      obj = this.departmentTList.find((item) =>{
+        return item.id == val
+      })
+      this.form.dep = '';
+      this.depBox = obj.departments
     },
     createImage(file) {
         if(typeof FileReader==='undefined'){
@@ -393,7 +466,7 @@ export default {
             vm.images.push(e.target.result);
             };
         }
-        //console.log(this.images);
+        ////console.log(this.images);
     },
     getData(){
       this.getDoctorOffice();
@@ -408,7 +481,9 @@ export default {
     hosChange(val){
       this.hospitalId = val
       this.getOrderDepartment({id:val})
-      //console.log(this.departmentTList)
+      this.form.departmentName = '';
+      this.form.dep = ''
+      ////console.log(this.departmentTList)
     },
     // 弹框
     closeUserAlt(val){
@@ -449,7 +524,7 @@ export default {
           obj = this.medicalAssitant.find((item)=>{//这里的userList就是上面遍历的数据源
               return item.id === this.form2.region;//筛选出匹配数据
           });
-          //console.log(obj);
+          ////console.log(obj);
           this.assistant = obj.username
           this.assistantId = obj.id;
           this.userSelectAlt= false;
@@ -476,7 +551,7 @@ export default {
            */
           this.dynamicTags.push(this.labelInput)
           this.labelSelectAlt= false;
-
+          this.labelInput = '';
           break;
       }
     },
@@ -493,7 +568,8 @@ export default {
     },
     //科室
     searchFromThis(id){
-      //console.log(id);
+      ////console.log(id);
+      this.obj1 = {}
       for (var i in this.diseaseTypeList) {
         if (this.diseaseTypeList[i].id == id) {
           //一级疾病
@@ -502,10 +578,16 @@ export default {
           this.diseasesBox = this.diseaseTypeList[i].diseases
         }
       }
+      // 二级三级问题赋值为空
+      this.form.region3 = '';
+      this.form.region1 = '';
+      this.obj2 = {};
+      this.obj3 = {};
+
     },
     // 获取疾病类型
     changeValue(value) {
-      //console.log(value);
+      ////console.log(value);
         for (var i in this.diseasesBox) {
           if (this.diseasesBox[i].id == value) {
             // 二级疾病
@@ -513,11 +595,14 @@ export default {
             this.obj2.diseaseId = this.diseasesBox[i].id;
           }
         }
+        // 三级疾病赋值为空
+      this.form.region3 = '';
+      this.obj3 = {};
       this.getOrderDepartmentThree({id:value})
     },
     // 获取疾病类型三级
     searchFromThree(value) {
-      //console.log(value);
+      ////console.log(value);
         for (var i in this.depList_three) {
           if (this.depList_three[i].id == value) {
             // 三级级疾病
@@ -528,6 +613,10 @@ export default {
     },
     // 提交保存个人信息
     commitInfo(){
+      // 校验信息是否为空
+      if(!this.examineValue()){
+        return
+      }
       //疾病ID数组过滤
       const diseaseIds = this.dynamicTags1.map((i) =>{
         return i.diseaseId
@@ -545,7 +634,7 @@ export default {
         }
       }
       this.position
-      //console.log(diseaseIds);
+      ////console.log(diseaseIds);
       var reg = /(?!^\d+$)(?!^[a-zA-Z]+$)[0-9a-zA-Z]{1,23}/
       if(!reg.test(this.form1.name)){
         this.$message({
@@ -554,6 +643,16 @@ export default {
         })
         return;
       }
+      /**
+       * 判断一级科室 二级科室 选择情况
+       * @type {Object}
+       */
+      if(this.form.dep){
+        this.departmentId = this.form.dep
+      }else{
+        this.departmentId = this.form.departmentName
+      }
+
       const data = {
         "account":this.form1.name ,
         "accountCheckStatus": this.form1.checkStatus== true?'1':'0',
@@ -564,10 +663,10 @@ export default {
         "description": this.dcoInfomation,
         "diseaseIds": diseaseIds,
         'hospitalId':this.hospitalId,
-        'departmentId':this.form.departmentName,
+        'departmentId':this.departmentId,
         // "doctorId": this.doctorDetail.doctor.doctorId,
         "intro": this.dcoInfomation,
-        "label": this.dynamicTags.join('、'),
+        "label": this.dynamicTags.join(','),
         "levelId": this.form.doctorLevel,//未知
         "levelName": this.doctorLevel1,
         "name": this.form.name,
@@ -589,9 +688,12 @@ export default {
     //上传图片
     upload(id){
       var formData = new FormData();
+      if(this.files[0] == undefined){
+        return
+      }
       formData.append("multipartFile",this.files[0],this.files[0].name);
       this.uploadPhoto({id:id,data:formData}).then((res)=>{
-        //console.log(localStorage.getItem('userPhoto'))
+        ////console.log(localStorage.getItem('userPhoto'))
         setTimeout(() =>{
             this.doctorDetail.doctor.photoUrl = localStorage.getItem('userPhoto')
         },1000)
@@ -621,7 +723,7 @@ $border-color:#eee;
 }
 .peopleImg{
   position: absolute;
-  right:-100px;
+  right:-300px;
   top:20px;
   text-align: center;
   img{
@@ -631,6 +733,10 @@ $border-color:#eee;
     border:1px solid $border-color;
     display:block;
     margin:10px auto;
+  }
+  .el-button--primary{
+    margin: 0 auto;
+    margin-left:100px;
   }
 }
 .set{

@@ -88,7 +88,7 @@
           <el-col :span="12">
             <div class="grid-content">
             <span class="spa-left-span">服务费用:</span>
-            <span class="spa-right-span">{{yyDetail.servicePrice}}</span>
+            <span class="spa-right-span">{{yyDetail.servicePrice +'元'}}</span>
           </div>
           </el-col>
         </el-row>
@@ -104,7 +104,7 @@
           <el-col :span="24">
             <div class="grid-content">
             <span class="spa-left-span">就诊时段:</span>
-            <span class="spa-right-span">{{yyDetail.ampm == 1?'上午':'下午'}}</span>
+            <span class="spa-right-span">{{parseTime(yyDetail.expectDateStart)+'--'+parseTime(yyDetail.expectDateEnd)}}</span>
             </div>
           </el-col>
         </el-row>
@@ -151,7 +151,7 @@
           <el-col :span="12">
             <div class="grid-content">
             <span class="spa-left-span">取消原因:</span>
-            <span class="spa-right-span">{{yyDetail.countermandReason }}</span>
+            <span class="spa-right-span">{{yyDetail.countermandReason}}</span>
             </div>
           </el-col>
         </el-row>
@@ -265,7 +265,6 @@ export default {
   },
   mounted(){
     this.getParams()
-    this.outpatientOrderComms = this.yyDetail.outpatientOrderComms;//初次赋值 以后添加后 push新值
   },
   methods:{
     ...mapActions('order', [
@@ -280,8 +279,8 @@ export default {
     getParams () {
         // 取到路由带过来的参数
         let routerParams = {
-          id:this.$route.params.id,
-          status:this.$route.params.status
+          id:this.$route.query.id,
+          status:this.$route.query.status
         }
         /**
          * [id description]
@@ -302,7 +301,9 @@ export default {
                this.a = true;
                break;
          }
-        this.getOrderYy_detail({id:routerParams.id})
+        this.getOrderYy_detail({id:routerParams.id}).then(() =>{
+          this.outpatientOrderComms = this.yyDetail.outpatientOrderComms;//初次赋值 以后添加后 push新值
+        })
     },
     goBack(){
       this.$router.go(-1)

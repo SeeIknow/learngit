@@ -35,7 +35,9 @@ export default {
   created(){
   	const menus = JSON.parse(localStorage.getItem('permission'));
   	this.$router.addRoutes(AddRouteRootMap(menus.menus))
-  	//console.log(AddRouteRootMap(menus.menus))
+  	
+  	const routerActiveOne = this.$store.state.routerActiveOne
+    //console.log(routerActiveOne)
   }
 }
 </script>

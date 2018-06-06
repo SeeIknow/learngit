@@ -60,7 +60,7 @@
         </el-input>
     </div>
     <div class="grid-content bg-purple input-select-1">
-      <el-button type="primary" icon="el-icon-search" @click="getData()">查询</el-button>
+      <el-button type="primary" icon="el-icon-search" @click="getData(1)">查询</el-button>
     </div>
   </div>
   <div class="tableBox">
@@ -86,28 +86,43 @@
           width="240">
         </el-table-column>
         <el-table-column
-          prop="diseaseName"
-          label="疾病"
+          prop="diseaseLabel"
+          label="咨询疾病"
           width="140">
         </el-table-column>
-        <el-table-column
+        <!-- <el-table-column
           prop="diseaseTypeName"
           label="疾病类型"
           width="80">
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column
           prop="patientName"
           label="患者姓名"
           width="80">
         </el-table-column>
         <el-table-column
-          prop="patientPhoneNum "
+          prop="patientPhoneNum"
           label="联系人电话"
           width="120">
         </el-table-column>
         <el-table-column
-          prop="doctorName "
+          prop="patientAge"
+          label="患者年龄"
+          width="80">
+        </el-table-column>
+        <el-table-column
+          prop="doctorName"
           label="医生"
+          width="80">
+        </el-table-column>
+        <el-table-column
+          prop="doctorPosition"
+          label="医生职称"
+          width="80">
+        </el-table-column>
+        <el-table-column
+          prop="indate"
+          label="咨询时间"
           width="80">
         </el-table-column>
         <el-table-column
@@ -117,6 +132,7 @@
           label="结束类型"
           width="120">
         </el-table-column>
+
         <el-table-column
           label="操作"
           fixed="right"
@@ -206,8 +222,8 @@ export default {
     goDetial(index,table){
       // index:当前点击对象的下表
       // table:整个表格对象
-      ////console.log(index);
-      ////console.log(table[index].id)
+      //////console.log(index);
+      //////console.log(table[index].id)
       /**
        * [switch description]
        * @param  table[index].status  每一个点击对象所对应的状态值
@@ -233,19 +249,21 @@ export default {
           var routerName = 'orderExmin2';
           break;
       }
-      this.$router.push({name:routerName,params:{id:table[index].id,type:table[index].status}})
+      eventBus.$emit('transmit',table[index].id)
+      this.$router.push({name:routerName,query:{id:table[index].id,type:table[index].status}})
     },
     // // 分页
     handleSizeChange(val) {
-      // //console.log(`每页 ${val} 条`);
+      // ////console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
-      console.log(val)
+      //console.log(val)
       this.getData(val)
     },
     // 获取数据
     getData(val){
-      ////console.log(this.dateValue);
+      this.dateValue = (this.dateValue == null ? ['',''] : this.dateValue)
+      console.log(this.dateValue);
       this.getOrderList(this.outObj(val)).then(()=>{
         if(this.list.total>0){
           this.showStatus = true;
@@ -255,8 +273,11 @@ export default {
       })
     },
     getTime(){
+      console.log(this.dateValue)
       // 时间组件 清楚内容
       this.dateValue = (this.dateValue == null ? ['',''] : this.dateValue)
+      console.log(this.dateValue)
+      console.log(this.dateValue[0],this.dateValue[1])
     },
     // 菜单切换
     handleSelect(key, keyPath) {
@@ -272,7 +293,7 @@ export default {
         this.colmu = false
       }
       // 菜单切换 日期组件重新赋值
-      this.dateValue = (this.dateValue == null ? ['',''] : this.dateValue)
+      this.dateValue =['','']
       this.getData(1)
      }
   }

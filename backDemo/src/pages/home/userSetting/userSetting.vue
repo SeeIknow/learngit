@@ -53,7 +53,7 @@
       </div>
       <!-- 修改头像 -->
       <div class="userphoto" v-if="activeIndex == 2?true:false">
-          <img :src="photo"  alt="">
+          <img :src="$store.state.user.imgUrl"  alt="">
           <input type="file" @change="upload">
           <p>从电脑中选择一项你喜欢的照片上传，仅支持JPG、PNG或BMP图片文件，且大小不超过10M。</p>
       </div>
@@ -110,10 +110,10 @@ export default {
           name:'修改头像',
           index:3
         },
-        {
-          name:'我的钱包',
-          index:4
-        },
+        // {
+        //   name:'我的钱包',
+        //   index:4
+        // },
       ],
       ruleForm2: {
         oldPass: '',
@@ -132,12 +132,13 @@ export default {
         ]
       },
       imageUrl: '',
-
+      photoBox:{
+      }
     }
   },
   mounted(){
     this.userInfo = JSON.parse(localStorage.getItem('userInfo'))
-    this.photo = this.userInfo.userModelResponse.photoUrl;
+    // this.$set(this.photoBox,'photo',localStorage.getItem('adminPhoto'))
   },
   methods:{
     ...mapActions('user',[
@@ -145,7 +146,7 @@ export default {
       'uploadUserPhoto'
     ]),
     handleClick(tab, event) {
-       //console.log(tab, event);
+       ////console.log(tab, event);
      },
      select(item,index){
        this.activeIndex = index;
@@ -154,7 +155,7 @@ export default {
             Vue.set(item,'active',false)
         });
         Vue.set(item,'active',true)
-            //console.log(item.active);
+            ////console.log(item.active);
         });
      },
      // 更改手机号
@@ -163,7 +164,7 @@ export default {
      },
      submit (formName) {
        this.$refs[formName].validate((valid) => {
-         //console.log(valid);
+         ////console.log(valid);
          // 验证成功
            if (valid) {
                if(this.ruleForm2.newPass != this.ruleForm2.pass1){
@@ -186,7 +187,7 @@ export default {
               }
 
            } else {
-             //console.log('error submit!!');
+             ////console.log('error submit!!');
              return false;
            }
          });
@@ -196,11 +197,15 @@ export default {
         var formData = new FormData();
         formData.append("photo",file,file.name);
         this.uploadUserPhoto({data:formData}).then((res) =>{
-            this.$message({
-             message: '图像修改成功',
-             type: 'success'
-           });
-           this.photo = localStorage.getItem('adminPhoto')
+          console.log(this.$store.state.user);
+            // this.photoBox.photo = this.$store.state.user.imgUrl;
+             setTimeout(() =>{
+               this.$message({
+                  message: '图像修改成功',
+                  type: 'success'
+                });
+              },1000)
+
         })
       },
       handleAvatarSuccess(res, file) {

@@ -2,7 +2,7 @@ import {LIST} from './mutation-type.js'
 
 export default {
   [LIST.GET_DOCTOR] (state, res) {
-    //console.log(state);
+    ////console.log(state);
     state.userList = res;
   },
   [LIST.DOCTORDETAIL] (state,res) {

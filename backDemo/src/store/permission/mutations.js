@@ -2,7 +2,7 @@ import {LIST} from './mutation-type.js'
 
 export default {
   ADD_MENU(state, res) {
-    //console.log(state);
+    ////console.log(state);
       state.routers = res;
   },
   [LIST.LOAD_ROUTES] (state,res) {

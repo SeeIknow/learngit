@@ -1,7 +1,11 @@
 <template lang="html">
   <div class="appMain">
-    <bread-crumb :nameP="nameP"></bread-crumb>
-  <router-view :key="key" style="padding:20px 40px"/>
+    <!-- <bread-crumb :nameP="nameP"></bread-crumb> -->
+    <keep-alive>
+      <router-view v-if="$route.meta.keepAlive" :key="key" style="padding:20px 40px"></router-view>
+    </keep-alive>
+    <router-view v-if="!$route.meta.keepAlive" :key="key" style="padding:20px 40px"></router-view>
+  <!-- <router-view /> -->
   </div>
 </template>
 

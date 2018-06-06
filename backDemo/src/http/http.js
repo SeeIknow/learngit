@@ -19,7 +19,7 @@ axios.interceptors.response.use(
                 case 401:
                     // 返回 401 清除token信息并跳转到登录页面
                     localStorage.removeItem('userInfo')
-                    Message.error('登录已失效，请重新登录！')
+                    Message.error(error.response.data.errorMessage)
                     setTimeout(function(){
                       router.replace({
                           path: 'login'

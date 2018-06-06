@@ -63,13 +63,13 @@
             </template>
           </el-select>
         </el-form-item>
-        <el-form-item label="三级科室">
+        <!-- <el-form-item label="三级科室">
           <el-select v-model="form1.region2" placeholder="请选择">
             <template v-for="(item,$index) in departmentTBox1">
                 <el-option :label="item.departmentName" :value="item.id"></el-option>
             </template>
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeModal('dep')">取 消</el-button>
@@ -91,7 +91,10 @@ export default {
         type:[],
       },
       radios2:'',
-      form1:{},
+      form1:{
+        region:'',
+        region1:''
+      },
       baseInfo:'',
       hosList:[],
       departmentId:" ",
@@ -100,6 +103,9 @@ export default {
       departmentTBox:[],
       departmentTBox1:[],
       hospitalName1:'',
+
+      department_o:{},//一级科室盒子
+      department_t:{},//二级科室盒子
     }
   },
   computed:{
@@ -122,7 +128,7 @@ export default {
       'getOrderDepartmentThree'
     ]),
     getData(){
-      this.getHospitalDetails({id:this.$route.params.hosId}).then((res) =>{
+      this.getHospitalDetails({id:this.$route.query.hosId}).then((res) =>{
         this.baseInfo = res.data
 
         // 舒适化赋值 用户在不更改个人信息的情况下
@@ -133,11 +139,11 @@ export default {
         this.getOrderDepartment({id:this.baseInfo.hospitalId})//根据医院获取一级科室
         .then((res) =>{
           this.depList = res.data;
-          //console.log(this.depList)
+          ////console.log(this.depList)
         })
       })
       this.getHospitalList().then((res)=>{
-        //console.log(res.data)
+        ////console.log(res.data)
         this.hosList = res.data;
       })
 
@@ -149,37 +155,51 @@ export default {
       this.depMod = true;
     },
     sureConfirm(){
-      // console.log(this.form1.region,this.form1.region1,this.form1.region2)
+      // //console.log(this.form1.region,this.form1.region1,this.form1.region2)
       // 循环遍历科室
-      if(this.form1.region != undefined&& this.form1.region1!= undefined&& this.form1.region2 !=undefined){
-        console.log(this.departmentTBox1);
-        this.departmentId = this.form1.region2
-        for(let i in this.departmentTBox1){
-          if(this.departmentTBox1[i].id = this.form1.region2){
-            this.baseInfo.departmentName = this.departmentTBox1[i].departmentName
-          }
-        }
-      }else if(this.form1.region != undefined&& this.form1.region1!= undefined ){
+      if(this.form1.region&& this.form1.region1){
+        console.log(this.department_t)
           this.departmentId = this.form1.region1
-        for(let i in this.departmentTBox){
-          console.log(this.departmentTBox);
-          if(this.departmentTBox[i].id = this.form1.region1){
-            this.baseInfo.departmentName = this.departmentTBox[i].departmentName
-          }
-        }
+          console.log(this.departmentTBox)
+        this.baseInfo.departmentName = this.department_t.departmentName
       }else{
-        console.log(this.departmentTBox1);
+        //console.log(this.departmentTBox1);
           this.departmentId = this.form1.region
-        for(let i in this.departmentTList){
-          if(this.departmentTList[i].id = this.form1.region){
-            this.baseInfo.departmentName = this.departmentTList[i].departmentName
-          }
-        }
+            this.baseInfo.departmentName = this.department_o.departmentName
+
       }
+      // if(this.form1.region != undefined&& this.form1.region1!= undefined&& this.form1.region2 !=undefined){
+      //   //console.log(this.departmentTBox1);
+      //   this.departmentId = this.form1.region2
+      //   for(let i in this.departmentTBox1){
+      //     if(this.departmentTBox1[i].id = this.form1.region2){
+      //       this.baseInfo.departmentName = this.departmentTBox1[i].departmentName
+      //     }
+      //   }
+      // }else if(this.form1.region != undefined&& this.form1.region1!= undefined ){
+      //     this.departmentId = this.form1.region1
+      //   // for(let i in this.departmentTBox){
+      //   //   //console.log(this.departmentTBox);
+      //   //   if(this.departmentTBox[i].id = this.form1.region1){
+      //   //     this.baseInfo.departmentName = this.departmentTBox[i].departmentName
+      //   //   }
+      //   // }
+      //   this.baseInfo.departmentName = this.department_t.departmentName
+      // }else{
+      //   //console.log(this.departmentTBox1);
+      //     this.departmentId = this.form1.region
+      //   // for(let i in this.departmentTList){
+      //   //   if(this.departmentTList[i].id = this.form1.region){
+      //   //     this.baseInfo.departmentName = this.departmentTList[i].departmentName
+      //   //   }
+      //   // }
+      //
+      //   this.baseInfo.departmentName = this.department_o.departmentName
+      // }
       this.depMod = false;
     },
     searchFromThree(id){
-      //console.log(id);
+      ////console.log(id);
       let obj = {};
       obj = this.hosList.find((item)=>{//这里的userList就是上面遍历的数据源
           return item.id === id;//筛选出匹配数据
@@ -192,7 +212,7 @@ export default {
       })
     },
     deleteHos(){
-      this.deleteHos({id:this.$route.params.hosId}).then(() =>{
+      this.deleteHos({id:this.$route.query.hosId}).then(() =>{
         this.$message({
           message: '删除成功',
           type: 'success'
@@ -207,34 +227,44 @@ export default {
           "address": this.baseInfo.address,
           "departmentId": this.departmentId,
           "departmentName":this.baseInfo.departmentName,
-          "doctorId": this.$route.params.id,
+          "doctorId": this.$route.query.id,
           "hospitalId": this.hospitalId,
           "hospitalName": this.hospitalName1,
           "hospitalType": this.baseInfo.hospitalType,
-          "id": this.$route.params.hosId,
+          "id": this.$route.query.hosId,
           "servicePrice": this.baseInfo.servicePrice,
           "takeNoPlace": this.baseInfo.takeNoPlace
         }
         this.setHospitalMange(data).then(() =>{
-          this.$router.replace({name:'doctorEdit'})
+          this.$router.replace({name:'doctorEdit',query:{id:this.$route.query.id}})
         })
     },
     searchFromThis(id,type){
-      //console.log(id);
+      ////console.log(id);
       let obj = {};
       obj = this.depList.find((item)=>{
           return item.id === id;
       });
+      this.department_o = obj;
       this.departmentTBox = obj.departments
+      // this.form1 = {}
+      this.form1.region1= ''
+      //console.log(this.form1.region1)
     },
   // 获取疾病类型
   changeValue(value,type) {
-    //console.log(value);
-    let obj = {};
-    obj = this.departmentTBox.find((item)=>{
-        return item.id === value;
-    });
-    this.getOrderDepartmentThree({id:obj.id}).then((res) =>{
+    ////console.log(value);
+    // let obj = {};
+    // obj = this.departmentTBox.find((item)=>{
+    //     return item.id === value;
+    // });
+    for (var i in this.departmentTBox) {
+      if (this.departmentTBox[i].id == value) {
+        this.department_t = this.departmentTBox[i];
+      }
+    }
+
+    this.getOrderDepartmentThree({id:value}).then((res) =>{
       this.departmentTBox1 = res.data
     })
   },

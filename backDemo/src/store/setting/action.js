@@ -7,7 +7,7 @@ export const getUserList = ({state, commit, dispatch, getters, rootGetters}, dat
   return new Promise((resolve, reject) => {
     payload.callback = res => {
       resolve(res)
-      // //console.log(res)
+      // ////console.log(res)
       commit(LIST.USERLIST,res.data)
     }
     payload.error = err => {
@@ -26,7 +26,7 @@ export const getUserList = ({state, commit, dispatch, getters, rootGetters}, dat
    return new Promise((resolve, reject) => {
      payload.callback = res => {
        resolve(res)
-       // //console.log(res)
+       // ////console.log(res)
      }
      payload.error = err => {
        reject(error)
@@ -45,7 +45,7 @@ export const getUserList = ({state, commit, dispatch, getters, rootGetters}, dat
     return new Promise((resolve, reject) => {
       payload.callback = res => {
         resolve(res)
-        // //console.log(res)
+        // ////console.log(res)
       }
       payload.error = err => {
         reject(error)
@@ -65,7 +65,7 @@ export const getUserList = ({state, commit, dispatch, getters, rootGetters}, dat
      return new Promise((resolve, reject) => {
        payload.callback = res => {
          resolve(res)
-         // //console.log(res)
+         // ////console.log(res)
          commit(LIST.BMLIST,res.data)
        }
        payload.error = err => {
@@ -84,7 +84,7 @@ export const getUserList = ({state, commit, dispatch, getters, rootGetters}, dat
       return new Promise((resolve, reject) => {
         payload.callback = res => {
           resolve(res)
-          // //console.log(res)
+          // ////console.log(res)
           commit(LIST.ROLELIST,res.data)
         }
         payload.error = err => {
@@ -103,7 +103,7 @@ export const setAddDoctor = ({state, commit, dispatch, getters, rootGetters}, da
  return new Promise((resolve, reject) => {
    payload.callback = res => {
      resolve(res)
-     // //console.log(res)
+     // ////console.log(res)
    }
    payload.error = err => {
      reject(error)
@@ -124,7 +124,7 @@ export const getRole = ({state, commit, dispatch, getters, rootGetters}, data) =
    payload.callback = res => {
      resolve(res)
      commit(LIST.ROLETABLE,res.data)
-     // //console.log(res)
+     // ////console.log(res)
    }
    payload.error = err => {
      reject(error)
@@ -144,7 +144,7 @@ export const setRoleInfo = ({state, commit, dispatch, getters, rootGetters}, dat
    payload.callback = res => {
      resolve(res)
      // commit(LIST.ROLETABLE,res.data)
-     // //console.log(res)
+     // ////console.log(res)
    }
    payload.error = err => {
      reject(error)
@@ -164,7 +164,7 @@ export const deleteRoleInfo = ({state, commit, dispatch, getters, rootGetters}, 
    payload.callback = res => {
      resolve(res)
      // commit(LIST.ROLETABLE,res.data)
-     // //console.log(res)
+     // ////console.log(res)
    }
    payload.error = err => {
      reject(error)
@@ -183,7 +183,7 @@ export const addRoleInfo = ({state, commit, dispatch, getters, rootGetters}, dat
    payload.callback = res => {
      resolve(res)
      // commit(LIST.ROLETABLE,res.data)
-     // //console.log(res)
+     // ////console.log(res)
    }
    payload.error = err => {
      reject(error)
@@ -203,7 +203,7 @@ export const getDepList = ({state, commit, dispatch, getters, rootGetters}, data
    payload.callback = res => {
      resolve(res)
       commit(LIST.DEPLIST,res.data)
-     // //console.log(res)
+     // ////console.log(res)
    }
    payload.error = err => {
      reject(error)
@@ -224,7 +224,7 @@ export const getDepManList = ({state, commit, dispatch, getters, rootGetters}, d
    payload.callback = res => {
      resolve(res)
       commit(LIST.DEPMANLIST,res.data)
-     // //console.log(res)
+     // ////console.log(res)
    }
    payload.error = err => {
      reject(error)
@@ -243,7 +243,7 @@ export const setDepInfo = ({state, commit, dispatch, getters, rootGetters}, data
    payload.callback = res => {
      resolve(res)
       // commit(LIST.DEPMANLIST,res.data)
-     // //console.log(res)
+     // ////console.log(res)
    }
    payload.error = err => {
      reject(error)
@@ -263,7 +263,7 @@ export const deleteDepInfo = ({state, commit, dispatch, getters, rootGetters}, d
    payload.callback = res => {
      resolve(res)
       // commit(LIST.DEPMANLIST,res.data)
-     // //console.log(res)
+     // ////console.log(res)
    }
    payload.error = err => {
      reject(error)
@@ -282,12 +282,12 @@ export const AddDepInfo = ({state, commit, dispatch, getters, rootGetters}, data
    payload.callback = res => {
      resolve(res)
       // commit(LIST.DEPMANLIST,res.data)
-     // //console.log(res)
+     // ////console.log(res)
    }
    payload.error = err => {
      reject(error)
    }
-   dispatch('api/userSettingDeleteDep', payload, {root: true})
+   dispatch('api/userSettingAddDep', payload, {root: true})
  })
 }
 
@@ -302,7 +302,7 @@ export const getLimitsBySelectUser = ({state, commit, dispatch, getters, rootGet
    payload.callback = res => {
      resolve(res)
       commit(LIST.LIMITSLISTBYSELECT,res.data)
-     // //console.log(res)
+     // ////console.log(res)
    }
    payload.error = err => {
      reject(error)
@@ -321,7 +321,7 @@ export const setLimitsBySelectUser = ({state, commit, dispatch, getters, rootGet
    payload.callback = res => {
      resolve(res)
       // commit(LIST.LIMITSLISTBYSELECT,res.data)
-     // //console.log(res)
+     // ////console.log(res)
    }
    payload.error = err => {
      reject(error)

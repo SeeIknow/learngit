@@ -88,7 +88,7 @@
           <el-col :span="12">
             <div class="grid-content">
             <span class="spa-left-span">服务费用:</span>
-            <span class="spa-right-span">{{yyDetail.servicePrice }}</span>
+            <span class="spa-right-span">{{yyDetail.servicePrice +'元'}}</span>
           </div>
           </el-col>
         </el-row>
@@ -225,7 +225,7 @@ export default {
   },
   mounted(){
     this.getParams()
-    this.outpatientOrderComms = this.yyDetail.outpatientOrderComms;//初次赋值 以后添加后 push新值
+
   },
   methods:{
     ...mapActions('order', [
@@ -244,9 +244,12 @@ export default {
     },
     getParams () {
         // 取到路由带过来的参数
-        let routerParams = this.$route.params.id
-        this.getOrderYy_detail({id:routerParams})
-        this.getOrderYy_address({id:this.yyDetail.doctorId});//出诊地点
+        let routerParams = this.$route.query.id
+        this.getOrderYy_detail({id:routerParams}).then(() =>{
+            this.outpatientOrderComms = this.yyDetail.outpatientOrderComms;//初次赋值 以后添加后 push新值
+            this.getOrderYy_address({id:this.yyDetail.doctorId});//出诊地点
+        })
+
     },
     goBack(){
       this.$router.go(-1)
@@ -257,7 +260,7 @@ export default {
         case 'successMod':
             // this.successMod = true;
             const obj1 = {
-              "id": this.$route.params.id,
+              "id": this.$route.query.id,
               "status":2
             }
             this.getOrderYy_check_j(obj1).then(()=>{
@@ -305,7 +308,7 @@ export default {
             break;
         case 'failMod':
               const obj2 = {
-                "id":this.$route.params.id,
+                "id":this.$route.query.id,
                 "nonMedicalReasons": this.valueTextArea2,
                 "status":3
               }

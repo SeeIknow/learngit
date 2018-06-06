@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="table">
+  <div class="table" v-loading="loading">
   <div class="select-p-1 clearfix">
     <div class="date-picker input-select-1">
       <span class="label-span">注册日期:</span>
@@ -24,6 +24,11 @@
           :value="item.value">
         </el-option>
       </el-select>
+    </div>
+    <div class="grid-content bg-purple input-select-1">
+      <el-button type="primary"  @click="downLoad()">医生模板下载</el-button>
+      <el-button type="primary" >医生模板导入</el-button>
+      <input type='file'  @change="addExcel" name="医生模板导入" style="opacity:0;margin-left:-130px;z-index:1000">
     </div>
   </div>
   <div class="select-p-1 clearfix">
@@ -63,11 +68,11 @@
       <el-table
         :data="userList.list"
         size="medium">
-        <el-table-column
+        <!-- <el-table-column
           prop="id"
           label="医生ID"
           width="80">
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column
           prop="name"
           label="医生姓名"
@@ -89,12 +94,12 @@
           width="80">
         </el-table-column>
         <el-table-column
-          prop="hospitalName "
+          prop="hospitalName"
           label="所属医院"
-          width="60">
+          width="100">
         </el-table-column>
         <el-table-column
-          prop="departmentName "
+          prop="departmentName"
           label="科室"
           width="80">
         </el-table-column>
@@ -105,8 +110,9 @@
           width="60">
         </el-table-column>
         <el-table-column
-          prop="licenseStatus  "
-          label="职业认证"
+          prop="licenseStatus"
+          label="执业认证"
+          :formatter="formatRole3"
           width="120">
         </el-table-column>
         <el-table-column
@@ -151,6 +157,12 @@
         :total="userList.total">
       </el-pagination>
     </div>
+    <el-dialog
+      title="下载"
+      :visible.sync="dialogVisible"
+      width="30%">
+      <span><a :href="aa">下载链接</a></span>
+    </el-dialog>
   </div>
 </template>
 
@@ -163,14 +175,18 @@ export default {
       dateValue:['',''],
       sourceValue:'',
       sourceOptions:[
-        {value:'1',lable:'审核'},
-        {value:'0',lable:'未审核'},
+        {value:'',label:'全部订单'},
+        {value:'1',label:'审核'},
+        {value:'0',label:'未审核'}
       ],
       nameValue:'',
       hospitalValue:'',
       phoneValue:'',
       // tableData4: [],//表格数据
-      showStatus:false
+      showStatus:false,
+      dialogVisible:false,
+      aa:'',
+      loading:false
     }
   },
   mounted(){
@@ -184,18 +200,40 @@ export default {
   methods:{
     ...mapActions('user', [
       'getUserList',
+      'doctorExcelDown',
+      'doctorExcelUp'
     ]),
     ...mapMutations('user', [
       'LIST.GET_DOCTOR',
     ]),
     formatRole(row,column){
-      return row.authority == 1 ? "审核" : "未审核";
+      return row.accountCheckStatus  == 1 ? "已审核" : "未审核";
     },
     formatRole1(row,column){
-      return row.authority == 1 ? "锁定" : "未锁定";
+      return row.accountLockStatus == 1 ? "已锁定" : "未锁定";
     },
     formatRole2(row,column){
-      return row.authority == 1 ? "已认证" : "未认证";
+      return row.certificationStatus  == 1 ? "已认证" : "未认证";
+    },
+    formatRole3(row,column){
+      return row.licenseStatus   == 1 ? "已认证" : "未认证";
+    },
+    downLoad(){
+      this.doctorExcelDown().then((res) =>{
+        console.log(res.data)
+        this.aa = res.data.excelPath
+        this.dialogVisible= true
+      })
+    },
+    addExcel(e){
+      this.loading = true
+      var formData = new FormData();
+      let files = e.target.files[0]
+      formData.append("excelfile",files,files.name);
+
+      this.doctorExcelUp({data:formData}).then( () =>{
+          this.loading = false
+      })
     },
     //参数对象
     outObj(val  = 1) {
@@ -214,20 +252,21 @@ export default {
     goDetial(index,table){
       // index:当前点击对象的下表
       // table:整个表格对象
-      ////console.log(index);
-      ////console.log(table[index].id)
-      this.$router.push({name:'doctorEdit',params:{id:table[index].id}})
+      //////console.log(index);
+      //////console.log(table[index].id)
+      this.$store.state.user.doctorId = table[index].id
+      this.$router.push({name:'doctorEdit',query:{id:table[index].id}})
     },
     // // 分页
     handleSizeChange(val) {
-      // //console.log(`每页 ${val} 条`);
+      // ////console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
       this.getData(val)
     },
     // 获取数据
     getData(val){
-      ////console.log(this.dateValue);
+      //////console.log(this.dateValue);
       this.getUserList(this.outObj(val)).then( () =>{
         if(this.userList.total>0){
           this.showStatus = true;

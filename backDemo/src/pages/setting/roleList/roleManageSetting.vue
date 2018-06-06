@@ -2,14 +2,12 @@
   <div class="managerSetting">
     <div class="button-box">
       <el-button type="danger" plain @click="deleteInfo()">删除</el-button>
-      <el-button type="primary" plain>返回</el-button>
+      <el-button type="primary" plain @click="goBack">返回</el-button>
     </div>
     <p class="form-title">角色设置</p>
     <div class="form-box">
         <el-form ref="form" :model="form" label-width="80px">
-          <el-form-item label="角色名称">
-            <el-input v-model="form.roleName"></el-input>
-          </el-form-item>
+
           <el-form-item label="部门">
             <el-select v-model="form.deptName" placeholder="请选择" @change="bmSelect(form.deptName)">
               <el-option
@@ -19,6 +17,9 @@
                 :value="item.id">
               </el-option>
             </el-select>
+          </el-form-item>
+          <el-form-item label="角色">
+            <el-input v-model="form.roleName" placeholder="请输入角色"></el-input>
           </el-form-item>
           <el-form-item label="权限">
               <el-button type="text" @click="select">查看并修改</el-button>
@@ -39,28 +40,44 @@ import {mapGetters,mapMutations,mapActions} from 'vuex'
 export default {
   data(){
     return{
-      form:{}
+      form:{
+        // status:false
+      }
     }
   },
   computed:{
     ...mapGetters('setting',[
-      'depList'
+      'depList',
+      'roleList'
     ])
   },
   mounted(){
     this.getData();
-    this.form = this.$route.params
+    this.form = this.$route.query
+    this.deptId = this.form.deptId
     //console.log(this.form);
+    this.change1()
   },
   methods:{
     ...mapActions('setting',[
       'setRoleInfo',
       'deleteRoleInfo',
-      'getDepList'
+      'getDepList',
+      'getRolelist',
     ]),
+    goBack(){
+      this.$router.go(-1)
+    },
+    change1(){
+      if(this.form.status == 0){
+          this.form.status =false
+      }else{
+        this.form.status =true
+      }
+    },
     onSubmit() {
       const data ={
-          "deptId": this.form.deptName,
+          "deptId": this.deptId,
           "id": this.form.id,
           "refId":this.form.refId,
           "roleName": this.form.roleName,
@@ -70,9 +87,13 @@ export default {
         this.$router.replace({name:'roleList'})
       })
     },
+    bmSelect(val){
+      this.deptId = val;
+      this.getRolelist({'id':val})
+    },
     // 删除
     deleteInfo(){
-      this.deleteRoleInfo({id:this.$route.params.id}).then(() =>{
+      this.deleteRoleInfo({id:this.$route.query.id}).then(() =>{
         this.$message({
           message:'修改成功',
           type:'success'
@@ -84,7 +105,7 @@ export default {
       this.getDepList();
     },
     select(){
-      this.$router.push({name:'limitEdit',params:this.form})
+      this.$router.push({name:'limitEdit',query:this.form})
     }
   }
 }

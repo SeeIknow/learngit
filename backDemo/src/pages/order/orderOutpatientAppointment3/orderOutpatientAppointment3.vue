@@ -88,7 +88,7 @@
           <el-col :span="12">
             <div class="grid-content">
             <span class="spa-left-span">服务费用:</span>
-            <span class="spa-right-span">{{yyDetail.servicePrice }}</span>
+            <span class="spa-right-span">{{yyDetail.servicePrice +'元'}}</span>
           </div>
           </el-col>
         </el-row>
@@ -104,7 +104,7 @@
           <el-col :span="12">
             <div class="grid-content">
             <span class="spa-left-span">就诊时段:</span>
-            <span class="spa-right-span">{{parseTime1(yyDetail.expectDateEnd)}}</span>
+            <span class="spa-right-span">{{parseTime1(yyDetail.expectDateStart)+'--'+parseTime1(yyDetail.expectDateEnd)}}</span>
             </div>
           </el-col>
           <el-col :span="12">
@@ -252,7 +252,7 @@ export default {
   },
   mounted(){
     this.getParams()
-    this.outpatientOrderComms = this.yyDetail.outpatientOrderComms;//初次赋值 以后添加后 push新值
+
   },
   methods:{
     ...mapActions('order', [
@@ -266,8 +266,10 @@ export default {
     },
     getParams () {
         // 取到路由带过来的参数
-        let routerParams = this.$route.params.id
-        this.getOrderYy_detail({id:routerParams})
+        let routerParams = this.$route.query.id
+        this.getOrderYy_detail({id:routerParams}).then(() =>{
+          this.outpatientOrderComms = this.yyDetail.outpatientOrderComms;//初次赋值 以后添加后 push新值
+        })
         this.getOrderYy_address({id:this.yyDetail.doctorId});//出诊地点
     },
     goBack(){
@@ -305,7 +307,7 @@ export default {
       switch(val){
         case 'successMod':
               const obj1 = {
-                "id": this.$route.params.id,
+                "id": this.$route.query.id,
                 "clinicDate": this.dateVal,
                 "status":2
               }
@@ -318,7 +320,7 @@ export default {
             break;
         case 'failMod':
               const obj2 = {
-                "id":this.$route.params.id,
+                "id":this.$route.query.id,
                 "nonMedicalReasons": this.valueTextArea2,
                 "status":3
               }
@@ -338,7 +340,7 @@ export default {
                 "communicationRecord": this.valueTextArea1,
                 // "id": this.$route.params.id,
                 "inDate": getNowFormatDate(),
-                "outpatientOrderId": this.$route.params.id
+                "outpatientOrderId": this.$route.query.id
               }
               // 添加沟通记录
               this.getOrderYy_detailRecord(obj).then( ()=>{

@@ -59,13 +59,6 @@
             </template>
           </el-select>
         </el-form-item>
-        <el-form-item label="三级科室">
-          <el-select v-model="form1.region2" placeholder="请选择">
-            <template v-for="(item,$index) in departmentTBox1">
-                <el-option :label="item.departmentName" :value="item.id"></el-option>
-            </template>
-          </el-select>
-        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeModal('dep')">取 消</el-button>
@@ -87,7 +80,10 @@ export default {
         hosId:""
       },
       radios2:1,
-      form1:{},
+      form1:{
+        region:'',
+        region1:''
+      },
       hosList:[],
       depList:[],
       departmentTBox:[],
@@ -104,7 +100,7 @@ export default {
   },
   mounted(){
     this.getData();
-    console.log(this.departmentTList)
+    //console.log(this.departmentTList)
   },
   methods:{
     // 保存提交
@@ -121,7 +117,7 @@ export default {
     },
     getData(){
       this.getHospitalList().then((res)=>{
-        console.log(res.data)
+        //console.log(res.data)
         this.hosList = res.data;
       })
     },
@@ -132,29 +128,37 @@ export default {
       this.depMod = false;
     },
     sureConfirm(){
-      // console.log(this.form1.region,this.form1.region1,this.form1.region2)
+      // //console.log(this.form1.region,this.form1.region1,this.form1.region2)
       // 循环遍历科室
-      if(this.form1.region != undefined&& this.form1.region1!= undefined&& this.form1.region2 !=undefined){
-        console.log(this.departmentTBox1);
-        this.departmentId = this.form1.region2
-        for(let i in this.departmentTBox1){
-          if(this.departmentTBox1[i].id = this.form1.region2){
-            this.form.depName = this.departmentTBox1[i].departmentName
-          }
-        }
-      }else if(this.form1.region != undefined&& this.form1.region1!= undefined ){
+      //**
+      /**
+       * [if description]
+       * if(this.form1.region != undefined&& this.form1.region1!= undefined&& this.form1.region2 !=undefined){
+         //console.log(this.departmentTBox1);
+         this.departmentId = this.form1.region2
+         for(let i in this.departmentTBox1){
+           if(this.departmentTBox1[i].id = this.form1.region2){
+             this.form.depName = this.departmentTBox1[i].departmentName
+           }
+         }
+       }else
+       */
+      if(this.form1.region&& this.form1.region1){
+        debugger
           this.departmentId = this.form1.region1
+          console.log(this.departmentTBox)
         for(let i in this.departmentTBox){
-          console.log(this.departmentTBox);
-          if(this.departmentTBox[i].id = this.form1.region1){
+          //console.log(this.departmentTBox);
+          if(this.departmentTBox[i].id == this.form1.region1){
             this.form.depName = this.departmentTBox[i].departmentName
           }
         }
       }else{
-        console.log(this.departmentTBox1);
+        debugger
+        //console.log(this.departmentTBox1);
           this.departmentId = this.form1.region
         for(let i in this.departmentTList){
-          if(this.departmentTList[i].id = this.form1.region){
+          if(this.departmentTList[i].id == this.form1.region){
             this.form.depName = this.departmentTList[i].departmentName
           }
         }
@@ -168,23 +172,25 @@ export default {
       });
       this.hospitalName1 = obj.hospitalName
       this.getOrderDepartment({id:data})
+
+      // 一级二级科室为空
+        this.form1.region = ''
+        this.form1.region1 = ''
     },
     searchFromThis(id,type){
-      //console.log(id);
+      ////console.log(id);
       for (var i in this.departmentTList) {
         if (this.departmentTList[i].id == id) {
           this.departmentTBox = this.departmentTList[i].departments
         }
       }
+      // 重新赋值二级科室
+      this.form1.region1 = ''
     },
   // 获取疾病类型
   changeValue(value,type) {
-    //console.log(value);
-    let obj = {};
-    obj = this.departmentTBox.find((item)=>{
-        return item.id === value;
-    });
-    this.getOrderDepartmentThree({id:obj.id}).then((res) =>{
+    ////console.log(value);
+    this.getOrderDepartmentThree({id:value}).then((res) =>{
       this.departmentTBox1 = res.data
     })
   },
@@ -198,13 +204,13 @@ export default {
           "departmentName":this.form.depName,
           "hospitalId": this.form.hosId ,
           "hospitalName": this.hospitalName1,
-          "doctorId":this.$route.params.id,
+          "doctorId":this.$route.query.id,
           "hospitalType": this.radios2,
           "servicePrice": this.form.servicePrice,
           "takeNoPlace": this.form.takeNoPlace
         }
         this.setHospitalAdd(data).then(() =>{
-          this.$router.replace({name:'doctorEdit'})
+          this.$router.replace({name:'doctorEdit',query:{id:this.$route.query.id}})
         })
     },
   }
@@ -217,10 +223,8 @@ $border-color:#00abec;
 .formContent{
   border:1px solid $border-color;
   border-radius: 10px;
-    textarea{
-      width:400px;
-      height:300px;
-      padding:20px;
-    }
+  width:500px;
+  padding:20px;
+  margin:20px 0;
 }
 </style>
