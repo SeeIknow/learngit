@@ -75,7 +75,7 @@
         <el-table-column
           prop="orderNo"
           label="订单号"
-          width="80">
+          width="120">
         </el-table-column>
         <el-table-column
           prop="patientName"
@@ -85,7 +85,7 @@
         <el-table-column
           prop="patientCertificateNo"
           label="证件号"
-          width="120">
+          width="156">
         </el-table-column>
         <el-table-column
           prop="patientPhoneNum"
@@ -100,7 +100,7 @@
         <el-table-column
           prop="doctorPosition"
           label="职称"
-          width="60">
+          width="80">
         </el-table-column>
         <el-table-column
           prop="doctorOrganization"
@@ -110,7 +110,7 @@
         <el-table-column
           prop="departmentName"
           label="科室"
-          width="80">
+          width="100">
         </el-table-column>
         <el-table-column
           prop="clinicDate"

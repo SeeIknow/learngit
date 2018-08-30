@@ -95,7 +95,7 @@
           <div class="form-box">
             <el-form ref="form" :model="form1" label-width="80px">
               <el-form-item label="账户名">
-                <el-input v-model="doctorDetail.doctor.account" :disabled="true"></el-input>
+                <el-input v-model="doctorDetail.doctor.account" ></el-input>
               </el-form-item>
               <el-form-item label="账户密码">
                 <el-input v-model="doctorDetail.doctor.accountPwd"></el-input>
@@ -128,7 +128,7 @@
           </div>
         </div>
         <!--  -->
-        <div class="module-i">
+        <!-- <div class="module-i">
           <p class="module-i-title">擅长治疗</p>
           <div class="form-box" style="width:auto">
             <el-tag
@@ -141,8 +141,14 @@
             </el-tag>
             <el-button type="text" @click="openUserAlt('disease')">添加擅长疾病</el-button>
           </div>
-        </div>
+        </div> -->
+        <div class="module-i">
+          <p class="module-i-title">擅长</p>
+          <div class="form-box">
+            <textarea name="name" rows="8" class="introContent"cols="80" placeholder="请输入擅长" v-model="beGoodAt"></textarea>
+          </div>
 
+        </div>
         <div class="module-i">
           <p class="module-i-title">社会标签</p>
           <div class="form-box">
@@ -306,7 +312,7 @@
             </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="三级疾病(可选)">
+      <!-- <el-form-item label="三级疾病(可选)">
         <el-select v-model="form.region3" placeholder="请选择三级疾病" @change="searchFromThree(form.region3,'dis')">
           <el-option
              v-for="item in depList_three"
@@ -315,7 +321,7 @@
              :value="item.id">
            </el-option>
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="closeUserAlt('disease')">取 消</el-button>
@@ -383,7 +389,8 @@ export default {
       form:{
         aa:'',
         bb:'',
-        region3:''
+        region3:'',
+        region1:''
       },
       form1:{},
       form2:{},
@@ -420,7 +427,8 @@ export default {
       positionName_c:'',
       levelName_c:'',
       levelName_c_i:'',
-      positionName_c_i:''
+      positionName_c_i:'',
+      beGoodAt:''
     }
   },
   computed:{
@@ -460,28 +468,28 @@ export default {
     ]),
     // 校验检查
     examineValue(){
-      if(!doctorDetail.doctor.name){
+      if(!this.doctorDetail.doctor.name){
         this.$message({
           type:'error',
           message:'医生姓名不能为空！'
         })
         return false
       }
-      if(!doctorDetail.doctor.hospitalName){
+      if(!this.doctorDetail.doctor.hospitalName){
         this.$message({
           type:'error',
           message:'医院不能为空！'
         })
         return false
       }
-      if(!doctorDetail.doctor.account){
+      if(!this.doctorDetail.doctor.account){
         this.$message({
           type:'error',
           message:'账户不能为空！'
         })
       return false
       }
-      if(!doctorDetail.doctor.accountPwd){
+      if(!this.doctorDetail.doctor.accountPwd){
         this.$message({
           type:'error',
           message:'密码不能为空！'
@@ -554,6 +562,8 @@ export default {
 
         this.form.aa =   this.positionName_c
         this.form.bb =   this.levelName_c
+
+        this.beGoodAt = this.doctorDetail.doctor.skilledContent
         //console.log(this.doctorDetail.doctor.accountCheckStatus )
       })
       // 医生职称
@@ -746,6 +756,7 @@ export default {
             // 二级疾病
             this.obj2.diseaseName = this.diseasesBox[i].name
             this.obj2.diseaseId = this.diseasesBox[i].id;
+            this.form.region1 = this.obj2.diseaseName;
           }
         }
         this.form.region3 = ''
@@ -820,7 +831,8 @@ export default {
         "positionId": this.positionName_c_i,
         "positionName": this.positionName_c,
         "sex": this.doctorDetail.doctor.sex,
-        "type": this.doctorDetail.doctor.type
+        "type": this.doctorDetail.doctor.type,
+        "skilledContent":this.beGoodAt
       }
       this.setDoctorInfo(data).then(() =>{
         this.$router.replace({name:'doctorManager'})

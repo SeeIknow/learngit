@@ -274,7 +274,7 @@ export default {
 
 <style lang="scss">
 @import '../../../styles/detailCommon.scss';
-$border-color:#00abec;
+$border-color:#409EFF;
 .formContent{
   border:1px solid $border-color;
   .hospitalItem{

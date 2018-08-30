@@ -47,7 +47,54 @@ export default new vuex.Store({
         }
         dispatch('api/orderStatistics', payload, {root: true})
       })
-    }
+    },
+    getPaymentOrder({state, commit, dispatch, getters, rootGetters}, data){
+      const payload = rootGetters['api/payload']
+      payload.param = data
+      return new Promise((resolve, reject) => {
+        payload.callback = res => {
+          resolve(res)
+          ////console.log(res.data)
+          // commit('tradeStatistics',res.data)
+        }
+        payload.error = err => {
+          reject(error)
+        }
+        dispatch('api/paymentOrder', payload, {root: true})
+      })
+    },
+    getPendingOrder({state, commit, dispatch, getters, rootGetters}, data){
+      const payload = rootGetters['api/payload']
+      payload.param = data
+      return new Promise((resolve, reject) => {
+        payload.callback = res => {
+          resolve(res)
+          ////console.log(res.data)
+          // commit('tradeStatistics',res.data)
+        }
+        payload.error = err => {
+          reject(error)
+        }
+        dispatch('api/pendingOrder', payload, {root: true})
+      })
+    },
+    // 更新用户信息
+    updateUserInfo({state, commit, dispatch, getters, rootGetters}, data){
+      const payload = rootGetters['api/payload']
+      payload.param = data
+      return new Promise((resolve, reject) => {
+        payload.callback = res => {
+          resolve(res)
+          ////console.log(res.data)
+          // commit('tradeStatistics',res.data)
+        }
+        payload.error = err => {
+          reject(error)
+        }
+        dispatch('api/updateUserInfo', payload, {root: true})
+      })
+    },
+
   },
   modules:{
     api,

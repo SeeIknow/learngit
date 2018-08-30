@@ -4,7 +4,7 @@
     width:200px;
   }
   .select-p-1{
-    margin:20px;
+    margin:0 20px;
     display:block;
     width:100%;
     height:auto;
@@ -19,7 +19,7 @@
   }
   .label-span{
     margin-right:10px;
-    min-width: 85px;
+    min-width: 125px;
     display: inline-block;
   }
   .tableBox{
@@ -29,7 +29,14 @@
     margin-top:30px;
   }
   th{
-    background:#00abec!important;
-    color:#333!important;
+    background:#409EFF!important;
+    text-align: center;
+    color:#fff !important
+  }
+  td{
+      text-align: center;
+  }
+  .el-menu-item{
+    font-size:18px!important;
   }
 }

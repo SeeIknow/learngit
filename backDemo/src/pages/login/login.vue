@@ -75,14 +75,19 @@ export default {
               this.$http.post('http://172.16.4.10:8080/ccyl/login',null,{headers:{'loginname':this.ruleForm2.username,'password':this.ruleForm2.pass}}).then(response => {
                   // success callback
                   ////console.log(response);
-                  // 本地存储用户信息
-                  localStorage.setItem('userInfo',JSON.stringify(response.data))
+
+                  localStorage.setItem('userToken',response.data.token)
+                  // 获取用户信息
+                  this.$store.dispatch('updateUserInfo').then((res) =>{
+                    // 本地存储用户信息
+                    localStorage.setItem('userInfo',JSON.stringify(res.data))
+                  })
                   // 存储用户图像
                   localStorage.setItem('adminPhoto',response.data.userModelResponse.photoUrl )
                   // 获取用户菜单权限
                   this.getUserPermission().then((data) =>{
-                    // 本地存储菜单权限
-                    localStorage.setItem('permission',JSON.stringify(data.data))
+                    // // 本地存储菜单权限
+                    // localStorage.setItem('permission',JSON.stringify(data.data))
                     this.$router.addRoutes(AddRouteRootMap(data.data.menus))
                     ////console.log(AddRouteRootMap(data.data.menus))
                     // vuex存储permission

@@ -159,7 +159,7 @@
             <el-button type="primary" style="margin-left:15px" icon="el-icon-plus" @click="openModal('dialogVisible')">添加沟通记录</el-button>
         </el-row>
       </div>
-      <div class="infoItem">
+      <div class="infoItem button_box">
         <el-button type="primary" plain @click="openModal('successMod')">已就诊</el-button>
         <el-button type="primary" plain @click="openModal('failMod')">未就诊</el-button>
       </div>

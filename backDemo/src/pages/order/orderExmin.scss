@@ -1,4 +1,4 @@
-$color:#00abec;
+$color:#409EFF;
 .orderExmin{
   padding:0 40px;
   .goBack{
@@ -7,16 +7,19 @@ $color:#00abec;
 
   .orderInfoDetail{
     width:800px;
-    border:1px solid #00abec;
+    border:1px solid #409EFF;
     padding:0 20px;
     margin-top:20px;
     border-radius: 5px;
-    box-shadow: 0 0 1px 1px #00abec;
+    box-shadow: 0 0 1px 1px #409EFF;
     .infoItem{
-        border-top:1px dotted #00abec;
+        border-top:1px dotted #409EFF;
         padding:20px 0;
         text-align: left;
         font-size:14px;
+    }
+    .button_box{
+      text-align: center;
     }
   }
   .el-row {
@@ -26,8 +29,8 @@ $color:#00abec;
       margin-bottom: 0;
     }
     img{
-      width:100px;
-      max-height:40px;
+      max-width:150px;
+      max-height:150px;
       margin-right:10px;
     }
   }
@@ -54,4 +57,5 @@ $color:#00abec;
       line-height:25px;
     }
   }
+
 }

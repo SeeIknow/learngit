@@ -44,6 +44,7 @@ export default {
   methods: {
     loginOut(){
        localStorage.removeItem('userInfo');
+       localStorage.removeItem('userToken');
        localStorage.removeItem('permission');
        localStorage.removeItem('adminPhoto');
        setTimeout(() =>{
@@ -54,7 +55,7 @@ export default {
     getInfo(){
       const info = JSON.parse(localStorage.getItem('userInfo'));
       const photo = localStorage.getItem('adminPhoto')
-      this.userName = info.userModelResponse.username
+      this.userName = info.username
       this.photo = photo;
       ////console.log(info.username);
     },

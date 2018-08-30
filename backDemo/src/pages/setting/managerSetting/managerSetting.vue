@@ -68,10 +68,12 @@ export default {
     ])
   },
   mounted(){
-    this.getData();
+
     this.form = this.$route.params;
     this.roleId = this.form.roleId
+    this.deptId = this.form.deptId
     this.roleStatus = this.changeStatus(this.form.status)
+      this.getData();
   },
   methods:{
     ...mapActions('setting',[
@@ -88,7 +90,7 @@ export default {
     },
     onSubmit() {
       const data ={
-        "deptId": this.form.deptId,
+        "deptId": this.deptId,
         "id": this.form.id,
         "indate": getNowFormatDate(),
         "loginname":this.form.loginname ,
@@ -118,8 +120,10 @@ export default {
     getData(){
       // 或者
       this.getBMlist({'id':this.form.deptId})
+      this.getRolelist({'id':this.form.deptId})
     },
     bmSelect(val){
+      this.deptId = val
       ////console.log(val);
       this.getRolelist({'id':val})
     },
@@ -129,7 +133,7 @@ export default {
         return item.id == val
       })
       this.roleName = obj.roleName
-      this.roleId = obj.roleId
+      this.roleId = obj.id
     }
   }
 }

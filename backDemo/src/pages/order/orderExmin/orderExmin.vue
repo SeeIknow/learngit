@@ -176,7 +176,7 @@
           </div>
           </el-col>
         </el-row>
-        <el-row class="btnBox">
+        <el-row class="btnBox button_box">
           <el-button type="primary" @click="submit()">审核</el-button>
           <el-button type="warning" @click="refuse()">不通过</el-button>
         </el-row>

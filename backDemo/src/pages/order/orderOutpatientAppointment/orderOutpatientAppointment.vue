@@ -127,7 +127,6 @@
       <!-- 沟通记录 -->
       <div class="infoItem communicationRecord" >
         <p>沟通记录</p>
-        </el-row>
         <template v-for="(item,$index) in outpatientOrderComms">
           <div class="contentBox">
             <p class="time_c">{{$index+1}}.{{parseTime1(item.inDate)}}</p>
@@ -138,7 +137,7 @@
             <el-button type="primary" style="margin-left:15px" icon="el-icon-plus" @click="openModal('dialogVisible')">添加沟通记录</el-button>
         </el-row>
       </div>
-      <div class="infoItem">
+      <div class="infoItem button_box">
         <el-button type="primary" plain @click="openModal('successMod')">预约成功</el-button>
         <el-button type="primary" plain @click="openModal('failMod')">预约失败</el-button>
       </div>
@@ -165,6 +164,7 @@
           <el-date-picker
             v-model="dateVal"
             type="date"
+            value-format="yyyy-MM-dd"
             placeholder="选择日期">
           </el-date-picker>
         </el-form-item>
@@ -293,7 +293,12 @@ export default {
           return obj;
     },
     parseTime1(val){
-      return parseTime(val)
+      if(val != null){
+        return parseTime(val)
+      }else{
+        return ''
+      }
+
     },
     getParams () {
         // 取到路由带过来的参数

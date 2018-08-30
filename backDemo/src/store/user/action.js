@@ -16,6 +16,20 @@ export const getUserList = ({state, commit, dispatch, getters, rootGetters}, dat
     dispatch('api/getUserList', payload, {root: true})
   })
 }
+export const postRecommendDoctor = ({state, commit, dispatch, getters, rootGetters}, data) => {
+  const payload = rootGetters['api/payload']
+  payload.param = data
+  return new Promise((resolve, reject) => {
+    payload.callback = res => {
+      resolve(res)
+      // ////console.log(res)
+    }
+    payload.error = err => {
+      reject(error)
+    }
+    dispatch('api/recommendDoctor', payload, {root: true})
+  })
+}
 /**
  * 医生管理 添加 编辑
  */
@@ -257,7 +271,7 @@ return new Promise((resolve, reject) => {
  export const uploadPhoto = ({state, commit, dispatch, getters, rootGetters},param) =>{
    ////console.log(param);
    axios.post(state.server1+`/doctor/upload/doctorHeader?doctorId=${param.id}`,param.data,{headers:{
-              "Authorization": JSON.parse(localStorage.getItem('userInfo')).token
+              "Authorization": localStorage.getItem('userToken')
             }}).then((res) =>{
               ////console.log(res);
 
@@ -271,7 +285,7 @@ return new Promise((resolve, reject) => {
  export const uploadUserPhoto = ({state, commit, dispatch, getters, rootGetters,rootState},param) =>{
    ////console.log(param);
    axios.post(state.server1+`/userinfo/uploadPhoto`,param.data,{headers:{
-              "Authorization": JSON.parse(localStorage.getItem('userInfo')).token
+              "Authorization": localStorage.getItem('userToken')
             }}).then((res) =>{
               ////console.log(res);
               localStorage.setItem('adminPhoto',res.data)
@@ -302,9 +316,133 @@ return new Promise((resolve, reject) => {
  export const doctorExcelUp = ({state, commit, dispatch, getters, rootGetters,rootState},param) =>{
    ////console.log(param);
    axios.post(state.server1+`/doctor/excel/executeImport`,param.data,{headers:{
-              "Authorization": JSON.parse(localStorage.getItem('userInfo')).token
+              "Authorization": localStorage.getItem('userToken')
             }}).then((res) =>{
               ////console.log(res);
               return res
             })
+ }
+
+ /**
+  * 用户设置》》医生模板下载
+  */
+
+ export const postPlaceMangeList= ({state, commit, dispatch, getters, rootGetters}, data) => {
+ const payload = rootGetters['api/payload']
+ payload.param = data
+ return new Promise((resolve, reject) => {
+  payload.callback = res => {
+    resolve(res)
+  }
+  payload.error = err => {
+    reject(error)
+  }
+  dispatch('api/postPlaceMangeList', payload, {root: true})
+ })
+ }
+
+ /**
+  * 用户设置》》渠道管理 省
+  */
+
+ export const postProvinces= ({state, commit, dispatch, getters, rootGetters}, data) => {
+ const payload = rootGetters['api/payload']
+ payload.param = data
+ return new Promise((resolve, reject) => {
+  payload.callback = res => {
+    resolve(res)
+  }
+  payload.error = err => {
+    reject(error)
+  }
+  dispatch('api/postProvinces', payload, {root: true})
+ })
+ }
+ /**
+  * 用户设置》》渠道管理 市
+  */
+
+ export const postCitys= ({state, commit, dispatch, getters, rootGetters}, data) => {
+ const payload = rootGetters['api/payload']
+ payload.param = data
+ return new Promise((resolve, reject) => {
+  payload.callback = res => {
+    resolve(res)
+  }
+  payload.error = err => {
+    reject(error)
+  }
+  dispatch('api/postCitys', payload, {root: true})
+ })
+ }
+ /**
+  * 用户设置》》渠道管理 区
+  */
+
+ export const postDistricts= ({state, commit, dispatch, getters, rootGetters}, data) => {
+ const payload = rootGetters['api/payload']
+ payload.param = data
+ return new Promise((resolve, reject) => {
+  payload.callback = res => {
+    resolve(res)
+  }
+  payload.error = err => {
+    reject(error)
+  }
+  dispatch('api/postDistricts', payload, {root: true})
+ })
+ }
+
+ /**
+  * 用户设置》》渠道管理 >>详情
+  */
+
+ export const getChannelDetail= ({state, commit, dispatch, getters, rootGetters}, data) => {
+ const payload = rootGetters['api/payload']
+ payload.param = data
+ return new Promise((resolve, reject) => {
+  payload.callback = res => {
+    resolve(res)
+  }
+  payload.error = err => {
+    reject(error)
+  }
+  dispatch('api/getChannelDetail', payload, {root: true})
+ })
+ }
+
+ /**
+  * 用户设置》》渠道管理 >>详情>>编辑提交
+  */
+
+ export const postEditchannel= ({state, commit, dispatch, getters, rootGetters}, data) => {
+ const payload = rootGetters['api/payload']
+ payload.param = data
+ return new Promise((resolve, reject) => {
+  payload.callback = res => {
+    resolve(res)
+  }
+  payload.error = err => {
+    reject(error)
+  }
+  dispatch('api/postEditchannel', payload, {root: true})
+ })
+ }
+
+ /**
+  * 用户设置》》渠道管理 >>详情>>编辑提交
+  */
+
+ export const postAddchannel= ({state, commit, dispatch, getters, rootGetters}, data) => {
+ const payload = rootGetters['api/payload']
+ payload.param = data
+ return new Promise((resolve, reject) => {
+  payload.callback = res => {
+    resolve(res)
+  }
+  payload.error = err => {
+    reject(error)
+  }
+  dispatch('api/postAddchannel', payload, {root: true})
+ })
  }

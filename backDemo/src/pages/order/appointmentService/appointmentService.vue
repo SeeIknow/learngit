@@ -99,7 +99,7 @@
         <el-table-column
           prop="patientCertificateNo"
           label="证件号"
-          width="120">
+          width="150">
         </el-table-column>
         <el-table-column
           prop="patientPhoneNum"
@@ -168,7 +168,7 @@
         <el-table-column
           label="操作"
           fixed=right
-          width="60">
+          width="80">
           <template slot-scope="scope">
             <el-button
               prop="id"

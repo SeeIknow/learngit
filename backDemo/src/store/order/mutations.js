@@ -21,6 +21,16 @@ export default {
     ////console.log(state);
     state.departmentTList = res;
   },
+  // 疾病救助列表
+  [LIST.GET_LIST_JZ] (state, res) {
+    ////console.log(state);
+    state.jzList = res;
+  },
+  // 疾病救助详情
+  [LIST.JZ_DETAIL] (state, res) {
+    ////console.log(state);
+    state.jzDetail = res;
+  },
   // 疾病分型（三级科室）
   [LIST.GET_LIST_DEP_THREE] (state, res) {
     ////console.log(state);

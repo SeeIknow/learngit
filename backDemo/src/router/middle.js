@@ -34,14 +34,59 @@ export const constantTouter =
     component:() => import('@/pages/homeindex.vue'), // 模板页面
     children: [
     	{
-         path: 'table',
-        name: 'table',
+         path: 'healthService',
+        name: 'healthService',
         node: 'order',
-        meta: {
-          title: '疾病救助',
-          role:false
-        },
-        component: () => import('@/pages/order/orderManage/orderManage.vue')
+        title: '疾病救助',
+        component: () => import('@/pages/order/healthService/healthService.vue')
+      },
+      {
+        path: 'healthServiceDetail',
+        name: 'healthServiceDetail',
+        title: '疾病救助待分诊详情',
+        component: () => import('@/pages/order/healthServiceDetail/healthServiceDetail.vue')
+      },
+      {
+        path: 'healthServiceDetail1',
+        name: 'healthServiceDetail1',
+        title: '疾病救助待复审详情',
+        component: () => import('@/pages/order/healthServiceDetail1/healthServiceDetail1.vue')
+      },
+      {
+        path: 'healthServiceDetail2',
+        name: 'healthServiceDetail2',
+        title: '疾病救助待分诊详情',
+        component: () => import('@/pages/order/healthServiceDetail2/healthServiceDetail2.vue')
+      },
+      {
+        path: 'healthServiceDetail3',
+        name: 'healthServiceDetail3',
+        title: '疾病救助待面诊-预约详情',
+        component: () => import('@/pages/order/healthServiceDetail3/healthServiceDetail3.vue')
+      },
+      {
+        path: 'healthServiceDetail4',
+        name: 'healthServiceDetail4',
+        title: '疾病救助待面诊-到院详情',
+        component: () => import('@/pages/order/healthServiceDetail4/healthServiceDetail4.vue')
+      },
+      {
+        path: 'healthServiceDetail5',
+        name: 'healthServiceDetail5',
+        title: '疾病救助待验证详情',
+        component: () => import('@/pages/order/healthServiceDetail5/healthServiceDetail5.vue')
+      },
+      {
+        path: 'healthServiceDetail6',
+        name: 'healthServiceDetail6',
+        title: '疾病救助待治疗详情',
+        component: () => import('@/pages/order/healthServiceDetail6/healthServiceDetail6.vue')
+      },
+      {
+        path: 'healthServiceDetail7',
+        name: 'healthServiceDetail7',
+        title: '疾病救助已完成详情',
+        component: () => import('@/pages/order/healthServiceDetail7/healthServiceDetail7.vue')
       },
       {
         path: 'healthService',
@@ -227,11 +272,25 @@ export const constantTouter =
         component: () => import('@/pages/user/medicalCenter/medicalCenter.vue')
       },
       {
-        path: 'orderExmin3',
-        name: 'orderExmin3',
+        path: 'placeManage',
+        name: 'placeManage',
         node: 'user',
           title: '渠道管理',
         component: () => import('@/pages/user/userManage/userManage.vue')
+      },
+      {
+        path: 'placeManageEdit',
+        name: 'placeManageEdit',
+        node: 'user',
+          title: '渠道管理编辑',
+        component: () => import('@/pages/user/placeManageEdit/placeManageEdit.vue')
+      },
+      {
+        path: 'placeManageAdd',
+        name: 'placeManageAdd',
+        node: 'user',
+          title: '渠道管理添加',
+        component: () => import('@/pages/user/placeManageAdd/placeManageAdd.vue')
       },
       {
         path: 'orderExmin4',
@@ -412,8 +471,10 @@ export const constantTouter =
   }
 ]
 
+    // 二级路由配置
     const map = {
        'doctorManager': resolve => import('@/pages/user/doctorManager/doctorManager.vue'),
+       'healthService':resolve => import('@/pages/order/healthService/healthService.vue'),
        'consultingService': resolve => import('@/pages/order/consultingService/consultingService.vue'),
        'operationalData': resolve => import('@/pages/count/operationalData/operationalData.vue'),
        'administerList': resolve => import('@/pages/setting/administerList/administerList.vue'),
@@ -421,6 +482,7 @@ export const constantTouter =
        'limitEdit': resolve => import('@/pages/setting/limitEdit/limitEdit.vue'),
        'appointmentService': resolve => import('@/pages/order/appointmentService/appointmentService.vue'),
        'doctorOfficeSerivce': resolve => import('@/pages/order/doctorOfficeSerivce/doctorOfficeSerivce.vue'),
+       'placeManage':resolve => import('@/pages/user/userManage/userManage.vue'),
      }
      export const AddRouteRootMap = (routesSource) => { // 这个是注入addRoutes的方法
        // routesSource 你自己定位到menus的位置

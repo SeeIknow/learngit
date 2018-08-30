@@ -5,19 +5,19 @@
   .topBar{
     ul {
       width:100%;
-      border-bottom:2px solid #00abec;
+      border-bottom:2px solid #409EFF;
       li{
         width:150px;
         height:30px;
         line-height:30px;
-        color:#00abec;
+        color:#409EFF;
         font-size:14px;
         float:left;
         cursor: pointer;
         border-radius: 3px;
       }
       li.active{
-        background:#00abec;
+        background:#409EFF;
         color:#fff;
       }
     }

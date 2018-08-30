@@ -212,7 +212,7 @@
             </div>
           </el-col>
         </el-row>
-        <el-row class="btnBox" v-if="buttonStatus">
+        <el-row class="btnBox button_box" v-if="buttonStatus">
           <el-button type="primary" @click="reply()">回复</el-button>
         </el-row>
       </div>

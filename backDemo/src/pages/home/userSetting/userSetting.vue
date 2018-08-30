@@ -11,11 +11,11 @@
       <div class="userInfoBox" v-if="activeIndex == 0?true:false">
           <p>
             <span class="span-left-c">账户名称:</span>
-            <span>{{userInfo.userModelResponse.loginname}}</span>
+            <span>{{userInfo.loginname}}</span>
           </p>
           <p>
             <span class="span-left-c">使用者姓名:</span>
-            <span>{{userInfo.userModelResponse.username}}</span>
+            <span>{{userInfo.username}}</span>
           </p>
           <!-- <p>
             <span class="span-left-c">账户名称:</span>
@@ -25,12 +25,12 @@
           <p>
             <span class="span-left-c">手机:</span>
             <!-- <input type="text" name="" value=""value="18772945918" disabled> -->
-            <el-input v-model="userInfo.userModelResponse.phonenum" v-bind:disabled="status"></el-input>
+            <el-input v-model="userInfo.phonenum" v-bind:disabled="status"></el-input>
             <!-- <el-button type="text" @click="changePhone">修改手机号</el-button> -->
           </p>
           <p>
             <span class="span-left-c">注册时间:</span>
-            <span>{{userInfo.userModelResponse.indate}}</span>
+            <span>{{userInfo.indate}}</span>
           </p>
           <!-- <el-button type="primary" style="text-align:left">修改</el-button> -->
       </div>

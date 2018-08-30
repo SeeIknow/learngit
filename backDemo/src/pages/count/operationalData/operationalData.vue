@@ -27,7 +27,7 @@
         <div class="charts-b">
           <div class="table-trade">
             <span>统计类型:</span>
-            <el-select v-model="statisticType" placeholder="请选择">
+            <el-select v-model="statisticType" placeholder="请选择" @change="statistSelect">
               <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -51,7 +51,7 @@
       </div>
       <!-- 内部数据 -->
       <div class="trade-inner-box">
-        <div class="charts-b">
+        <!-- <div class="charts-b">
           <div class="table-trade">
             <span>统计类型:</span>
             <el-select v-model="statisticType1" placeholder="请选择">
@@ -72,7 +72,7 @@
               </el-option>
             </el-select>
             <el-button type="primary" style="margin-left:60px;" @click="search()">搜索</el-button>
-          </div>
+          </div> -->
           <div id="main2" style="width: 600px; height: 400px;"></div>
         </div>
       </div>
@@ -111,11 +111,12 @@ export default {
         value:'',
         value1:'',
         statisticType:'',
-        statisticType:'',
+        statisticType1:'',
         orderType:'',
         orderType1:'',
         startDate:'',
         endDate:'',
+        val:''
     }
   },
   mounted(){
@@ -136,6 +137,14 @@ export default {
     search(){
       //console.log(111)
       this.charts()
+    },
+    statistSelect(){
+
+      if(this.statisticType ==2){
+        this.val = '元'
+      }else{
+        this.val = ''
+      }
     },
     select(){
       //console.log(this.radio3)
@@ -195,7 +204,7 @@ export default {
 				trigger : 'axis'
 			},
 			legend : {// 这个就是图例，也就是每条折线或者项对应的示例，就是这个<a target=_blank href="https://img-blog.csdn.net/20160622094820180?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">图例</a>
-				data : []
+				data : [],
 			},
 			toolbox : {
 				feature : {
@@ -216,8 +225,11 @@ export default {
 			// X轴的定义
 			} ],
 			yAxis : [ {
-				type : 'value'// Y轴的定义
-			} ],
+				type : 'value',// Y轴的定义
+        axisLabel : {
+            formatter: '{value}'+this.val
+        }
+			}],
 			series : []
 		};
 
@@ -226,7 +238,7 @@ export default {
 		    backgroundColor: 'white',
 			title : {// 图表标题，可以通过show:true/false控制显示与否，还有subtext:'二级标题',link:'http://www.baidu.com'等
 				text : '来源渠道实例',
-				x:'center'
+				x:'left'
 			},
 			tooltip : {// 这个是鼠标浮动时的工具条，显示鼠标所在区域的数据，trigger这个地方每种图有不同的设置，见官网吧，一两句说不清楚  7
 				trigger: 'item',
@@ -260,7 +272,7 @@ export default {
 	        }]
 		};
     // 交易统计折线图
-    this.getTradeStatic(this.exportData().data).then((res) =>{
+    this.getTradeStatic(this.exportData().data1).then((res) =>{
       const jsons = res.data;
       const Item = function() {
 					return {
@@ -276,7 +288,7 @@ export default {
 					var it = new Item();
 					it.name = json[i].name;
 					legends.push(json[i].name);
-					it.data = json[i].data;
+					it.data = json[i].ydata;
 					Series.push(it);
 				}
         // 横轴坐标
@@ -286,12 +298,15 @@ export default {
         myChart.setOption(option);
     })
     myChart1.showLoading();// 加载动画
-    this.getOrderStatic(this.exportData().data1).then((res) =>{
+    this.getOrderStatic(this.exportData().data).then((res) =>{
       //console.log(res);
       myChart1.setOption({
 				       series:[{
 				           data:  res.data
 				       }],
+               legend:{
+                 data:res.data.name
+               }
 				   });
 				 myChart1.hideLoading();
     })

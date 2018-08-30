@@ -177,7 +177,7 @@
           </div>
         </template>
       </div> -->
-      <div class="infoItem">
+      <div class="infoItem button_box">
         <el-button type="primary" plain @click="openModal('successMod')">就诊确认</el-button>
       </div>
     </div>
@@ -203,6 +203,7 @@
         <el-date-picker
           v-model="dateVal"
           type="date"
+          value-format="yyyy-MM-dd"
           placeholder="选择日期">
         </el-date-picker>
       </el-form-item>
@@ -262,7 +263,11 @@ export default {
       'getOrderYy_check_j_s',
     ]),
     parseTime1(val){
-      return parseTime(val)
+      if(val != null){
+        return parseTime(val)
+      }else{
+        return ''
+      }
     },
     getParams () {
         // 取到路由带过来的参数

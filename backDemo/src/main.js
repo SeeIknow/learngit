@@ -43,8 +43,7 @@ import {constantTouter} from '@/router/middle'
 Vue.use(ElementUi)
 
 Vue.config.productionTip = false
-
-const permission = JSON.parse(localStorage.getItem('permission'))
+const permission = JSON.parse(localStorage.getItem('permission'))//获取本地存储
 // 全局定义事件
 window.eventBus = new Vue()
 
@@ -71,23 +70,29 @@ router.beforeEach((to, from, next) => {
       name: 'home'
     })
   }else if( permission && store.state.permission.routers.length == 0){
-  	 debugger
-
 		if( to.name != null){
-			router.addRoutes(AddRouteRootMap(permission.menus))
+      // 调取接口 获取权限
+      store.dispatch('permission/getUserPermission')
+
+			router.addRoutes(AddRouteRootMap(JSON.parse(localStorage.getItem('permission')).menus))
 			localStorage.setItem('router',to.name)
-      store.commit('permission/ADD_MENU', permission.menus)
+      store.commit('permission/ADD_MENU', JSON.parse(localStorage.getItem('permission')).menus)
+      // 更新用户信息
+      store.dispatch('updateUserInfo').then((response) =>{
+        // 本地存储用户信息
+        localStorage.setItem('userInfo',JSON.stringify(response.data))
+        // 存储用户图像
+        localStorage.setItem('adminPhoto',response.data.photoUrl )
+      })
       store.state.user.imgUrl = localStorage.getItem('adminPhoto')
       setTimeout(() =>{
         next({...to,replace:true})
-      },500)
+      },200)
 		 }else if(to.name == null){
       next({
         name: 'index'
       })
 		}
-    //   next()
-    // }
   }else{
 
   	//添加路由本地存储  一级菜单
@@ -118,8 +123,6 @@ router.beforeEach((to, from, next) => {
           }
         }
       }
-      //console.log(store.state.routerTwoBox)
-    	debugger
      	next() // 否则全部重定向到登录页
   	}
 
@@ -129,7 +132,6 @@ router.beforeEach((to, from, next) => {
 router.afterEach(transition => {
   NProgress.done()
   NProgress.remove();
-
 });
 /* eslint-disable no-new */
 new Vue({

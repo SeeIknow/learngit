@@ -134,7 +134,258 @@ export const getOrderReply = ({state, commit, dispatch, getters, rootGetters}, d
     dispatch('api/getOrderReply', payload, {root: true})
   })
 }
-
+// 疾病救助列表
+export const getOrderListJz = ({state, commit, dispatch, getters, rootGetters}, data) => {
+  const payload = rootGetters['api/payload']
+  payload.param = data
+  return new Promise((resolve, reject) => {
+    payload.callback = res => {
+      resolve(res)
+      ////console.log(res)
+      commit(LIST.GET_LIST_JZ,res.data)
+    }
+    payload.error = err => {
+      reject(error)
+    }
+    dispatch('api/getOrderJzList', payload, {root: true})
+  })
+}
+// 疾病救助详情
+export const getOrderDetailJz = ({state, commit, dispatch, getters, rootGetters}, data) => {
+  const payload = rootGetters['api/payload']
+  payload.param = data
+  return new Promise((resolve, reject) => {
+    payload.callback = res => {
+      resolve(res)
+      ////console.log(res)
+      commit(LIST.JZ_DETAIL,res.data)
+    }
+    payload.error = err => {
+      reject(error)
+    }
+    dispatch('api/getOrderJzDetail', payload, {root: true})
+  })
+}
+// 疾病救助上传
+export const uploadPhoto = ({state, commit, dispatch, getters, rootState},param) =>{
+  ////console.log(param);
+  axios.post(rootState.server1+`/diseaseHelpController/upload/zhengming?type=${param.type}&id=${param.id}`,param.data,{headers:{
+             "Authorization": localStorage.getItem('userToken')
+           }}).then((res) =>{
+             ////console.log(res);
+             return res
+           })
+}
+// 疾病救助列表详情>>添加沟通记录
+export const getOrderJz_detailRecord = ({state, commit, dispatch, getters, rootGetters}, data) => {
+  const payload = rootGetters['api/payload']
+  payload.param = data
+  return new Promise((resolve, reject) => {
+    payload.callback = res => {
+      resolve(res)
+    }
+    payload.error = err => {
+      reject(error)
+    }
+    dispatch('api/addChatDetail', payload, {root: true})
+  })
+}
+// 疾病救助列表详情>>初审不通过
+export const postOrderJz_detailStatus = ({state, commit, dispatch, getters, rootGetters}, data) => {
+  const payload = rootGetters['api/payload']
+  payload.param = data
+  return new Promise((resolve, reject) => {
+    payload.callback = res => {
+      resolve(res)
+    }
+    payload.error = err => {
+      reject(error)
+    }
+    dispatch('api/firstCheckUnable', payload, {root: true})
+  })
+}
+// 疾病救助列表详情>>初审通过
+export const postOrderJz_detailStatus_r = ({state, commit, dispatch, getters, rootGetters}, data) => {
+  const payload = rootGetters['api/payload']
+  payload.param = data
+  return new Promise((resolve, reject) => {
+    payload.callback = res => {
+      resolve(res)
+    }
+    payload.error = err => {
+      reject(error)
+    }
+    dispatch('api/firstCheckAble', payload, {root: true})
+  })
+}
+// 疾病救助列表详情>>复审通过
+export const postOrderJz_detailStatus_r_s = ({state, commit, dispatch, getters, rootGetters}, data) => {
+  const payload = rootGetters['api/payload']
+  payload.param = data
+  return new Promise((resolve, reject) => {
+    payload.callback = res => {
+      resolve(res)
+    }
+    payload.error = err => {
+      reject(error)
+    }
+    dispatch('api/secondChcekAble', payload, {root: true})
+  })
+}
+// 疾病救助列表详情>>复审通过
+export const postOrderJz_detailStatus_s = ({state, commit, dispatch, getters, rootGetters}, data) => {
+  const payload = rootGetters['api/payload']
+  payload.param = data
+  return new Promise((resolve, reject) => {
+    payload.callback = res => {
+      resolve(res)
+    }
+    payload.error = err => {
+      reject(error)
+    }
+    dispatch('api/secondChcekUnable', payload, {root: true})
+  })
+}
+// 疾病救助列表详情>>基金会列表
+export const getFoundations = ({state, commit, dispatch, getters, rootGetters}, data) => {
+  const payload = rootGetters['api/payload']
+  payload.param = data
+  return new Promise((resolve, reject) => {
+    payload.callback = res => {
+      resolve(res)
+    }
+    payload.error = err => {
+      reject(error)
+    }
+    dispatch('api/foundations', payload, {root: true})
+  })
+}
+// 疾病救助列表详情>>医学中心列表
+export const getMedicalCenters = ({state, commit, dispatch, getters, rootGetters}, data) => {
+  const payload = rootGetters['api/payload']
+  payload.param = data
+  return new Promise((resolve, reject) => {
+    payload.callback = res => {
+      resolve(res)
+    }
+    payload.error = err => {
+      reject(error)
+    }
+    dispatch('api/medicalCenters', payload, {root: true})
+  })
+}
+// 疾病救助列表详情>>医学中心列表
+export const postPatientDistribution = ({state, commit, dispatch, getters, rootGetters}, data) => {
+  const payload = rootGetters['api/payload']
+  payload.param = data
+  return new Promise((resolve, reject) => {
+    payload.callback = res => {
+      resolve(res)
+    }
+    payload.error = err => {
+      reject(error)
+    }
+    dispatch('api/patientDistribution', payload, {root: true})
+  })
+}
+// 疾病救助列表详情>>待面诊 预约失败
+export const postAppointmentDiseaseFail = ({state, commit, dispatch, getters, rootGetters}, data) => {
+  const payload = rootGetters['api/payload']
+  payload.param = data
+  return new Promise((resolve, reject) => {
+    payload.callback = res => {
+      resolve(res)
+    }
+    payload.error = err => {
+      reject(error)
+    }
+    dispatch('api/appointmentDiseaseFail', payload, {root: true})
+  })
+}
+// 疾病救助列表详情>>待面诊 添加到院时间
+export const postAppointmentDisease = ({state, commit, dispatch, getters, rootGetters}, data) => {
+  const payload = rootGetters['api/payload']
+  payload.param = data
+  return new Promise((resolve, reject) => {
+    payload.callback = res => {
+      resolve(res)
+    }
+    payload.error = err => {
+      reject(error)
+    }
+    dispatch('api/appointmentDisease', payload, {root: true})
+  })
+}
+// 疾病救助列表详情>>待面诊 已到院
+export const postAlredayComeHospital = ({state, commit, dispatch, getters, rootGetters}, data) => {
+  const payload = rootGetters['api/payload']
+  payload.param = data
+  return new Promise((resolve, reject) => {
+    payload.callback = res => {
+      resolve(res)
+    }
+    payload.error = err => {
+      reject(error)
+    }
+    dispatch('api/alredayComeHospital', payload, {root: true})
+  })
+}
+// 疾病救助列表详情>>待面诊 已到院
+export const postNotComeHospital = ({state, commit, dispatch, getters, rootGetters}, data) => {
+  const payload = rootGetters['api/payload']
+  payload.param = data
+  return new Promise((resolve, reject) => {
+    payload.callback = res => {
+      resolve(res)
+    }
+    payload.error = err => {
+      reject(error)
+    }
+    dispatch('api/notComeHospital', payload, {root: true})
+  })
+}
+// 疾病救助列表详情>>待治疗 已治疗
+export const postAlredayTreatment = ({state, commit, dispatch, getters, rootGetters}, data) => {
+  const payload = rootGetters['api/payload']
+  payload.param = data
+  return new Promise((resolve, reject) => {
+    payload.callback = res => {
+      resolve(res)
+    }
+    payload.error = err => {
+      reject(error)
+    }
+    dispatch('api/alredayTreatment', payload, {root: true})
+  })
+}
+// 疾病救助列表详情>>待治疗 未治疗
+export const postNotTreatment = ({state, commit, dispatch, getters, rootGetters}, data) => {
+  const payload = rootGetters['api/payload']
+  payload.param = data
+  return new Promise((resolve, reject) => {
+    payload.callback = res => {
+      resolve(res)
+    }
+    payload.error = err => {
+      reject(error)
+    }
+    dispatch('api/notTreatment', payload, {root: true})
+  })
+}
+// 疾病救助列表详情>>待治疗 未治疗
+export const postValidateOperation = ({state, commit, dispatch, getters, rootGetters}, data) => {
+  const payload = rootGetters['api/payload']
+  payload.param = data
+  return new Promise((resolve, reject) => {
+    payload.callback = res => {
+      resolve(res)
+    }
+    payload.error = err => {
+      reject(error)
+    }
+    dispatch('api/validateOperation', payload, {root: true})
+  })
+}
 // 预约列表
 export const getOrderListYY = ({state, commit, dispatch, getters, rootGetters}, data) => {
   const payload = rootGetters['api/payload']

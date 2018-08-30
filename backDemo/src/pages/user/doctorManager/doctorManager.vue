@@ -25,10 +25,16 @@
         </el-option>
       </el-select>
     </div>
-    <div class="grid-content bg-purple input-select-1">
-      <el-button type="primary"  @click="downLoad()">医生模板下载</el-button>
-      <el-button type="primary" >医生模板导入</el-button>
-      <input type='file'  @change="addExcel" name="医生模板导入" style="opacity:0;margin-left:-130px;z-index:1000">
+    <div class="source input-select-1">
+      <span class="label-span">是否为推荐医生:</span>
+      <el-select v-model="doctorValue" clearable placeholder="请选择">
+        <el-option
+          v-for="item in doctorOptions"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select>
     </div>
   </div>
   <div class="select-p-1 clearfix">
@@ -60,8 +66,13 @@
         </el-input>
     </div>
     <div class="grid-content bg-purple input-select-1">
-      <el-button type="primary" icon="el-icon-search" @click="getData()">查询</el-button>
+      <el-button type="primary" icon="el-icon-search" @click="search()">查询</el-button>
       <el-button type="primary" icon="el-icon-plus" @click="add()">添加</el-button>
+    </div>
+    <div class="grid-content bg-purple input-select-1">
+      <el-button type="primary"  @click="downLoad()">医生模板下载</el-button>
+      <el-button type="primary" >医生模板导入</el-button>
+      <input type='file'  @change="addExcel" name="医生模板导入" style="opacity:0;margin-left:-130px;z-index:1000">
     </div>
   </div>
   <div class="tableBox">
@@ -130,12 +141,12 @@
           prop="accountLockStatus"
           label="冻结状态"
           :formatter="formatRole1"
-          width="120">
+          width="80">
         </el-table-column>
         <el-table-column
           label="操作"
           fixed=right
-          width="60">
+          width="120">
           <template slot-scope="scope">
             <el-button
               prop="id"
@@ -144,6 +155,11 @@
               size="small">
               编辑
             </el-button>
+          </br>
+            <el-button
+             @click="setDoctorActive(scope.row.recommend,scope.row.id)" type="text"
+            title="设置为推荐医生"
+            size="mini">{{scope.row.recommend | filtersMate}}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -153,6 +169,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :page-size="12"
+        :current-page.sync="currentPage2"
         layout="prev, pager, next, jumper"
         :total="userList.total">
       </el-pagination>
@@ -179,6 +196,12 @@ export default {
         {value:'1',label:'审核'},
         {value:'0',label:'未审核'}
       ],
+      doctorOptions:[
+        {value:0,label:'全部医生'},
+        {value:'1',label:'是'},
+        {value:'2',label:'否'},
+      ],
+      doctorValue:0,
       nameValue:'',
       hospitalValue:'',
       phoneValue:'',
@@ -186,11 +209,21 @@ export default {
       showStatus:false,
       dialogVisible:false,
       aa:'',
-      loading:false
+      loading:false,
+      currentPage2:1
     }
   },
   mounted(){
     this.getData();
+  },
+  filters:{
+    filtersMate(val){
+      if(val == 1){
+        return '取消推荐'
+      }else{
+        return '设置为推荐'
+      }
+    }
   },
   computed:{
     ...mapGetters('user', [
@@ -201,7 +234,8 @@ export default {
     ...mapActions('user', [
       'getUserList',
       'doctorExcelDown',
-      'doctorExcelUp'
+      'doctorExcelUp',
+      'postRecommendDoctor'
     ]),
     ...mapMutations('user', [
       'LIST.GET_DOCTOR',
@@ -226,13 +260,22 @@ export default {
       })
     },
     addExcel(e){
+      debugger
       this.loading = true
       var formData = new FormData();
       let files = e.target.files[0]
       formData.append("excelfile",files,files.name);
-
       this.doctorExcelUp({data:formData}).then( () =>{
-          this.loading = false
+        this.$message({
+          type:'success',
+          message:'导入成功'
+        })
+        // 医生列表重新获取
+        this.getData(1)
+        setTimeout(() =>{
+            this.loading = false
+        },1000)
+
       })
     },
     //参数对象
@@ -244,7 +287,8 @@ export default {
           "inDateEnd": this.dateValue[1],
           "inDateStart": this.dateValue[0],
           "phoneNum": this.phoneValue,
-          'pageNum':val
+          'pageNum':this.currentPage2,
+          'recommend':this.doctorValue
         }
       return data
     },
@@ -262,12 +306,26 @@ export default {
       // ////console.log(`每页 ${val} 条`);
     },
     handleCurrentChange(val) {
+      this.currentPage2 = val
       this.getData(val)
+    },
+    search(){
+      this.currentPage2 = 1
+      this.getUserList(this.outObj()).then( () =>{
+
+        if(this.userList.total>0){
+          this.showStatus = true;
+        }else{
+          this.showStatus = false;
+        }
+      })
     },
     // 获取数据
     getData(val){
       //////console.log(this.dateValue);
+      // this.currentPage2 = 1
       this.getUserList(this.outObj(val)).then( () =>{
+
         if(this.userList.total>0){
           this.showStatus = true;
         }else{
@@ -291,6 +349,25 @@ export default {
      },
      addHospitalList(){
        this.$router.push({name:'addHospitalList'})
+     },
+     // 设置推荐医生 取消推荐医生
+     setDoctorActive(recommend,id){
+       if(recommend == 1){
+         recommend = 2
+        var  message = '取消推荐医生成功'
+
+       }else{
+         recommend = 1
+         var message = '设置推荐医生成功'
+       }
+      this.postRecommendDoctor({id:id,recommend:recommend}).then(() =>{
+        this.$message({
+          type:'success',
+          message:message
+        })
+        // this.currentPage2 = 1
+        this.getData(this.currentPage2)
+      })
      }
   }
 }

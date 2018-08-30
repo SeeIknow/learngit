@@ -13,6 +13,8 @@ const state = {
   yyDetail:'',//预约详情
   yyDetailAdress:'',//出诊地点
   depList_three:'',//三级科室（疾病分型）
+  jzList:'',//疾病救助列表
+  jzDetail:'',
 }
 
 export default {

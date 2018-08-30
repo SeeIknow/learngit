@@ -31,6 +31,24 @@ export const ajaxMethod = ({state, dispatch}, data) => {
 *https://easy-mock.com/mock/5aa881eb99ed355f274d0e93/system/userInfonormal#!method=get
 */
 /**
+ * 首页 订单统计
+ */
+export const paymentOrder = ({state, dispatch}, payload) => {
+  dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/payment/paymentOrder`, payload.param, payload]}, {root: true})
+}
+/**
+ * 首页 待处理订单
+ */
+export const pendingOrder = ({state, dispatch}, payload) => {
+  dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/payment/pendingOrder`, payload.param, payload]}, {root: true})
+}
+/**
+ * 更新用户信息
+ */
+export const updateUserInfo = ({state, dispatch}, payload) => {
+  dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/userinfo/refreshUserInfo`, payload.param, payload]}, {root: true})
+}
+/**
  * 获取用户菜单权限
  */
 export const getUserPermission = ({state, dispatch}, payload) => {
@@ -129,18 +147,135 @@ export const getOrderList = ({state, dispatch}, payload) => {
     export const getOrderYy_check_j = ({state, dispatch}, payload) => {
       dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/outpatientOrder/outpatient/outpatientOrder`, payload.param, payload]}, {root: true})
     }
-    /**
-     * 订单管理》》门诊预约》详情》》就诊订单确认
-     */
-     export const getOrderYy_check_j_s = ({state, dispatch}, payload) => {
-       dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/outpatientOrder/outpatient/affirm`, payload.param, payload]}, {root: true})
-     }
+/**
+* 订单管理》》门诊预约》详情》》就诊订单确认
+*/
+export const getOrderYy_check_j_s = ({state, dispatch}, payload) => {
+dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/outpatientOrder/outpatient/affirm`, payload.param, payload]}, {root: true})
+}
+
+/**
+* 订单管理》》就诊服务》》列表
+*/
+export const getOrderJzList= ({state, dispatch}, payload) => {
+dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/diseaseHelpController/orders`, payload.param, payload]}, {root: true})
+}
+/**
+* 订单管理》》就诊服务》》详情
+*/
+export const getOrderJzDetail= ({state, dispatch}, payload) => {
+dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/diseaseHelpController/${payload.param.id}/order`, payload.param, payload]}, {root: true})
+}
+/**
+* 订单管理》》就诊服务》》上传图片
+*/
+export const uploadPhoto= ({state, dispatch}, payload) => {
+dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/diseaseHelpController/upload/zhengming?type=${payload.param.type}&id=${payload.param.id}`, payload.param, payload]}, {root: true})
+}
+/**
+* 订单管理》》就诊服务》》添加沟通记录
+*/
+export const addChatDetail= ({state, dispatch}, payload) => {
+dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/diseaseHelpController/communicateRecord`, payload.param, payload]}, {root: true})
+}
+/**
+* 订单管理》》就诊服务》》待就诊不通过
+*/
+export const firstCheckUnable= ({state, dispatch}, payload) => {
+dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/diseaseHelpController/firstCheckUnable`, payload.param, payload]}, {root: true})
+}
+
+
+/**
+* 订单管理》》就诊服务》》待就诊通过
+*/
+export const firstCheckAble= ({state, dispatch}, payload) => {
+ dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/diseaseHelpController/${payload.param.id}/firstCheckAble`, payload.param, payload]}, {root: true})
+}
+/**
+* 订单管理》》就诊服务》》待复审通过
+*/
+export const secondChcekAble= ({state, dispatch}, payload) => {
+ dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/diseaseHelpController/${payload.param.id}/secondChcekAble`, payload.param, payload]}, {root: true})
+}
+/**
+* 订单管理》》就诊服务》》待复审不通过
+*/
+export const secondChcekUnable= ({state, dispatch}, payload) => {
+ dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/diseaseHelpController/secondChcekUnable`, payload.param, payload]}, {root: true})
+}
+/**
+* 订单管理》》就诊服务》》基金会列表
+*/
+export const foundations= ({state, dispatch}, payload) => {
+ dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/diseaseHelpController/foundations`, payload.param, payload]}, {root: true})
+}
+/**
+* 订单管理》》就诊服务》》医学中心列表
+*/
+export const medicalCenters= ({state, dispatch}, payload) => {
+ dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/diseaseHelpController/medicalCenters`, payload.param, payload]}, {root: true})
+}
+/**
+* 订单管理》》就诊服务》》患者分配
+*/
+export const patientDistribution= ({state, dispatch}, payload) => {
+ dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/diseaseHelpController/${payload.param.id}/${payload.param.medicalCenterId}/${payload.param.foundationId}/forwardMedical`, payload.param, payload]}, {root: true})
+}
+/**
+* 订单管理》》就诊服务》》待面诊 预约失败
+*/
+export const appointmentDiseaseFail= ({state, dispatch}, payload) => {
+ dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/diseaseHelpController/appointmentDiseaseFail`, payload.param, payload]}, {root: true})
+}
+/**
+* 订单管理》》就诊服务》》待面诊 添加到院时间
+*/
+export const appointmentDisease= ({state, dispatch}, payload) => {
+ dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/diseaseHelpController/appointmentDisease`, payload.param, payload]}, {root: true})
+}
+/**
+* 订单管理》》就诊服务》》待面诊 已到院
+*/
+export const alredayComeHospital= ({state, dispatch}, payload) => {
+ dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/diseaseHelpController/alredayComeHospital`, payload.param, payload]}, {root: true})
+}
+/**
+* 订单管理》》就诊服务》》待面诊 未到院
+*/
+export const notComeHospital= ({state, dispatch}, payload) => {
+ dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/diseaseHelpController/notComeHospital`, payload.param, payload]}, {root: true})
+}
+/**
+* 订单管理》》就诊服务》》待治疗 已治疗
+*/
+export const alredayTreatment= ({state, dispatch}, payload) => {
+ dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/diseaseHelpController/alredayTreatment`, payload.param, payload]}, {root: true})
+}
+/**
+* 订单管理》》就诊服务》》待治疗 未治疗
+*/
+export const notTreatment= ({state, dispatch}, payload) => {
+ dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/diseaseHelpController/notTreatment`, payload.param, payload]}, {root: true})
+}
+/**
+* 订单管理》》就诊服务》》待验证 验证
+*/
+export const validateOperation= ({state, dispatch}, payload) => {
+ dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/diseaseHelpController/${payload.param.id}/validateOperation`, payload.param, payload]}, {root: true})
+}
  /**
   * 用户管理》》医生管理
   */
   export const getUserList = ({state, dispatch}, payload) => {
     dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/doctor/doctors?pageNum=${payload.param.pageNum}`, payload.param, payload]}, {root: true})
   }
+  /**
+   * 用户管理》》医生管理>>设置推荐医生
+   */
+   export const recommendDoctor = ({state, dispatch}, payload) => {
+     dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/doctor/${payload.param.recommend}/${payload.param.id}/recommendDoctor`, payload.param, payload]}, {root: true})
+   }
   /**
    * 用户管理》》医生管理>>添加 编辑医生
    */
@@ -213,8 +348,49 @@ export const deleteHospital = ({state, dispatch}, payload) => {
 }
 
 
+/**
+* 用户管理》》渠道管理列表
+*/
+export const postPlaceMangeList = ({state, dispatch}, payload) => {
+ dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/channel/channels`, payload.param, payload]}, {root: true})
+}
+/**
+* 用户管理》》渠道管理>>省
+*/
+export const postProvinces = ({state, dispatch}, payload) => {
+ dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/channel/provinces`, payload.param, payload]}, {root: true})
+}
+/**
+* 用户管理》》渠道管理>>市
+*/
+export const postCitys = ({state, dispatch}, payload) => {
+ dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/channel/${payload.param.id}/citys`, payload.param, payload]}, {root: true})
+}
+/**
+* 用户管理》》渠道管理>>区
+*/
+export const postDistricts = ({state, dispatch}, payload) => {
+ dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/channel/${payload.param.id}/districts`, payload.param, payload]}, {root: true})
+}
+/**
+* 用户管理》》渠道管理>>渠道详情
+*/
+export const getChannelDetail = ({state, dispatch}, payload) => {
+ dispatch('api/ajaxMethod', {param: ['GET', state.server.server1 + `/channel/${payload.param.channelId}/channelDetail`, payload.param, payload]}, {root: true})
+}
 
-
+/**
+* 用户管理》》渠道管理>>渠道详情>>编辑提交
+*/
+export const postEditchannel = ({state, dispatch}, payload) => {
+ dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/channel/editchannel`, payload.param, payload]}, {root: true})
+}
+/**
+* 用户管理》》渠道管理>>渠道添加
+*/
+export const postAddchannel = ({state, dispatch}, payload) => {
+ dispatch('api/ajaxMethod', {param: ['POST', state.server.server1 + `/channel/addchannel`, payload.param, payload]}, {root: true})
+}
 /**
  * 设置---------------------------
  */

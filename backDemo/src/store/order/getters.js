@@ -19,7 +19,12 @@ export const doctorList_fp = state => {
 export const depList_three = state => {
   return state.depList_three
 }
-
+export const jzList = state => {
+  return state.jzList
+}
+export const jzDetail = state => {
+  return state.jzDetail
+}
 // 预约
 export const listYY = state => {
   return state.listYY

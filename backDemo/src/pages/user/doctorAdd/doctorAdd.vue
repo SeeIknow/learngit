@@ -114,7 +114,7 @@
           </div>
         </div>
         <!--  -->
-        <div class="module-i">
+        <!-- <div class="module-i">
           <p class="module-i-title">擅长治疗</p>
           <div class="form-box">
             <el-tag
@@ -127,8 +127,14 @@
             </el-tag>
             <el-button type="text" @click="openUserAlt('disease')">添加擅长疾病</el-button>
           </div>
-        </div>
+        </div> -->
+        <div class="module-i">
+          <p class="module-i-title">社会标签</p>
+          <div class="form-box">
+            <textarea name="name"class="introContent"  rows="8" cols="80" placeholder="请输入擅长" v-model="beGoodAt"></textarea>
+          </div>
 
+        </div>
         <div class="module-i">
           <p class="module-i-title">社会标签</p>
           <div class="form-box">
@@ -285,7 +291,7 @@
             </el-option> -->
         </el-select>
       </el-form-item>
-      <el-form-item label="三级疾病(可选)">
+      <!-- <el-form-item label="三级疾病(可选)">
         <el-select v-model="form.region3" placeholder="请选择三级疾病" @change="searchFromThree(form.region3)">
           <template v-for="(item,$index) in depList_three">
               <el-option :label="item.diseaseTypeName" :value="item.id"></el-option>
@@ -295,9 +301,9 @@
              :key="item.id"
              :label="item.diseaseTypeName"
              :value="item.id">
-           </el-option> -->
+           </el-option>
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
     </el-form>
     <span slot="footer" class="dialog-footer">
       <el-button @click="closeUserAlt('disease')">取 消</el-button>
@@ -366,6 +372,7 @@ export default {
       doctorLevel1:'',
       radio:'1',
       depBox:[],
+      beGoodAt:''
     }
   },
   computed:{
@@ -592,7 +599,8 @@ export default {
           if (this.diseasesBox[i].id == value) {
             // 二级疾病
             this.obj2.diseaseName = this.diseasesBox[i].name
-            this.obj2.diseaseId = this.diseasesBox[i].id;
+            this.obj2.diseaseId = this.diseasesBox[i].id
+
           }
         }
         // 三级疾病赋值为空
@@ -675,6 +683,7 @@ export default {
         "positionId": this.form.positionName ,
         "positionName": this.position ,
         "sex": this.form.sex == '女'?'2':'1',
+        "skilledContent ":this.beGoodAt
       }
       this.setDoctorInfo(data).then((res) =>{
         // 调取上传图片方法

@@ -123,7 +123,7 @@
         <el-table-column
           prop="indate"
           label="咨询时间"
-          width="80">
+          width="115">
         </el-table-column>
         <el-table-column
           prop="status"
@@ -213,7 +213,7 @@ export default {
       return data
     },
     formatRole(row,column){
-      return row.status  == 0 ? "待分诊" : row.authority == 1 ? "待回复" : row.authority == 2 ? "已回复" : row.authority ==3 ? "已采纳" : row.authority ==4 ? "已关闭" :  "未通过";
+      return row.status  == 0 ? "待分诊" : row.status == 1 ? "待回复" : row.status == 2 ? "已回复" : row.status ==3 ? "已采纳" : row.status ==4 ? "已关闭" :  "未通过";
     },
     formatRole1(row,column){
       return row.type  == 0 ? "免费订单" : "专家问诊";

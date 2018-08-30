@@ -6,7 +6,7 @@
        class="el-menu-vertical-demo"
        background-color="#ccc"
        text-color="#333"
-       active-text-color="#00abec">
+       active-text-color="#409EFF">
        <template v-for="(item,$index) in menuList">
         <!-- <template v-if="item.children && item.children.length >= 1">
            <el-submenu :index="item.name" :key="item.name">
@@ -64,10 +64,11 @@ export default {
 @import './secondBar.scss';
 .secondBar .el-menu-item.is-active{
   background-color:rgb(103,103,103)!important;
-  color:#00abec!important;
+  color:#fff!important;
 }
 .router-link-exact-active .el-menu-item{
   background-color:rgb(103,103,103)!important;
-  color:#00abec!important;
+  color:#fff!important;
+  font-size:14px;
 }
 </style>

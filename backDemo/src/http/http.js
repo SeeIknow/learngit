@@ -48,7 +48,7 @@ export const AjaxRequest = function (url, param, payload) {
       url: this.url,
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': JSON.parse(localStorage.getItem('userInfo')).token
+        'Authorization': localStorage.getItem('userToken')
       },
       param: this.param
     }).then(res => {
@@ -63,7 +63,7 @@ export const AjaxRequest = function (url, param, payload) {
       url: this.url,
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': JSON.parse(localStorage.getItem('userInfo')).token
+        'Authorization': localStorage.getItem('userToken')
       },
       data: this.param
     }).then(res => {
@@ -78,7 +78,7 @@ export const AjaxRequest = function (url, param, payload) {
       url: this.url,
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': JSON.parse(localStorage.getItem('userInfo')).token
+        'Authorization': localStorage.getItem('userToken')
       },
       data: this.param
     }).then(res => {
@@ -93,7 +93,7 @@ export const AjaxRequest = function (url, param, payload) {
       url: url,
       headers: {
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': JSON.parse(localStorage.getItem('userInfo')).token
+        'Authorization': localStorage.getItem('userToken')
       },
       params: this.param
     }).then(res => {

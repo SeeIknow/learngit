@@ -1,10 +1,10 @@
 <template lang="html">
   <div class="select">
-      <div class="listItem" v-for="(item,$index) in list" @mouseover="show($index)" @mouseout="hide($index)">
-        <div class="menu-title2">{{item.title}}<i>({{item.number}})</i></div>
+      <div class="listItem" v-for="(item,$index) in orderList" @mouseover="show($index)" @mouseout="hide($index)">
+        <div class="menu-title2">{{item.name}}<i>({{item.num}})</i></div>
         <div class="menu-content" :class="{show:(showStatus && $index == indexVla)}">
-          <ul v-for="items in item.menu">
-            <li :key="items.index">{{items.title}}</li>
+          <ul v-for="items in item.list">
+            <li :key="items.index">{{items.status}}<i>({{items.count}})</i></li>
           </ul>
         </div>
       </div>
@@ -17,38 +17,9 @@ export default {
     return {
       showStatus:false,
       indexVla:-1,
-      list:[
-        {
-          'title':'1',
-          'number':'2',
-          'menu':[
-            {
-              'title':'1-1',
-              'index':'1-1-0'
-            },
-            {
-              'title':'1-2',
-              'index':'1-2-0'
-            }
-          ]
-        },
-        {
-          'title':'2',
-          'number':'3',
-          'menu':[
-            {
-              'title':'2-1',
-              'index':'2-1-0'
-            },
-            {
-              'title':'2-2',
-              'index':'2-2-0'
-            }
-          ]
-        }
-      ]
     }
   },
+  props:['orderList'],
   methods:{
     show(index){
       // alert(1);
@@ -59,6 +30,9 @@ export default {
       this.showStatus = !this.showStatus
       this.indexVla = index;
     }
+  },
+  mounted(){
+    console.log(this.orderList)
   }
   // props:["list"]
 }

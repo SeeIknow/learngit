@@ -34,6 +34,7 @@
       vertical-align: middle;
       margin-top:10px;
     }
+
     span{
       color:#333;
       line-height: 30px;
@@ -41,15 +42,20 @@
 
   }
   .menuItem:hover{
-    .svgBox{
+    .svgBox {
       background: #409EFF;
-      color:#fff;
+      .icon{
+        color:#fff;
+      }
+
     }
   }
   .menuItem.active{
     .svgBox{
       background:#409EFF;
-      color:#fff;
+      .icon{
+        color:#fff;
+      }
     }
   }
 }
